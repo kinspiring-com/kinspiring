@@ -1,3 +1,5 @@
+import * as custom from './marketplace-custom-config.js';
+
 const env = process.env.REACT_APP_ENV || 'production';
 const dev = process.env.REACT_APP_ENV === 'development';
 
@@ -223,7 +225,7 @@ const stripeSupportedCountries = [
 //    type: 'listing',
 //    attributes: {
 //      title: 'sauna',
-//      // and description, closed, deleted, price, etc.
+//      // and description, price, etc.
 //      customAttributes: {
 //        category: "mountain",
 //        // and other added custom attributes as "key: value" pairs
@@ -298,6 +300,7 @@ const config = {
   facebookAppId,
   sentryDsn,
   usingSSL,
+  custom,
 };
 
 export default config;

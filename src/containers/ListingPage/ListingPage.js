@@ -5,9 +5,10 @@ import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import classNames from 'classnames';
 import config from '../../config';
 import routeConfiguration from '../../routeConfiguration';
-import { propTypes } from '../../util/types';
+import { LISTING_STATE_PENDING_APPROVAL, LISTING_STATE_CLOSED, propTypes } from '../../util/types';
 import { types as sdkTypes } from '../../util/sdkLoader';
 import { createSlug } from '../../util/urlHelpers';
 import { formatMoney } from '../../util/currency';
@@ -19,7 +20,6 @@ import {
   AvatarLarge,
   AvatarMedium,
   Button,
-  Map,
   ModalInMobile,
   Page,
   ResponsiveImage,
@@ -40,6 +40,8 @@ import { BookingDatesForm, TopbarContainer, EnquiryForm } from '../../containers
 
 import { sendEnquiry, loadData, setInitialValues } from './ListingPage.duck';
 import EditIcon from './EditIcon';
+import SectionRulesMaybe from './SectionRulesMaybe';
+import SectionMapMaybe from './SectionMapMaybe';
 import css from './ListingPage.css';
 
 // This defines when ModalInMobile shows content as Modal
@@ -60,16 +62,29 @@ const priceData = (price, intl) => {
   return {};
 };
 
-export const ActionBar = props => {
-  const { isOwnListing, isClosed, editParams } = props;
+export const ActionBarMaybe = props => {
+  const { isOwnListing, listing, editParams } = props;
+  const state = listing.attributes.state;
+  const isPendingApproval = state === LISTING_STATE_PENDING_APPROVAL;
+  const isClosed = state === LISTING_STATE_CLOSED;
 
   if (isOwnListing) {
+    let ownListingTextTranslationId = 'ListingPage.ownListing';
+
+    if (isPendingApproval) {
+      ownListingTextTranslationId = 'ListingPage.ownListingPendingApproval';
+    } else if (isClosed) {
+      ownListingTextTranslationId = 'ListingPage.ownClosedListing';
+    }
+
+    const ownListingTextClasses = classNames(css.ownListingText, {
+      [css.ownListingTextPendingApproval]: isPendingApproval,
+    });
+
     return (
       <div className={css.actionBar}>
-        <p className={css.ownListingText}>
-          <FormattedMessage
-            id={isClosed ? 'ListingPage.ownClosedListing' : 'ListingPage.ownListing'}
-          />
+        <p className={ownListingTextClasses}>
+          <FormattedMessage id={ownListingTextTranslationId} />
         </p>
         <NamedLink className={css.editListingLink} name="EditListingPage" params={editParams}>
           <EditIcon className={css.editIcon} />
@@ -85,20 +100,19 @@ export const ActionBar = props => {
         </p>
       </div>
     );
-  } else {
-    return null;
   }
+  return null;
 };
 
 const { arrayOf, bool, func, object, oneOf, shape, string } = PropTypes;
 
-ActionBar.propTypes = {
+ActionBarMaybe.propTypes = {
   isOwnListing: bool.isRequired,
-  isClosed: bool.isRequired,
+  listing: propTypes.listing.isRequired,
   editParams: object.isRequired,
 };
 
-ActionBar.displayName = 'ActionBar';
+ActionBarMaybe.displayName = 'ActionBarMaybe';
 
 const gotoBookTab = (history, listing) => {
   if (!listing.id) {
@@ -334,6 +348,7 @@ export class ListingPageComponent extends Component {
     const userAndListingAuthorAvailable = !!(currentUser && authorAvailable);
     const isOwnListing =
       userAndListingAuthorAvailable && currentListing.author.id.uuid === currentUser.id.uuid;
+    const isClosed = currentListing.attributes.state === LISTING_STATE_CLOSED;
     const showContactUser = !currentUser || (currentUser && !isOwnListing);
 
     const currentAuthor = authorAvailable ? currentListing.author : null;
@@ -344,22 +359,10 @@ export class ListingPageComponent extends Component {
     });
     const authorDisplayName = userDisplayName(ensuredAuthor, bannedUserDisplayName);
 
-    const address = publicData.location ? publicData.location.address : '';
-
     const bookBtnMessage = intl.formatMessage({ id: 'ListingPage.ctaButtonMessage' });
     const { formattedPrice, priceTitle } = priceData(price, intl);
-    const map = geolocation ? (
-      <div className={css.locationContainer}>
-        <h2 className={css.locationTitle}>
-          <FormattedMessage id="ListingPage.locationTitle" />
-        </h2>
-        <div className={css.map}>
-          <Map center={geolocation} address={address} />
-        </div>
-      </div>
-    ) : null;
 
-    const showClosedListingHelpText = currentListing.id && currentListing.attributes.closed;
+    const showClosedListingHelpText = currentListing.id && isClosed;
     const bookingHeading = (
       <div className={css.bookingHeading}>
         <h2 className={css.bookingTitle}>
@@ -382,8 +385,8 @@ export class ListingPageComponent extends Component {
     };
 
     const handleBookingSubmit = values => {
-      const isClosed = currentListing.attributes.closed;
-      if (isOwnListing || isClosed) {
+      const isCurrentlyClosed = currentListing.attributes.state === LISTING_STATE_CLOSED;
+      if (isOwnListing || isCurrentlyClosed) {
         window.scrollTo(0, 0);
       } else {
         this.handleSubmit(values);
@@ -393,8 +396,8 @@ export class ListingPageComponent extends Component {
     const editParams = { id: listingId.uuid, slug: listingSlug, type: 'edit', tab: 'description' };
 
     const handleBookButtonClick = () => {
-      const isClosed = currentListing.attributes.closed;
-      if (isOwnListing || isClosed) {
+      const isCurrentlyClosed = currentListing.attributes.state === LISTING_STATE_CLOSED;
+      if (isOwnListing || isCurrentlyClosed) {
         window.scrollTo(0, 0);
       } else {
         gotoBookTab(history, currentListing);
@@ -405,9 +408,9 @@ export class ListingPageComponent extends Component {
     // to the parent that would otherwise open the image carousel
     const actionBar = currentListing.id ? (
       <div onClick={e => e.stopPropagation()}>
-        <ActionBar
+        <ActionBarMaybe
           isOwnListing={isOwnListing}
-          isClosed={currentListing.attributes.closed}
+          listing={currentListing}
           editParams={editParams}
         />
       </div>
@@ -553,7 +556,8 @@ export class ListingPageComponent extends Component {
                     <p className={css.description}>{description}</p>
                   </div>
 
-                  {map}
+                  <SectionRulesMaybe publicData={publicData} />
+                  <SectionMapMaybe geolocation={geolocation} publicData={publicData} />
 
                   <div className={css.reviewsContainer}>
                     <h2 className={css.reviewsHeading}>
@@ -621,7 +625,7 @@ export class ListingPageComponent extends Component {
                   </div>
 
                   {bookingHeading}
-                  {!currentListing.attributes.closed ? (
+                  {!isClosed ? (
                     <BookingDatesForm
                       className={css.bookingForm}
                       submitButtonWrapperClassName={css.bookingDatesSubmitButtonWrapper}
@@ -642,7 +646,7 @@ export class ListingPageComponent extends Component {
                     </div>
                   </div>
 
-                  {!currentListing.attributes.closed ? (
+                  {!isClosed ? (
                     <Button rootClassName={css.bookButton} onClick={handleBookButtonClick}>
                       {bookBtnMessage}
                     </Button>
