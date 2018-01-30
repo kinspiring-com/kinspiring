@@ -23,7 +23,7 @@ const i18n = {
 // Note: if you change this, many of the generic translations will
 // still show information about nights. Make sure to go through the
 // translations when the unit is changed.
-const bookingUnitType = 'line-item/night';
+const bookingUnitType = 'line-item/day';
 
 // To pass environment variables to the client app in the build
 // script, react-scripts (and the sharetribe-scripts fork of
