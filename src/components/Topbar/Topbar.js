@@ -263,7 +263,7 @@ class TopbarComponent extends Component {
             name="LandingPage"
             title={intl.formatMessage({ id: 'Topbar.logoIcon' })}
           >
-        <Logo format="mobile" className={css.mobileLogo}/>
+            <Logo format="mobile" className={css.mobileLogo} />
           </NamedLink>
           <Button
             rootClassName={css.searchMenu}
