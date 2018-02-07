@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import desktopLogo from './images/saunatime-logo.png';
+import desktopLogo from './images/kinspiring-logo.png';
 
 const LogoIcon = props => {
   const { alt, className, isMobile } = props;
