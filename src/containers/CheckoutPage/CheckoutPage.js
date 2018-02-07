@@ -21,6 +21,7 @@ import {
   NamedRedirect,
   Page,
   ResponsiveImage,
+  Logo,
 } from '../../components';
 import { StripePaymentForm } from '../../containers';
 import { isScrollingDisabled } from '../../ducks/UI.duck';
@@ -28,7 +29,6 @@ import { initiateOrder, setInitialValues, speculateTransaction } from './Checkou
 import config from '../../config';
 
 import { storeData, storedData, clearData } from './CheckoutPageSessionHelpers';
-import LogoIcon from './LogoIcon';
 import css from './CheckoutPage.css';
 
 const STORAGE_KEY = 'CheckoutPage';
@@ -265,14 +265,15 @@ export class CheckoutPageComponent extends Component {
     const topbar = (
       <div className={css.topbar}>
         <NamedLink className={css.home} name="LandingPage">
-          <LogoIcon
+          <Logo
             className={css.logoMobile}
             title={intl.formatMessage({ id: 'CheckoutPage.goToLandingPage' })}
+            format='mobile'
           />
-          <LogoIcon
+          <Logo
             className={css.logoDesktop}
             alt={intl.formatMessage({ id: 'CheckoutPage.goToLandingPage' })}
-            isMobile={false}
+            format='desktop'
           />
         </NamedLink>
       </div>

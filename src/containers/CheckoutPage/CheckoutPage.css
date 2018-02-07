@@ -44,6 +44,7 @@
 
 .logoMobile {
   display: block;
+  height: 25px;
 
   @media (--viewportLarge) {
     display: none;
@@ -53,7 +54,7 @@
 .logoDesktop {
   display: none;
   width: 155px;
-  height: 27px;
+  height: 35px;
 
   @media (--viewportLarge) {
     display: block;

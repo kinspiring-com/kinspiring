@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import config from '../../config';
 
 import IconLogo from './IconLogo';
-import LogoImage from './saunatime-logo.png';
+import LogoImage from './kinspiring-logo.png';
 
 const Logo = props => {
   const { className, format, ...rest } = props;
