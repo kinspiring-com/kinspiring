@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import routeConfiguration from '../../routeConfiguration';
-import { propTypes } from '../../util/types';
 import { ensureListing } from '../../util/data';
 import { createResourceLocatorString } from '../../util/routes';
 import {
   EditListingDescriptionPanel,
+  EditListingFeaturesPanel,
   EditListingLocationPanel,
   EditListingPhotosPanel,
   EditListingPoliciesPanel,
@@ -16,13 +16,14 @@ import {
 import css from './EditListingWizard.css';
 
 export const DESCRIPTION = 'description';
+export const FEATURES = 'features';
 export const POLICY = 'policy';
 export const LOCATION = 'location';
 export const PRICING = 'pricing';
 export const PHOTOS = 'photos';
 
 // EditListingWizardTab component supports these tabs
-export const SUPPORTED_TABS = [DESCRIPTION, POLICY, LOCATION, PRICING, PHOTOS];
+export const SUPPORTED_TABS = [DESCRIPTION, FEATURES, POLICY, LOCATION, PRICING, PHOTOS];
 
 const pathParamsToNextTab = (params, tab, marketplaceTabs) => {
   const nextTabIndex = marketplaceTabs.findIndex(s => s === tab) + 1;
@@ -45,18 +46,14 @@ const EditListingWizardTab = props => {
     images,
     listing,
     handleCreateFlowTabScrolling,
-    onCreateListing,
+    handleCreateListing,
     onUpdateListing,
     onCreateListingDraft,
     onImageUpload,
-    onPayoutDetailsFormChange,
-    onPayoutDetailsSubmit,
     onUpdateImageOrder,
     onRemoveImage,
     onUpdateListingDraft,
     onChange,
-    currentUser,
-    onManageDisableScrolling,
     updatedTab,
     updateInProgress,
     intl,
@@ -64,21 +61,35 @@ const EditListingWizardTab = props => {
 
   const isNew = params.type === 'new';
   const currentListing = ensureListing(listing);
+  const imageIds = images => {
+    return images ? images.map(img => img.imageId || img.id) : null;
+  };
 
   const onCompleteEditListingWizardTab = (tab, updateValues) => {
     if (isNew) {
-      const onUpsertListingDraft = currentListing.id ? onUpdateListingDraft : onCreateListingDraft;
+      const onUpsertListingDraft =
+        tab !== marketplaceTabs[0] ? onUpdateListingDraft : onCreateListingDraft;
       onUpsertListingDraft(updateValues);
 
-      // Create listing flow: smooth scrolling polyfill to scroll to correct tab
-      handleCreateFlowTabScrolling(false);
-      // Redirect to next tab
-      const pathParams = pathParamsToNextTab(params, tab, marketplaceTabs);
-      history.push(
-        createResourceLocatorString('EditListingPage', routeConfiguration(), pathParams, {})
-      );
+      if (tab !== marketplaceTabs[marketplaceTabs.length - 1]) {
+        // Create listing flow: smooth scrolling polyfill to scroll to correct tab
+        handleCreateFlowTabScrolling(false);
+        // Redirect to next tab
+        const pathParams = pathParamsToNextTab(params, tab, marketplaceTabs);
+        history.push(
+          createResourceLocatorString('EditListingPage', routeConfiguration(), pathParams, {})
+        );
+      } else {
+        // Normalize images for API call
+        const imageIdArray = imageIds(updateValues.images);
+        handleCreateListing({ ...listing.attributes, images: imageIdArray });
+      }
     } else {
-      onUpdateListing(tab, { ...updateValues, id: currentListing.id });
+      const { images: updatedImages, ...rest } = updateValues;
+      // Normalize images for API call
+      const imageProperty =
+        typeof updatedImages !== 'undefined' ? { images: imageIds(updatedImages) } : {};
+      onUpdateListing(tab, { ...rest, id: currentListing.id, ...imageProperty });
     }
   };
 
@@ -101,6 +112,20 @@ const EditListingWizardTab = props => {
       return (
         <EditListingDescriptionPanel
           {...panelProps(DESCRIPTION)}
+          submitButtonText={intl.formatMessage({ id: submitButtonTranslationKey })}
+          onSubmit={values => {
+            onCompleteEditListingWizardTab(tab, values);
+          }}
+        />
+      );
+    }
+    case FEATURES: {
+      const submitButtonTranslationKey = isNew
+        ? 'EditListingWizard.saveNewFeatures'
+        : 'EditListingWizard.saveEditFeatures';
+      return (
+        <EditListingFeaturesPanel
+          {...panelProps(FEATURES)}
           submitButtonText={intl.formatMessage({ id: submitButtonTranslationKey })}
           onSubmit={values => {
             onCompleteEditListingWizardTab(tab, values);
@@ -154,6 +179,8 @@ const EditListingWizardTab = props => {
       const submitButtonTranslationKey = isNew
         ? 'EditListingWizard.saveNewPhotos'
         : 'EditListingWizard.saveEditPhotos';
+
+      // newListingCreated and fetchInProgress are flags for the last wizard tab
       return (
         <EditListingPhotosPanel
           {...panelProps(PHOTOS)}
@@ -163,22 +190,10 @@ const EditListingWizardTab = props => {
           images={images}
           onImageUpload={onImageUpload}
           onRemoveImage={onRemoveImage}
-          onPayoutDetailsFormChange={onPayoutDetailsFormChange}
-          onPayoutDetailsSubmit={onPayoutDetailsSubmit}
           onSubmit={values => {
-            const { images: updatedImages } = values;
-            const imageIds = updatedImages.map(img => img.imageId || img.id);
-            const updateValues = { ...listing.attributes, images: imageIds };
-
-            if (isNew) {
-              onCreateListing(updateValues);
-            } else {
-              onUpdateListing(PHOTOS, { images: imageIds, id: currentListing.id });
-            }
+            onCompleteEditListingWizardTab(tab, values);
           }}
           onUpdateImageOrder={onUpdateImageOrder}
-          currentUser={currentUser}
-          onManageDisableScrolling={onManageDisableScrolling}
         />
       );
     }
@@ -190,7 +205,6 @@ const EditListingWizardTab = props => {
 EditListingWizardTab.defaultProps = {
   errors: null,
   listing: null,
-  currentUser: null,
   updatedTab: null,
 };
 
@@ -219,7 +233,6 @@ EditListingWizardTab.propTypes = {
   // We cannot use propTypes.listing since the listing might be a draft.
   listing: shape({
     attributes: shape({
-      customAttributes: object, // structure (key: value) can be defined in management console
       publicData: object,
       description: string,
       geolocation: object,
@@ -230,18 +243,14 @@ EditListingWizardTab.propTypes = {
   }),
 
   handleCreateFlowTabScrolling: func.isRequired,
-  onCreateListing: func.isRequired,
+  handleCreateListing: func.isRequired,
   onUpdateListing: func.isRequired,
   onCreateListingDraft: func.isRequired,
   onImageUpload: func.isRequired,
-  onPayoutDetailsFormChange: func.isRequired,
-  onPayoutDetailsSubmit: func.isRequired,
   onUpdateImageOrder: func.isRequired,
   onRemoveImage: func.isRequired,
   onUpdateListingDraft: func.isRequired,
   onChange: func.isRequired,
-  currentUser: propTypes.currentUser,
-  onManageDisableScrolling: func.isRequired,
   updatedTab: string,
   updateInProgress: bool.isRequired,
 

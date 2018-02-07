@@ -18,7 +18,7 @@ const i18n = {
 
 // The transaction line item code for the main unit type in bookings.
 //
-// Possible values: ['line-item/night', 'line-item/day']
+// Possible values: ['line-item/night', 'line-item/day', 'line-item/units';]
 //
 // Note: if you change this, many of the generic translations will
 // still show information about nights. Make sure to go through the
@@ -211,41 +211,6 @@ const stripeSupportedCountries = [
   },
 ];
 
-// Custom attributes are marketplace specific listing data (e.g. listing could have a category).
-// Custom attributes can be defined through management console and code related to custom
-// attributes should be changed accordingly.
-//
-// Here's an example what custom attributes might look like for bicycle listings. This code
-// assumes that a custom attribute, called 'category', is created through management console
-// with 4 possible values: 'road', 'mountain', 'track', and 'other'.
-//
-// When listing information is queried customAttributes is returned among other attributes:
-//  {
-//    id: 1,
-//    type: 'listing',
-//    attributes: {
-//      title: 'sauna',
-//      // and description, price, etc.
-//      customAttributes: {
-//        category: "mountain",
-//        // and other added custom attributes as "key: value" pairs
-//      },
-//    },
-//  }
-const exampleCustomAttributes = {
-  category: {
-    select: 'single', // possible values: 'single' (only type supported atm.)
-    type: 'string',
-    values: ['road', 'mountain', 'track', 'other'],
-  },
-};
-
-// To use the example custom attributes, set the
-// REACT_APP_USE_EXAMPLE_CUSTOM_ATTRIBUTES variable to `true` in the
-// gitignored `.env.development.local` file
-const useExampleCustomAttributes = process.env.REACT_APP_USE_EXAMPLE_CUSTOM_ATTRIBUTES === 'true';
-const customAttributes = useExampleCustomAttributes ? exampleCustomAttributes : {};
-
 // Address information is used in SEO schema for Organization (http://schema.org/PostalAddress)
 const addressCountry = 'FI';
 const addressRegion = 'Helsinki';
@@ -273,6 +238,24 @@ const siteFacebookPage = 'https://www.facebook.com/Sharetribe/';
 // You should create one to track social sharing in Facebook
 const facebookAppId = null;
 
+const coordinates = {
+  // If true, obfuscate the coordinates of the listings that are shown
+  // on a map.
+  fuzzy: process.env.REACT_APP_FUZZY_COORDINATES || false,
+
+  fuzzyDefaultZoomLevel: 14,
+
+  // When fuzzy === true, a circle is shown on the map, the radius and
+  // the style can be configured here.
+  circleRadius: 500,
+  circleOptions: {
+    fillColor: '#c0392b',
+    fillOpacity: 0.2,
+    strokeColor: '#c0392b',
+    strokeWeight: 0.5,
+  },
+};
+
 // NOTE: only expose configuration that should be visible in the
 // client side, don't add any server secrets in this file.
 const config = {
@@ -284,7 +267,6 @@ const config = {
   sdk: { clientId: sdkClientId, baseUrl: sdkBaseUrl },
   currency,
   currencyConfig,
-  customAttributes,
   stripe: { publishableKey: stripePublishableKey, supportedCountries: stripeSupportedCountries },
   canonicalRootURL,
   address: {
@@ -300,6 +282,7 @@ const config = {
   facebookAppId,
   sentryDsn,
   usingSSL,
+  coordinates,
   custom,
 };
 

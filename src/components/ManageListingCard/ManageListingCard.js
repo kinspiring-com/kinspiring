@@ -16,7 +16,7 @@ import {
   MenuLabel,
   MenuContent,
   MenuItem,
-  NamedLink,
+  ListingLink,
   IconSpinner,
   ResponsiveImage,
 } from '../../components';
@@ -27,6 +27,7 @@ import css from './ManageListingCard.css';
 
 // Menu content needs the same padding
 const MENU_CONTENT_OFFSET = -12;
+const MAX_LENGTH_FOR_WORDS_IN_TITLE = 7;
 
 const priceData = (price, intl) => {
   if (price && price.currency === config.currency) {
@@ -55,6 +56,23 @@ const createURL = (routes, listing) => {
   return createResourceLocatorString('EditListingPage', routes, pathParams, {});
 };
 
+// Cards are not fixed sizes - So, long words in title make flexboxed items to grow too big.
+// 1. We split title to an array of words and spaces.
+//    "foo bar".split(/([^\s]+)/gi) => ["", "foo", " ", "bar", ""]
+// 2. Then we break long words by adding a '<span>' with word-break: 'break-all';
+const formatTitle = (title, maxLength) => {
+  const nonWhiteSpaceSequence = /([^\s]+)/gi;
+  return title.split(nonWhiteSpaceSequence).map((word, index) => {
+    return word.length > maxLength ? (
+      <span key={index} style={{ wordBreak: 'break-all' }}>
+        {word}
+      </span>
+    ) : (
+      word
+    );
+  });
+};
+
 export const ManageListingCardComponent = props => {
   const {
     className,
@@ -76,7 +94,6 @@ export const ManageListingCardComponent = props => {
   const { title = '', price, state } = currentListing.attributes;
   const isPendingApproval = state === LISTING_STATE_PENDING_APPROVAL;
   const isClosed = state === LISTING_STATE_CLOSED;
-  const slug = createSlug(title);
   const firstImage =
     currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
 
@@ -179,7 +196,7 @@ export const ManageListingCardComponent = props => {
   });
 
   return (
-    <NamedLink className={classes} name="ListingPage" params={{ id, slug }}>
+    <ListingLink className={classes} listing={listing}>
       <div className={css.threeToTwoWrapper}>
         <div className={css.aspectWrapper}>
           <ResponsiveImage
@@ -251,7 +268,7 @@ export const ManageListingCardComponent = props => {
           </div>
         </div>
         <div className={css.mainInfo}>
-          <div className={titleClasses}>{title}</div>
+          <div className={titleClasses}>{formatTitle(title, MAX_LENGTH_FOR_WORDS_IN_TITLE)}</div>
         </div>
         <button
           className={css.edit}
@@ -264,7 +281,7 @@ export const ManageListingCardComponent = props => {
           <FormattedMessage id="ManageListingCard.edit" />
         </button>
       </div>
-    </NamedLink>
+    </ListingLink>
   );
 };
 

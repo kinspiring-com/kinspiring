@@ -36,3 +36,10 @@ export const amenities = [
     label: 'Own food allowed',
   },
 ];
+
+export const categories = [
+  { key: 'smoke', label: 'Smoke' },
+  { key: 'electric', label: 'Electric' },
+  { key: 'wood', label: 'Wood' },
+  { key: 'other', label: 'Other' },
+];
