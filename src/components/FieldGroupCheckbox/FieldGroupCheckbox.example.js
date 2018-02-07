@@ -5,11 +5,13 @@ import FieldGroupCheckbox from './FieldGroupCheckbox';
 
 const formName = 'Styleguide.FieldGroupCheckboxForm';
 
-const legend = <h3>Amenities</h3>;
+const label = <h3>Amenities</h3>;
+const name = 'amenities';
 
 const componentProps = {
-  id: `${formName}.amenities`,
-  legend: legend,
+  id: `${formName}.${name}`,
+  name: name,
+  label: label,
   options: [
     {
       key: 'towels',

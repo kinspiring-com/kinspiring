@@ -8,49 +8,53 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
+import { arrayOf, bool, node, shape, string } from 'prop-types';
 import classNames from 'classnames';
+import { FieldArray } from 'redux-form';
+import { FieldCheckbox, ValidationError } from '../../components';
 
-import { FieldCheckbox } from '../../components';
 import css from './FieldGroupCheckbox.css';
 
-const FieldGroupCheckbox = props => {
-  const { rootClassName, className, id, legend, options, twoColumns } = props;
+const FieldCheckboxRenderer = props => {
+  const { className, rootClassName, label, twoColumns, id, options, fields, meta } = props;
+  const name = fields.name;
+
+  // FieldArray doesn't have touched prop, so we fake it to ValidationError
+  const touched = !!(meta.dirty || meta.submitFailed);
 
   const classes = classNames(rootClassName || css.root, className);
   const listClasses = twoColumns ? classNames(css.list, css.twoColumns) : css.list;
 
   return (
     <fieldset className={classes}>
-      {legend ? <legend>{legend}</legend> : null}
+      {label ? <legend>{label}</legend> : null}
       <ul className={listClasses}>
         {options.map(option => {
           const fieldId = `${id}.${option.key}`;
           return (
             <li key={fieldId} className={css.item}>
-              <FieldCheckbox id={fieldId} name={option.key} label={option.label} />
+              <FieldCheckbox id={fieldId} name={`${name}.${option.key}`} label={option.label} />
             </li>
           );
         })}
+        <ValidationError fieldMeta={{ ...meta, touched }} />
       </ul>
     </fieldset>
   );
 };
 
-FieldGroupCheckbox.defaultProps = {
+FieldCheckboxRenderer.defaultProps = {
   rootClassName: null,
   className: null,
-  legend: null,
+  label: null,
   twoColumns: false,
 };
 
-const { arrayOf, bool, node, shape, string } = PropTypes;
-
-FieldGroupCheckbox.propTypes = {
+FieldCheckboxRenderer.propTypes = {
   rootClassName: string,
   className: string,
   id: string.isRequired,
-  legend: node,
+  label: node,
   options: arrayOf(
     shape({
       key: string.isRequired,
@@ -58,6 +62,14 @@ FieldGroupCheckbox.propTypes = {
     })
   ).isRequired,
   twoColumns: bool,
+};
+
+const FieldGroupCheckbox = props => <FieldArray component={FieldCheckboxRenderer} {...props} />;
+
+// Name and component are required fields for FieldArray.
+// Component-prop we define in this file, name needs to be passed in
+FieldGroupCheckbox.propTypes = {
+  name: string.isRequired,
 };
 
 export default FieldGroupCheckbox;

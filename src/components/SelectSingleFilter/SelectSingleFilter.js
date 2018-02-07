@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { string, func, arrayOf, shape, number } from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 
-import config from '../../config';
 import { Menu, MenuContent, MenuItem, MenuLabel } from '../../components';
 import css from './SelectSingleFilter.css';
 
-class SelectSingleFilterComponent extends Component {
+const optionLabel = (options, key) => {
+  const option = options.find(o => o.key === key);
+  return option ? option.label : key;
+};
+
+class SelectSingleFilter extends Component {
   constructor(props) {
     super(props);
 
@@ -20,26 +24,25 @@ class SelectSingleFilterComponent extends Component {
     this.setState({ isOpen: isOpen });
   }
 
-  selectOption(customAttribute, option) {
+  selectOption(urlParam, option) {
     this.setState({ isOpen: false });
-    this.props.onSelect(customAttribute, option);
+    this.props.onSelect(urlParam, option);
   }
 
   render() {
-    const { rootClassName, className, customAttribute, urlQueryParams, intl } = this.props;
-
-    // custom attribute content
-    const ca = customAttribute && config.customAttributes[customAttribute];
-    // name of the corresponding query parameter
-    const caParam = `ca_${customAttribute}`;
-    // current value of this custom attribute filter
-    const currentValue = urlQueryParams[caParam];
+    const {
+      rootClassName,
+      className,
+      urlParam,
+      label,
+      options,
+      initialValue,
+      contentPlacementOffset,
+    } = this.props;
 
     // resolve menu label text and class
-    const menuLabel = currentValue
-      ? intl.formatMessage({ id: `SelectSingleFilter.category.option.${currentValue}` })
-      : intl.formatMessage({ id: `SelectSingleFilter.${customAttribute}.label` });
-    const menuLabelClass = currentValue ? css.menuLabelSelected : css.menuLabel;
+    const menuLabel = initialValue ? optionLabel(options, initialValue) : label;
+    const menuLabelClass = initialValue ? css.menuLabelSelected : css.menuLabel;
 
     const classes = classNames(rootClassName || css.root, className);
 
@@ -47,35 +50,32 @@ class SelectSingleFilterComponent extends Component {
       <Menu
         className={classes}
         useArrow={false}
-        contentPlacementOffset={-14}
+        contentPlacementOffset={contentPlacementOffset}
         onToggleActive={this.onToggleActive}
         isOpen={this.state.isOpen}
       >
         <MenuLabel className={menuLabelClass}>{menuLabel}</MenuLabel>
         <MenuContent className={css.menuContent}>
-          {ca.values.map(v => {
+          {options.map(option => {
             // check if this option is selected
-            const selected = currentValue === v;
+            const selected = initialValue === option.key;
             // menu item border class
             const menuItemBorderClass = selected ? css.menuItemBorderSelected : css.menuItemBorder;
 
             return (
-              <MenuItem key={v}>
+              <MenuItem key={option.key}>
                 <button
                   className={css.menuItem}
-                  onClick={() => this.selectOption(customAttribute, v)}
+                  onClick={() => this.selectOption(urlParam, option.key)}
                 >
                   <span className={menuItemBorderClass} />
-                  <FormattedMessage id={`SelectSingleFilter.category.option.${v}`} />
+                  {option.label}
                 </button>
               </MenuItem>
             );
           })}
           <MenuItem key={'clearLink'}>
-            <button
-              className={css.clearMenuItem}
-              onClick={() => this.selectOption(customAttribute, null)}
-            >
+            <button className={css.clearMenuItem} onClick={() => this.selectOption(urlParam, null)}>
               <FormattedMessage id={'SelectSingleFilter.clear'} />
             </button>
           </MenuItem>
@@ -85,24 +85,27 @@ class SelectSingleFilterComponent extends Component {
   }
 }
 
-const { object, string, func } = PropTypes;
-
-SelectSingleFilterComponent.defaultProps = {
+SelectSingleFilter.defaultProps = {
   rootClassName: null,
   className: null,
+  initialValue: null,
+  contentPlacementOffset: 0,
 };
 
-SelectSingleFilterComponent.propTypes = {
+SelectSingleFilter.propTypes = {
   rootClassName: string,
   className: string,
-  customAttribute: string.isRequired,
-  urlQueryParams: object.isRequired,
+  urlParam: string.isRequired,
+  label: string.isRequired,
   onSelect: func.isRequired,
-
-  // from injectIntl
-  intl: intlShape.isRequired,
+  options: arrayOf(
+    shape({
+      key: string.isRequired,
+      label: string.isRequired,
+    })
+  ).isRequired,
+  initialValue: string,
+  contentPlacementOffset: number,
 };
-
-const SelectSingleFilter = injectIntl(SelectSingleFilterComponent);
 
 export default SelectSingleFilter;

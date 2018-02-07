@@ -20,7 +20,55 @@ exports[`SearchPageComponent matches snapshot 1`] = `
   <withRouter(Connect(TopbarContainerComponent)) />
   <div>
     <div>
-      <withRouter(SearchFiltersComponent)
+      <withRouter(InjectIntl(SearchFiltersComponent))
+        categories={
+          Array [
+            Object {
+              "key": "cat1",
+              "label": "Cat 1",
+            },
+            Object {
+              "key": "cat2",
+              "label": "Cat 2",
+            },
+          ]
+        }
+        features={
+          Array [
+            Object {
+              "key": "towels",
+              "label": "Towels",
+            },
+            Object {
+              "key": "bathroom",
+              "label": "Bathroom",
+            },
+            Object {
+              "key": "swimming_pool",
+              "label": "Swimming pool",
+            },
+            Object {
+              "key": "own_drinks",
+              "label": "Own drinks allowed",
+            },
+            Object {
+              "key": "jacuzzi",
+              "label": "Jacuzzi",
+            },
+            Object {
+              "key": "audiovisual_entertainment",
+              "label": "Audiovisual entertainment",
+            },
+            Object {
+              "key": "barbeque",
+              "label": "Barbeque",
+            },
+            Object {
+              "key": "own_food_allowed",
+              "label": "Own food allowed",
+            },
+          ]
+        }
         listingsAreLoaded={true}
         onManageDisableScrolling={[Function]}
         onMapIconClick={[Function]}
@@ -31,12 +79,25 @@ exports[`SearchPageComponent matches snapshot 1`] = `
           Object {
             "address": undefined,
             "bounds": undefined,
-            "ca_category": undefined,
             "origin": undefined,
+            "pub_amenities": undefined,
+            "pub_category": undefined,
           }
         }
       />
       <InjectIntl(withRouter(SearchFiltersMobileComponent))
+        categories={
+          Array [
+            Object {
+              "key": "cat1",
+              "label": "Cat 1",
+            },
+            Object {
+              "key": "cat2",
+              "label": "Cat 2",
+            },
+          ]
+        }
         listingsAreLoaded={true}
         onCloseModal={[Function]}
         onManageDisableScrolling={[Function]}
@@ -50,8 +111,9 @@ exports[`SearchPageComponent matches snapshot 1`] = `
           Object {
             "address": undefined,
             "bounds": undefined,
-            "ca_category": undefined,
             "origin": undefined,
+            "pub_amenities": undefined,
+            "pub_category": undefined,
           }
         }
       />
@@ -91,6 +153,19 @@ exports[`SearchPageComponent matches snapshot 1`] = `
             }
           }
           className={null}
+          coordinatesConfig={
+            Object {
+              "circleOptions": Object {
+                "fillColor": "#c0392b",
+                "fillOpacity": 0.2,
+                "strokeColor": "#c0392b",
+                "strokeWeight": 0.5,
+              },
+              "circleRadius": 500,
+              "fuzzy": false,
+              "fuzzyDefaultZoomLevel": 14,
+            }
+          }
           isOpenOnModal={false}
           listings={Array []}
           mapRootClassName={null}

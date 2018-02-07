@@ -1,15 +1,21 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { compose } from 'redux';
+import { object, string, bool, number, func, shape, array } from 'prop-types';
+import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
 import { omit } from 'lodash';
 
-import { SelectSingleFilter } from '../../components';
+import { SelectSingleFilter, SelectMultipleFilter } from '../../components';
 import routeConfiguration from '../../routeConfiguration';
 import { createResourceLocatorString } from '../../util/routes';
-import config from '../../config';
 import css from './SearchFilters.css';
+
+const CATEGORY_URL_PARAM = 'pub_category';
+const AMENITIES_URL_PARAM = 'pub_amenities';
+
+// Dropdown container can have a positional offset (in pixels)
+const FILTER_DROPDOWN_OFFSET = -14;
 
 const SearchFiltersComponent = props => {
   const {
@@ -19,7 +25,10 @@ const SearchFiltersComponent = props => {
     listingsAreLoaded,
     resultsCount,
     searchInProgress,
+    categories,
+    features,
     history,
+    intl,
   } = props;
 
   const loadingResults = <FormattedMessage id="SearchFilters.loadingResults" />;
@@ -32,32 +41,68 @@ const SearchFiltersComponent = props => {
 
   const classes = classNames(rootClassName || css.root, className);
 
-  const onSelectSingle = (customAttribute, option) => {
-    // Name of the corresponding query parameter.
-    // The custom attribute query parameters are named
-    // ca_<custom_attribute_name> in the API.
-    const caParam = `ca_${customAttribute}`;
+  const categoryLabel = intl.formatMessage({
+    id: 'SearchFilters.categoryLabel',
+  });
 
-    // query parameters after selecting the option
-    // if no option is passed, clear the selection for the filter
-    const queryParams = option
-      ? { ...urlQueryParams, [caParam]: option }
-      : omit(urlQueryParams, caParam);
+  const featuresLabel = intl.formatMessage({
+    id: 'SearchFilters.featuresLabel',
+  });
+
+  const initialFeatures = !!urlQueryParams[AMENITIES_URL_PARAM]
+    ? urlQueryParams[AMENITIES_URL_PARAM].split(',')
+    : [];
+
+  const initialCategory = urlQueryParams[CATEGORY_URL_PARAM];
+
+  const handleSelectOptions = (urlParam, options) => {
+    const queryParams =
+      options && options.length > 0
+        ? { ...urlQueryParams, [AMENITIES_URL_PARAM]: options.join(',') }
+        : omit(urlQueryParams, AMENITIES_URL_PARAM);
 
     history.push(createResourceLocatorString('SearchPage', routeConfiguration(), {}, queryParams));
   };
 
-  const hasCategoryConfig = config.customAttributes && config.customAttributes.category;
-  const categoryFilter = hasCategoryConfig ? (
+  const handleSelectOption = (urlParam, option) => {
+    // query parameters after selecting the option
+    // if no option is passed, clear the selection for the filter
+    const queryParams = option
+      ? { ...urlQueryParams, [urlParam]: option }
+      : omit(urlQueryParams, urlParam);
+
+    history.push(createResourceLocatorString('SearchPage', routeConfiguration(), {}, queryParams));
+  };
+
+  const categoryFilter = categories ? (
     <SelectSingleFilter
-      customAttribute="category"
-      urlQueryParams={urlQueryParams}
-      onSelect={onSelectSingle}
+      urlParam={CATEGORY_URL_PARAM}
+      label={categoryLabel}
+      onSelect={handleSelectOption}
+      options={categories}
+      initialValue={initialCategory}
+      contentPlacementOffset={FILTER_DROPDOWN_OFFSET}
     />
   ) : null;
+
+  const featuresFilter = features ? (
+    <SelectMultipleFilter
+      name="amenities"
+      urlParam={AMENITIES_URL_PARAM}
+      label={featuresLabel}
+      onSelect={handleSelectOptions}
+      options={features}
+      initialValues={initialFeatures}
+      contentPlacementOffset={FILTER_DROPDOWN_OFFSET}
+    />
+  ) : null;
+
   return (
     <div className={classes}>
-      <div className={css.filters}>{categoryFilter}</div>
+      <div className={css.filters}>
+        {categoryFilter}
+        {featuresFilter}
+      </div>
 
       <div className={css.searchResultSummary}>
         {listingsAreLoaded && resultsCount > 0 ? resultsFound : null}
@@ -68,13 +113,13 @@ const SearchFiltersComponent = props => {
   );
 };
 
-const { object, string, bool, number, func, shape } = PropTypes;
-
 SearchFiltersComponent.defaultProps = {
   rootClassName: null,
   className: null,
   resultsCount: null,
   searchingInProgress: false,
+  categories: null,
+  features: null,
 };
 
 SearchFiltersComponent.propTypes = {
@@ -86,13 +131,18 @@ SearchFiltersComponent.propTypes = {
   searchingInProgress: bool,
   onMapIconClick: func.isRequired,
   onManageDisableScrolling: func.isRequired,
+  categories: array,
+  features: array,
 
   // from withRouter
   history: shape({
     push: func.isRequired,
   }).isRequired,
+
+  // from injectIntl
+  intl: intlShape.isRequired,
 };
 
-const SearchFilters = withRouter(SearchFiltersComponent);
+const SearchFilters = compose(withRouter, injectIntl)(SearchFiltersComponent);
 
 export default SearchFilters;
