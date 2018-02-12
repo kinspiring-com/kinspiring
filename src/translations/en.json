@@ -241,7 +241,7 @@
   "InboxPage.bannedUserDisplayName": "Kielletty käyttäjä",
   "InboxPage.fetchFailed": "Viestien lataaminen ei onnistunut. Yritä uudelleen.",
   "InboxPage.noOrdersFound": "Sinulla ei ole vielä varauksia.",
-  "InboxPage.noSalesFound": "Kukaan ei ole vielä vuokrannut sinulta.",
+  "InboxPage.noSalesFound": "Kukaan ei ole vielä vuokrannut lastentarvikkeita.",
   "InboxPage.ordersTabTitle": "Vuokraaminen",
   "InboxPage.ordersTitle": "Inbox: Vuokraaminen",
   "InboxPage.salesTabTitle": "Vuokralle antaminen",
