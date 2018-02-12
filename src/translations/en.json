@@ -288,7 +288,7 @@
   "ListingPage.schemaTitle": "{title} - {price} | {siteTitle}",
   "ListingPage.viewImagesButton": "Katso kuvat ({count})",
   "ListingPage.yourHostHeading": "Vuokranantajasi",
-  "LocationSearchForm.placeholder": "Etsi sijainnista…",
+  "LocationSearchForm.placeholder": "Hae lastentarviketta sijainnista…",
   "LoginForm.emailInvalid": "Tarvitsemme sähköpostiosoitteen",
   "LoginForm.emailLabel": "sähköposti",
   "LoginForm.emailPlaceholder": "maija@meikalainen.com",
