@@ -5,7 +5,7 @@ const dev = process.env.REACT_APP_ENV === 'development';
 
 // If you want to change the language, remember to also change the
 // locale data and the messages in the app.js file.
-const locale = 'en';
+const locale = 'fi';
 const i18n = {
   /*
     0: Sunday
@@ -13,7 +13,7 @@ const i18n = {
     ...
     6: Saturday
   */
-  firstDayOfWeek: 0,
+  firstDayOfWeek: 1,
 };
 
 // The transaction line item code for the main unit type in bookings.
@@ -33,7 +33,7 @@ const sdkClientId =
   process.env.REACT_APP_SHARETRIBE_SDK_CLIENT_ID || '08ec69f6-d37e-414d-83eb-324e94afddf0';
 const sdkBaseUrl = process.env.REACT_APP_SHARETRIBE_SDK_BASE_URL || 'http://localhost:8088';
 
-const currency = process.env.REACT_APP_SHARETRIBE_MARKETPLACE_CURRENCY || 'USD';
+const currency = process.env.REACT_APP_SHARETRIBE_MARKETPLACE_CURRENCY || 'EUR';
 
 // Sentry DSN (Data Source Name), a client key for authenticating calls to Sentry
 const sentryDsn = process.env.REACT_APP_PUBLIC_SENTRY_DSN;
