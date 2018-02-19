@@ -11,6 +11,7 @@ import { BrowserRouter, StaticRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { mapValues } from 'lodash';
 import moment from 'moment';
+import 'moment/locale/fi';
 import { IntlProvider, addLocaleData } from 'react-intl';
 import configureStore from './store';
 import routeConfiguration from './routeConfiguration';
@@ -21,8 +22,8 @@ import config from './config';
 // the wanted locale.
 //
 // Remember to also change the language in the config.js file.
-import localeData from 'react-intl/locale-data/en';
-import messages from './translations/en.json';
+import localeData from 'react-intl/locale-data/fi';
+import messages from './translations/fi.json';
 
 const isTestEnv = process.env.NODE_ENV === 'test';
 
