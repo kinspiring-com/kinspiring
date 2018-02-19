@@ -20,6 +20,7 @@ const sentryClientEnabled = !!process.env.REACT_APP_PUBLIC_SENTRY_DSN;
 module.exports = (reportUri, enforceSsl, reportOnly) => {
   const self = "'self'";
   const inline = "'unsafe-inline'";
+  const data = 'data:';
   const sharetribeApi = config.sdk.baseUrl;
   const sharetribeAssets = 'https://assets-sharetribecom.sharetribe.com/';
   const imgix = '*.imgix.net/';
@@ -33,6 +34,7 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
   const googleFonts = 'https://fonts.googleapis.com/';
   const stripeJs = 'https://js.stripe.com/';
   const stripeQ = 'https://q.stripe.com/';
+  const stripeApi = 'https://api.stripe.com/';
   const sentryApi = 'https://sentry.io/api/';
 
   const scriptSrc = [self, inline, googleMaps, stripeJs];
@@ -41,7 +43,7 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
 
   const imgSrc = [
     self,
-    'data:',
+    data,
     imgix,
     loremPixel,
     placeholder,
@@ -51,9 +53,9 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
     googleStaticMaps,
   ];
 
-  const connectSrc = [self, sharetribeApi, googleMaps];
+  const connectSrc = [self, sharetribeApi, googleMaps, stripeApi];
 
-  const fontSrc = [self, sharetribeAssets, googleStaticFonts];
+  const fontSrc = [self, data, sharetribeAssets, googleStaticFonts];
 
   const frameSrc = [self, stripeJs];
 
