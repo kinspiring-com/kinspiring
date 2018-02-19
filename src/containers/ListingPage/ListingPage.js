@@ -37,7 +37,7 @@ import {
   Reviews,
   PropertyGroup,
 } from '../../components';
-import { BookingDatesForm, TopbarContainer, EnquiryForm } from '../../containers';
+import { BookingDatesForm, TopbarContainer, EnquiryForm, NotFoundPage } from '../../containers';
 
 import { sendEnquiry, loadData, setInitialValues } from './ListingPage.duck';
 import EditIcon from './EditIcon';
@@ -263,6 +263,24 @@ export class ListingPageComponent extends Component {
       ? ensureOwnListing(getOwnListing(listingId))
       : ensureListing(getListing(listingId));
 
+    const isApproved =
+      currentListing.id && currentListing.attributes.state !== LISTING_STATE_PENDING_APPROVAL;
+
+    const pendingIsApproved = isPendingApprovalVariant && isApproved;
+
+    // If a /pending-approval URL is shared, the UI requires
+    // authentication and attempts to fetch the listing from own
+    // listings. This will fail with 403 Forbidden if the author is
+    // another user. We use this information to try to fetch the
+    // public listing.
+    const pendingOtherUsersListing =
+      isPendingApprovalVariant && showListingError && showListingError.status === 403;
+    const shouldShowPublicListingPage = pendingIsApproved || pendingOtherUsersListing;
+
+    if (shouldShowPublicListingPage) {
+      return <NamedRedirect name="ListingPage" params={params} search={location.search} />;
+    }
+
     const listingSlug = params.slug || createSlug(currentListing.attributes.title || '');
     const {
       description = '',
@@ -292,7 +310,7 @@ export class ListingPageComponent extends Component {
     if (showListingError && showListingError.status === 404) {
       // 404 listing not found
 
-      return <NamedRedirect name="NotFoundPage" />;
+      return <NotFoundPage />;
     } else if (showListingError) {
       // Other error in fetching listing
 
@@ -706,7 +724,9 @@ ListingPageComponent.propTypes = {
   history: shape({
     push: func.isRequired,
   }).isRequired,
-  location: object.isRequired,
+  location: shape({
+    search: string,
+  }).isRequired,
 
   unitType: propTypes.bookingUnitType,
   // from injectIntl

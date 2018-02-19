@@ -65,7 +65,6 @@
 .modalHeadingWrapper {
   padding-bottom: 31px;
   border-bottom: 1px solid var(--matterColorNegative);
-  margin-bottom: 27px;
 }
 
 .modalHeading {
@@ -93,6 +92,13 @@
   &:hover {
     color: var(--matterColor);
   }
+}
+
+.filtersWrapper {
+  /* add bottom margin so that the last filter won't be hidden
+   * under the mobile safari bottom bar or the "Show results"
+   * button bar */
+  padding-bottom: 180px;
 }
 
 .showListingsContainer {
