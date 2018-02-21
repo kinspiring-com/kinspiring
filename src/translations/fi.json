@@ -315,7 +315,7 @@
   "ManageListingsPage.profileSettings": "Profiilin asetukset",
   "ManageListingsPage.queryError": "Kysely epäonnistui. Yritä uudelleen.",
   "ManageListingsPage.title": "Hallinnoi ilmoituksia",
-  "ManageListingsPage.youHaveListings": "Sinulla on {count} {count, plural, one {listing} other {listings}}",
+  "ManageListingsPage.youHaveListings": "Sinulla on {count} {count, plural, one {ilmoitus} other {ilmoitusta}}",
   "ManageListingsPage.yourListings": "Ilmoituksesi",
   "MapPriceMarker.unsupportedPrice": "({currency})",
   "Modal.close": "SULJE",
