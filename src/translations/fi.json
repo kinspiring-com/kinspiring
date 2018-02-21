@@ -297,7 +297,7 @@
   "LoginForm.forgotPasswordInfo": "Unohditko salasanasi? {passwordRecoveryLink}",
   "LoginForm.logIn": "Kirjaudu",
   "LoginForm.passwordLabel": "Salasana",
-  "LoginForm.passwordPlaceholder": "Valitse uusi salasana…",
+  "LoginForm.passwordPlaceholder": "Kirjoita salasanasi…",
   "LoginForm.passwordRequired": "Tämä kenttä on pakollinen",
   "ManageListingCard.actionFailed": "Ups, jotain meni pieleen. Päivitä sivu ja yritä uudelleen.",
   "ManageListingCard.closeListing": "Sulje ilmoitus",
