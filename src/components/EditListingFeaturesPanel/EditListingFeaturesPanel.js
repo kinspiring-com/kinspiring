@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { pick } from 'lodash';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 import { ensureListing } from '../../util/data';
@@ -47,8 +48,21 @@ const EditListingFeaturesPanel = props => {
         name={FEATURES_NAME}
         initialValues={initialValues}
         onSubmit={values => {
+          const { category, ...fields } = values;
+
+          // When a category is changed, we must remember to unset the
+          // data already saved with another category that should not
+          // be present in the new category. Setting the rest of the
+          // fields to `null` handles the unsetting in the API.
+          const nullFields = config.custom.fields.reduce((nulls, f) => {
+            nulls[f.name] = null;
+            return nulls;
+          }, {});
+          const categoryFields = config.custom.categoryFields.find(c => c.key === category).fields;
+          const categoryFieldValues = pick(fields, categoryFields);
+
           const updatedValues = {
-            publicData: values,
+            publicData: { ...nullFields, ...categoryFieldValues },
           };
           onSubmit(updatedValues);
         }}
