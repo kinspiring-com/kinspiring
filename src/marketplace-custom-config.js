@@ -17,7 +17,31 @@ export const categories = [
   { key: 'muutLastentarvikkeet', label: 'Muut lastentarvikkeet' },
 ];
 
-const brands = [{ key: 'example-brand', label: 'Example Brand' }];
+const brands = [
+  { key: 'babyzen', label: 'Babyzen' }, // turnkey id: 101288
+  { key: 'bugaboo', label: 'Bugaboo' }, // turnkey id: 101290
+  { key: 'babybjorn', label: 'BabyBjörn' }, // turnkey id: 101289
+  { key: 'britax', label: 'Britax' }, // turnkey id: 101719
+  { key: 'babyJogger', label: 'Baby Jogger' }, // turnkey id: 101302
+  { key: 'cybex', label: 'Cybex' }, // turnkey id: 101291
+  { key: 'deuter', label: 'Deuter' }, // turnkey id: 103928
+  { key: 'emmaljunga', label: 'Emmaljunga' }, // turnkey id: 101292
+  { key: 'gesslain', label: 'Gesslain' }, // turnkey id: 101718
+  { key: 'manduca', label: 'Manduca' }, // turnkey id: 101293
+  { key: 'mountainBuggy', label: 'Mountain Buggy' }, // turnkey id: 101294
+  { key: 'maxiCosi', label: 'Maxi-Cosi' }, // turnkey id: 101298
+  { key: 'maclaren', label: 'Maclaren' }, // turnkey id: 101717
+  { key: 'philAndTeds', label: 'Phil & Teds' }, // turnkey id: 101295
+  { key: 'recaro', label: 'Recaro' }, // turnkey id: 101716
+  { key: 'stokke', label: 'Stokke' }, // turnkey id: 101296
+  { key: 'samsonite', label: 'Samsonite' }, // turnkey id: 101299
+  { key: 'kidco', label: 'Kidco' }, // turnkey id: 101549
+  { key: 'quinny', label: 'Quinny' }, // turnkey id: 101805
+  { key: 'ergobaby', label: 'Ergobaby' }, // turnkey id: 103929
+  { key: 'ora', label: 'Ora' }, // turnkey id: 138550
+  { key: 'tula', label: 'Tula' }, // turnkey id: 193754
+  { key: 'other', label: 'Muu' }, // turnkey id: 101303
+];
 
 export const FIELD_TYPE_TEXT = 'text';
 export const FIELD_TYPE_TEXTAREA = 'textarea';
