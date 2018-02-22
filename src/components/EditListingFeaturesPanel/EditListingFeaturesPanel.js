@@ -58,11 +58,11 @@ const EditListingFeaturesPanel = props => {
             nulls[f.name] = null;
             return nulls;
           }, {});
-          const categoryFields = config.custom.categoryFields.find(c => c.key === category).fields;
+          const categoryFields = config.custom.categoryFields[category] || [];
           const categoryFieldValues = pick(fields, categoryFields);
 
           const updatedValues = {
-            publicData: { ...nullFields, ...categoryFieldValues },
+            publicData: { category, ...nullFields, ...categoryFieldValues },
           };
           onSubmit(updatedValues);
         }}

@@ -107,17 +107,14 @@ const KinspiringCategoryFieldsMaybe = props => {
   if (!category) {
     return null;
   }
-  const categoryFields = config.custom.categoryFields.find(c => c.key === category);
-  if (!categoryFields) {
-    throw new Error(`Not extra fields defined for category: ${category}`);
-  }
+  const categoryFields = config.custom.categoryFields[category] || [];
   const fieldInfo = fieldName => {
     return config.custom.fields.find(f => f.name === fieldName);
   };
 
   return (
     <div>
-      {categoryFields.fields.map(fieldName => (
+      {categoryFields.map(fieldName => (
         <CategoryFieldMaybe
           key={fieldName}
           className={css.field}

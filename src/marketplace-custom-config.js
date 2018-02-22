@@ -7,14 +7,14 @@ export const amenities = [];
 export const categories = [
   { key: 'matkarattaat', label: 'Matkarattaat' },
   { key: 'yhdistelmarattaat', label: 'Yhdistelmärattaat' },
-  { key: 'tupla-ja-sisarusrattaat', label: 'Tupla- ja sisarusrattaat' },
+  { key: 'tuplaJaSisarusrattaat', label: 'Tupla- ja sisarusrattaat' },
   { key: 'juoksurattaat', label: 'Juoksurattaat' },
-  { key: 'kantovalineet-ja-rinkat', label: 'Kantovälineet ja rinkat' },
+  { key: 'kantovalineetJaRinkat', label: 'Kantovälineet ja rinkat' },
   { key: 'matkasangyt', label: 'Matkasängyt' },
   { key: 'turvaistuimet', label: 'Turvaistuimet' },
-  { key: 'kuljetuslaukut-ja-vaunutarvikkeet', label: 'Kuljetuslaukut & vaunutarvikkeet' },
+  { key: 'kuljetuslaukutJaVaunutarvikkeet', label: 'Kuljetuslaukut & vaunutarvikkeet' },
   { key: 'pyoraily', label: 'Pyöräily' },
-  { key: 'muut-lastentarvikkeet', label: 'Muut lastentarvikkeet' },
+  { key: 'muutLastentarvikkeet', label: 'Muut lastentarvikkeet' },
 ];
 
 const brands = [{ key: 'example-brand', label: 'Example Brand' }];
@@ -106,15 +106,15 @@ const strollerFields = [
   FIELD_ACCESSORIES,
 ];
 
-export const categoryFields = [
-  { key: 'matkarattaat', fields: [...commonFields, ...strollerFields] },
-  { key: 'yhdistelmarattaat', fields: [...commonFields, ...strollerFields] },
-  { key: 'tupla-ja-sisarusrattaat', fields: [...commonFields, ...strollerFields] },
-  { key: 'juoksurattaat', fields: [...commonFields, ...strollerFields] },
-  { key: 'kantovalineet-ja-rinkat', fields: [...commonFields] },
-  { key: 'matkasangyt', fields: [...commonFields] },
-  { key: 'turvaistuimet', fields: [...commonFields, FIELD_CRASH_FREE, FIELD_ACCESSORIES] },
-  { key: 'kuljetuslaukut-ja-vaunutarvikkeet', fields: [...commonFields, FIELD_ACCESSORIES] },
-  { key: 'pyoraily', fields: [...commonFields, FIELD_ACCESSORIES] },
-  { key: 'muut-lastentarvikkeet', fields: [...commonFields, FIELD_ACCESSORIES] },
-];
+export const categoryFields = {
+  matkarattaat: [...commonFields, ...strollerFields],
+  yhdistelmarattaat: [...commonFields, ...strollerFields],
+  tuplaJaSisarusrattaat: [...commonFields, ...strollerFields],
+  juoksurattaat: [...commonFields, ...strollerFields],
+  kantovalineetJaRinkat: [...commonFields],
+  matkasangyt: [...commonFields],
+  turvaistuimet: [...commonFields, FIELD_CRASH_FREE, FIELD_ACCESSORIES],
+  kuljetuslaukutJaVaunutarvikkeet: [...commonFields, FIELD_ACCESSORIES],
+  pyoraily: [...commonFields, FIELD_ACCESSORIES],
+  muutLastentarvikkeet: [...commonFields, FIELD_ACCESSORIES],
+};
