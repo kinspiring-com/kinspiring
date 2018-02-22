@@ -2,11 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
-import { toPairs } from 'lodash';
-
 import { ensureListing } from '../../util/data';
 import { EditListingFeaturesForm } from '../../containers';
 import { ListingLink } from '../../components';
+import config from '../../config';
 
 import css from './EditListingFeaturesPanel.css';
 
@@ -38,15 +37,7 @@ const EditListingFeaturesPanel = props => {
     <FormattedMessage id="EditListingFeaturesPanel.createListingTitle" />
   );
 
-  const currentFeaturesArray = publicData && publicData.amenities;
-  const currentFeatures =
-    currentFeaturesArray &&
-    currentFeaturesArray.reduce((map, key) => {
-      map[key] = true;
-      return map;
-    }, {});
-
-  const initialValues = { [FEATURES_NAME]: currentFeatures };
+  const initialValues = publicData;
 
   return (
     <div className={classes}>
@@ -56,12 +47,8 @@ const EditListingFeaturesPanel = props => {
         name={FEATURES_NAME}
         initialValues={initialValues}
         onSubmit={values => {
-          const entries = values[FEATURES_NAME] ? toPairs(values[FEATURES_NAME]) : [];
-
-          const amenities = entries.filter(entry => entry[1] === true).map(entry => entry[0]);
-
           const updatedValues = {
-            publicData: { amenities },
+            publicData: values,
           };
           onSubmit(updatedValues);
         }}
@@ -70,6 +57,7 @@ const EditListingFeaturesPanel = props => {
         updated={panelUpdated}
         updateError={errors.updateListingError}
         updateInProgress={updateInProgress}
+        categories={config.custom.categories}
       />
     </div>
   );

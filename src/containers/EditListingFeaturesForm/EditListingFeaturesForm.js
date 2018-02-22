@@ -1,12 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { bool, func, string, shape, arrayOf } from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import classNames from 'classnames';
-import { reduxForm, propTypes as formPropTypes } from 'redux-form';
-import { FormattedMessage } from 'react-intl';
+import { reduxForm, propTypes as formPropTypes, formValueSelector } from 'redux-form';
+import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
 
 import { propTypes } from '../../util/types';
-import config from '../../config';
-import { Button, FieldGroupCheckbox, Form } from '../../components';
+import { Button, Form } from '../../components';
+import CustomCategorySelectFieldMaybe from './CustomCategorySelectFieldMaybe';
+import KinspiringCategoryFieldsMaybe from './KinspiringCategoryFieldsMaybe';
 
 import css from './EditListingFeaturesForm.css';
 
@@ -17,12 +20,14 @@ const EditListingFeaturesFormComponent = props => {
     disabled,
     rootClassName,
     className,
-    name,
     handleSubmit,
     saveActionMsg,
     updated,
     updateError,
     updateInProgress,
+    categories,
+    category,
+    intl,
   } = props;
 
   const classes = classNames(rootClassName || css.root, className);
@@ -40,12 +45,14 @@ const EditListingFeaturesFormComponent = props => {
     <Form className={classes} onSubmit={handleSubmit}>
       {errorMessage}
 
-      <FieldGroupCheckbox
-        className={css.features}
-        id={`${form}.${name}`}
-        name={name}
-        options={config.custom.amenities}
+      <CustomCategorySelectFieldMaybe
+        name="category"
+        id={`${form}.category`}
+        categories={categories}
+        intl={intl}
       />
+
+      <KinspiringCategoryFieldsMaybe form={form} category={category} />
 
       <Button
         className={css.submitButton}
@@ -66,8 +73,6 @@ EditListingFeaturesFormComponent.defaultProps = {
   updateError: null,
 };
 
-const { bool, func, string } = PropTypes;
-
 EditListingFeaturesFormComponent.propTypes = {
   ...formPropTypes,
   rootClassName: string,
@@ -78,8 +83,26 @@ EditListingFeaturesFormComponent.propTypes = {
   updated: bool.isRequired,
   updateError: propTypes.error,
   updateInProgress: bool.isRequired,
+
+  categories: arrayOf(
+    shape({
+      key: string.isRequired,
+      label: string.isRequired,
+    })
+  ),
+
+  // from mapStateToProps
+  category: string,
+
+  intl: intlShape.isRequired,
 };
 
-const defaultFormName = 'EditListingFeaturesForm';
+const formName = 'EditListingFeaturesForm';
+const selector = formValueSelector(formName);
+const mapStateToProps = state => ({
+  category: selector(state, 'category'),
+});
 
-export default reduxForm({ form: defaultFormName })(EditListingFeaturesFormComponent);
+export default compose(connect(mapStateToProps), reduxForm({ form: formName }), injectIntl)(
+  EditListingFeaturesFormComponent
+);
