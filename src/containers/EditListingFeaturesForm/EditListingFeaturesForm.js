@@ -46,6 +46,7 @@ const EditListingFeaturesFormComponent = props => {
       {errorMessage}
 
       <CustomCategorySelectFieldMaybe
+        className={css.category}
         name="category"
         id={`${form}.category`}
         categories={categories}

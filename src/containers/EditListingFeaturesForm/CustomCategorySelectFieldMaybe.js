@@ -3,7 +3,7 @@ import { required } from '../../util/validators';
 import { SelectField } from '../../components';
 
 const CustomCategorySelectFieldMaybe = props => {
-  const { name, id, categories, intl } = props;
+  const { className, name, id, categories, intl } = props;
   const categoryLabel = intl.formatMessage({
     id: 'EditListingFeaturesForm.kinspiring.categoryLabel',
   });
@@ -16,7 +16,13 @@ const CustomCategorySelectFieldMaybe = props => {
     })
   );
   return categories ? (
-    <SelectField name={name} id={id} label={categoryLabel} validate={categoryRequired}>
+    <SelectField
+      className={className}
+      name={name}
+      id={id}
+      label={categoryLabel}
+      validate={categoryRequired}
+    >
       <option value="">{categoryPlaceholder}</option>
       {categories.map(c => (
         <option key={c.key} value={c.key}>
