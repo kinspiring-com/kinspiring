@@ -35,7 +35,6 @@ import {
   Footer,
   UserCard,
   Reviews,
-  PropertyGroup,
 } from '../../components';
 import { BookingDatesForm, TopbarContainer, EnquiryForm, NotFoundPage } from '../../containers';
 
@@ -579,18 +578,6 @@ export class ListingPageComponent extends Component {
                       <FormattedMessage id="ListingPage.descriptionTitle" />
                     </h2>
                     <p className={css.description}>{description}</p>
-                  </div>
-
-                  <div className={css.featuresContainer}>
-                    <h2 className={css.featuresTitle}>
-                      <FormattedMessage id="ListingPage.featuresTitle" />
-                    </h2>
-                    <PropertyGroup
-                      id="ListingPage.amenities"
-                      options={config.custom.amenities}
-                      selectedOptions={publicData.amenities}
-                      twoColumns={true}
-                    />
                   </div>
 
                   <SectionRulesMaybe publicData={publicData} />
