@@ -52,7 +52,7 @@ const EditListingFeaturesFormComponent = props => {
         intl={intl}
       />
 
-      <KinspiringCategoryFieldsMaybe form={form} category={category} />
+      <KinspiringCategoryFieldsMaybe form={form} category={category} intl={intl} />
 
       <Button
         className={css.submitButton}

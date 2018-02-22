@@ -27,35 +27,26 @@ const commonFields = [
   {
     name: 'modelYear',
     type: FIELD_TYPE_TEXT,
-    label: 'Käyttöönottovuosi/vuosimalliarvio',
-    placeholder: 'esim. 2018',
     required: true,
   },
   {
     name: 'weightAgeLimit',
     type: FIELD_TYPE_TEXT,
-    label: 'Painorajat/suositusikä',
-    placeholder: 'esim. 10-15kg',
     required: true,
   },
   {
     name: 'minRentingPeriod',
     type: FIELD_TYPE_TEXT,
-    label: 'Minimivuokrausaika',
-    placeholder: 'esim. 1 viikko',
     required: true,
   },
   {
     name: 'rentingTerms',
     type: FIELD_TYPE_TEXT,
-    label: 'Vuokrausehdot (esim. omavastuun suuruus)',
-    placeholder: 'esim. omavastuu 100€',
     required: true,
   },
   {
     name: 'containsBrandMaterial',
     type: FIELD_TYPE_BOOLEAN,
-    label: 'Ilmoitus sisältää valmistajan kuva- tai videomateriaalia',
     required: true,
   },
 ];

@@ -1,4 +1,5 @@
 import React from 'react';
+import { intlShape } from 'react-intl';
 import { string, shape, bool, oneOf } from 'prop-types';
 import { TextInputField } from '../../components';
 import * as validators from '../../util/validators';
@@ -12,10 +13,12 @@ const {
 } = config.custom;
 
 const CategoryFieldMaybe = props => {
-  const { form, field } = props;
-  const { name, type, label, placeholder, required } = field;
+  const { form, field, intl } = props;
+  const { name, type, required } = field;
 
-  const fieldRequiredMessage = 'Tämä kenttä on pakollinen';
+  const fieldRequiredMessage = intl.formatMessage({
+    id: 'KinspiringCategoryFieldsMaybe.fieldRequired',
+  });
   const validate = required ? validators.required(fieldRequiredMessage) : null;
 
   if (type === FIELD_TYPE_TEXT) {
@@ -24,8 +27,10 @@ const CategoryFieldMaybe = props => {
         type="text"
         name={name}
         id={`${form}.${name}`}
-        label={label}
-        placeholder={placeholder}
+        label={intl.formatMessage({ id: `KinspiringCategoryFieldsMaybe.${name}.label` })}
+        placeholder={intl.formatMessage({
+          id: `KinspiringCategoryFieldsMaybe.${name}.placeholder`,
+        })}
         validate={validate}
       />
     );
@@ -35,8 +40,10 @@ const CategoryFieldMaybe = props => {
         type="textarea"
         name={name}
         id={`${form}.${name}`}
-        label={label}
-        placeholder={placeholder}
+        label={intl.formatMessage({ id: `KinspiringCategoryFieldsMaybe.${name}.label` })}
+        placeholder={intl.formatMessage({
+          id: `KinspiringCategoryFieldsMaybe.${name}.placeholder`,
+        })}
         validate={validate}
       />
     );
@@ -59,14 +66,13 @@ CategoryFieldMaybe.propTypes = {
       FIELD_TYPE_BOOLEAN,
       FIELD_TYPE_SELECT_SINGLE,
     ]).isRequired,
-    label: string.isRequired,
-    placeholder: string,
     required: bool.isRequired,
   }).isRequired,
+  intl: intlShape.isRequired,
 };
 
 const KinspiringCategoryFieldsMaybe = props => {
-  const { form, category } = props;
+  const { form, category, intl } = props;
   if (!category) {
     return null;
   }
@@ -77,7 +83,7 @@ const KinspiringCategoryFieldsMaybe = props => {
   return (
     <div>
       {categoryFields.fields.map(field => (
-        <CategoryFieldMaybe key={field.name} form={form} field={field} />
+        <CategoryFieldMaybe key={field.name} form={form} field={field} intl={intl} />
       ))}
     </div>
   );
@@ -90,6 +96,7 @@ KinspiringCategoryFieldsMaybe.defaultProps = {
 KinspiringCategoryFieldsMaybe.propTypes = {
   form: string.isRequired,
   category: string,
+  intl: intlShape.isRequired,
 };
 
 export default KinspiringCategoryFieldsMaybe;
