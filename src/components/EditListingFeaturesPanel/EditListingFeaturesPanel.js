@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { pick } from 'lodash';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
-import { toPairs } from 'lodash';
-
 import { ensureListing } from '../../util/data';
 import { EditListingFeaturesForm } from '../../containers';
 import { ListingLink } from '../../components';
+import config from '../../config';
 
 import css from './EditListingFeaturesPanel.css';
 
@@ -38,15 +38,7 @@ const EditListingFeaturesPanel = props => {
     <FormattedMessage id="EditListingFeaturesPanel.createListingTitle" />
   );
 
-  const currentFeaturesArray = publicData && publicData.amenities;
-  const currentFeatures =
-    currentFeaturesArray &&
-    currentFeaturesArray.reduce((map, key) => {
-      map[key] = true;
-      return map;
-    }, {});
-
-  const initialValues = { [FEATURES_NAME]: currentFeatures };
+  const initialValues = publicData;
 
   return (
     <div className={classes}>
@@ -56,12 +48,21 @@ const EditListingFeaturesPanel = props => {
         name={FEATURES_NAME}
         initialValues={initialValues}
         onSubmit={values => {
-          const entries = values[FEATURES_NAME] ? toPairs(values[FEATURES_NAME]) : [];
+          const { category, ...fields } = values;
 
-          const amenities = entries.filter(entry => entry[1] === true).map(entry => entry[0]);
+          // When a category is changed, we must remember to unset the
+          // data already saved with another category that should not
+          // be present in the new category. Setting the rest of the
+          // fields to `null` handles the unsetting in the API.
+          const nullFields = config.custom.fields.reduce((nulls, f) => {
+            nulls[f.name] = null;
+            return nulls;
+          }, {});
+          const categoryFields = config.custom.categoryFields[category] || [];
+          const categoryFieldValues = pick(fields, categoryFields);
 
           const updatedValues = {
-            publicData: { amenities },
+            publicData: { category, ...nullFields, ...categoryFieldValues },
           };
           onSubmit(updatedValues);
         }}
@@ -70,6 +71,7 @@ const EditListingFeaturesPanel = props => {
         updated={panelUpdated}
         updateError={errors.updateListingError}
         updateInProgress={updateInProgress}
+        categories={config.custom.categories}
       />
     </div>
   );

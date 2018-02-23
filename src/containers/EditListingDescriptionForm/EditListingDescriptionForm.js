@@ -1,5 +1,5 @@
 import React from 'react';
-import { bool, func, string, arrayOf, shape } from 'prop-types';
+import { bool, func, string } from 'prop-types';
 import { compose } from 'redux';
 import { reduxForm, propTypes as formPropTypes } from 'redux-form';
 import { intlShape, injectIntl, FormattedMessage } from 'react-intl';
@@ -7,7 +7,6 @@ import classNames from 'classnames';
 import { propTypes } from '../../util/types';
 import { maxLength, required } from '../../util/validators';
 import { Form, Button, TextInputField } from '../../components';
-import CustomCategorySelectFieldMaybe from './CustomCategorySelectFieldMaybe';
 
 import css from './EditListingDescriptionForm.css';
 
@@ -26,7 +25,6 @@ const EditListingDescriptionFormComponent = props => {
     updated,
     updateError,
     updateInProgress,
-    categories,
   } = props;
 
   const titleMessage = intl.formatMessage({ id: 'EditListingDescriptionForm.title' });
@@ -88,13 +86,6 @@ const EditListingDescriptionFormComponent = props => {
         validate={[required(descriptionRequiredMessage)]}
       />
 
-      <CustomCategorySelectFieldMaybe
-        name="category"
-        id={`${form}.category`}
-        categories={categories}
-        intl={intl}
-      />
-
       <Button
         className={css.submitButton}
         type="submit"
@@ -119,12 +110,6 @@ EditListingDescriptionFormComponent.propTypes = {
   updated: bool.isRequired,
   updateError: propTypes.error,
   updateInProgress: bool.isRequired,
-  categories: arrayOf(
-    shape({
-      key: string.isRequired,
-      label: string.isRequired,
-    })
-  ),
 };
 
 const formName = 'EditListingDescriptionForm';
