@@ -1,7 +1,7 @@
 import React from 'react';
 import { intlShape } from 'react-intl';
 import { string, shape, bool, oneOf, arrayOf } from 'prop-types';
-import { TextInputField, SelectField } from '../../components';
+import { TextInputField, SelectField, FieldBoolean } from '../../components';
 import * as validators from '../../util/validators';
 import config from '../../config';
 
@@ -25,6 +25,7 @@ const CategoryFieldMaybe = props => {
     id: 'KinspiringCategoryFieldsMaybe.fieldRequired',
   });
   const validate = required ? validators.required(fieldRequiredMessage) : null;
+  const validateBoolean = required ? validators.requiredBoolean(fieldRequiredMessage) : null;
 
   if (type === FIELD_TYPE_TEXT) {
     return (
@@ -55,7 +56,18 @@ const CategoryFieldMaybe = props => {
       />
     );
   } else if (type === FIELD_TYPE_BOOLEAN) {
-    return <p style={{ color: '#e7e7e7', fontSize: 14 }}>TODO: {label} (kyllä/ei)</p>;
+    return (
+      <FieldBoolean
+        className={className}
+        name={name}
+        id={`${form}.${name}`}
+        label={label}
+        placeholder={intl.formatMessage({
+          id: `KinspiringCategoryFieldsMaybe.${name}.placeholder`,
+        })}
+        validate={validateBoolean}
+      />
+    );
   } else if (type === FIELD_TYPE_SELECT_SINGLE) {
     return (
       <SelectField
@@ -113,7 +125,7 @@ const KinspiringCategoryFieldsMaybe = props => {
   };
 
   return (
-    <div>
+    <div className={css.root}>
       {categoryFields.map(fieldName => (
         <CategoryFieldMaybe
           key={fieldName}
