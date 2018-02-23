@@ -198,6 +198,8 @@
   "EnquiryForm.messageRequired": "Viestikenttä on pakollinen",
   "EnquiryForm.sendEnquiryError": "Ups, jotain meni pieleen. Yritä uudelleen.",
   "EnquiryForm.submitButtonText": "Lähetä kysely",
+  "FieldBoolean.no": "Ei",
+  "FieldBoolean.yes": "Kyllä",
   "FieldDateInput.clearDate": "Tyhjennä päivät",
   "FieldDateInput.closeDatePicker": "Sulje",
   "FieldDateInput.invalidDate": "Aloituspäivämäärä ei kelpaa",
