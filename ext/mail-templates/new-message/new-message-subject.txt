@@ -1,1 +1,1 @@
-{{message.sender.display-name}} has sent you a new message
+{{message.sender.display-name}} on lähettänyt sinulle uuden viestin
