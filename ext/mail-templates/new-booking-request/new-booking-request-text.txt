@@ -16,10 +16,10 @@ Maksutapahtuma
 {{#each line-items~}}
 {{~#contains include-for "provider"~}}
 {{~#eq "day" code~}}
-{{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "day" "days"}}: {{> format-money money=line-total}}
+{{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "päivä" "päivää"}}: {{> format-money money=line-total}}
 {{/eq~}}
 {{~#eq "night" code~}}
-{{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "night" "nights"}}: {{> format-money money=line-total}}
+{{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "yö" "yötä"}}: {{> format-money money=line-total}}
 {{/eq~}}
 {{~#eq "provider-commission" code~}}
 {{marketplace.name}} komissio: {{> format-money money=line-total}}
