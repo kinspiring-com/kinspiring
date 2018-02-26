@@ -4,15 +4,15 @@
 {{~/inline~}}
 
 {{~#*inline "format-date"~}}
-{{date date format="MMM d, YYYY"}}
+{{date date format="MMM d, YYYY" lang="fi-FI"}}
 {{~/inline~}}
 
 {{#with transaction~}}
-Please respond to a request by {{customer.display-name}}
+Vastaathan käyttäjän {{customer.display-name}} varauspyyntöön!
 
-Good news! {{customer.display-name}} just requested to book {{listing.title}} from {{> format-date date=booking.start}} to {{> format-date date=booking.end}}. Here's the breakdown.
+Hyviä uutisia! {{customer.display-name}} haluaisi vuokrata lastentarvikkeesi {{listing.title}} ajalle {{> format-date date=booking.start}} – {{> format-date date=booking.end}}. Tässä varauksen tiedot.
 
-Payment
+Maksutapahtuma
 {{#each line-items~}}
 {{~#contains include-for "provider"~}}
 {{~#eq "day" code~}}
@@ -22,14 +22,14 @@ Payment
 {{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "night" "nights"}}: {{> format-money money=line-total}}
 {{/eq~}}
 {{~#eq "provider-commission" code~}}
-{{marketplace.name}} fee: {{> format-money money=line-total}}
+{{marketplace.name}} komissio: {{> format-money money=line-total}}
 {{/eq~}}
 {{~/contains~}}
 {{/each~}}
-You earn: {{> format-money money=payout-total}}
+Sinä tienaat: {{> format-money money=payout-total}}
 
-You need to accept the request by {{> format-date date=delayed-transition.run-at}}. Otherwise the request will be expired and you won't get paid. If the booked dates won't work for you, you can also choose to decline the request.
+Sinun tulee hyväksyä varauspyyntö viimeistään {{> format-date date=delayed-transition.run-at}}. Jos hyväksyt tilauksen ennen määräaikaa, maksu veloitetaan ostajalta. Muussa tapauksessa tilaus hylätään automaattisesti eikä maksua veloiteta. Jos et hyväksy varausta määräajassa, se hylätään, etkä saa maksua. Mikäli vuokrauksen päivät eivät sovi sinulle, voit myös hylätä varauspyynnön.
 
-Accept or decline the booking: {{marketplace.url}}/sale/{{url-encode id}}/details
+Hyväksy tai hylkää varauspyyntö: {{marketplace.url}}/sale/{{url-encode id}}/details
 
 {{~/with}}
