@@ -1,0 +1,42 @@
+@import '../../marketplace.css';
+
+.root {
+  padding: 0 24px;
+  margin-bottom: 35px;
+
+  @media (--viewportMedium) {
+    padding: 0;
+    margin-bottom: 48px;
+  }
+}
+
+.heading {
+  @apply --marketplaceH3FontStyles;
+  color: var(--matterColorAnti);
+
+  margin-top: 0;
+  @media (--viewportMedium) {
+    margin-top: 0;
+    margin-bottom: 24px;
+  }
+}
+
+.fields {
+  margin: 0;
+}
+
+.field {
+  margin-top: 12px;
+
+  @media (--viewportMedium) {
+    margin-top: 16px;
+  }
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.label {
+  font-weight: bold;
+}

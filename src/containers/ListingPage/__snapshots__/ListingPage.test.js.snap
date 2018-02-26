@@ -270,6 +270,9 @@ exports[`ListingPage matches snapshot 1`] = `
                 listing1 description
               </p>
             </div>
+            <KinspiringPublicData
+              publicData={Object {}}
+            />
             <SectionRulesMaybe
               className={null}
               publicData={Object {}}
