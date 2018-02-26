@@ -5,12 +5,12 @@
 
 <html>
   <body>
-    <h1>Your booking request has expired.</h1>
+    <h1>Varauspyyntösi on hylätty.</h1>
 
     {{#with transaction}}
-    <p>Unfortunately {{provider.display-name}} didn't respond to your booking request for {{listing.title}} from {{> format-date date=booking.start}} to {{> format-date date=booking.end}} on time, so the request has expired. You have not been billed.</p>
+    <p>Voi harmi, {{provider.display-name}} ei vastannut ajallaan varauspyyntöösi lastentarvikkeelle {{listing.title}} ajalle {{> format-date date=booking.start}} – {{> format-date date=booking.end}} ja varauksesi on siten hylätty. Sinua ei ole laskutettu.</p>
     {{/with}}
 
-    <p><a href="{{marketplace.url}}">Try to book something else instead</a></p>
+    <p><a href="{{marketplace.url}}">Mitä jos varaisit toisen vastaavaan lastentarvikkeen Kinspiringissa? Katso vuokralla olevat lastentarvikkeet: </a></p>
   </body>
 </html>
