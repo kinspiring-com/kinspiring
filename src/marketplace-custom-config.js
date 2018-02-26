@@ -60,6 +60,10 @@ const FIELD_BACKREST_LEAN_ADJUSTMENT = 'backrestLeanAdjustment';
 const FIELD_ACCESSORIES = 'accessories';
 const FIELD_CRASH_FREE = 'crashFree';
 
+// Configuration for all the publicData fields. This is used to show a
+// correct input for the listing creation/edit and to render the value
+// in the listing page. The order affect how the values are rendered
+// in the listing page.
 export const fields = [
   {
     name: FIELD_BRAND,
@@ -130,6 +134,9 @@ const strollerFields = [
   FIELD_ACCESSORIES,
 ];
 
+// Configuration for publicData fields in listing
+// creation/edit. Defines which fields should be shown for each
+// category and in which order (in the listing creation/edit).
 export const categoryFields = {
   matkarattaat: [...commonFields, ...strollerFields],
   yhdistelmarattaat: [...commonFields, ...strollerFields],

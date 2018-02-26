@@ -42,6 +42,7 @@ import { sendEnquiry, loadData, setInitialValues } from './ListingPage.duck';
 import EditIcon from './EditIcon';
 import SectionRulesMaybe from './SectionRulesMaybe';
 import SectionMapMaybe from './SectionMapMaybe';
+import KinspiringPublicData from './KinspiringPublicData';
 import css from './ListingPage.css';
 
 // This defines when ModalInMobile shows content as Modal
@@ -579,6 +580,8 @@ export class ListingPageComponent extends Component {
                     </h2>
                     <p className={css.description}>{description}</p>
                   </div>
+
+                  <KinspiringPublicData publicData={publicData} />
 
                   <SectionRulesMaybe publicData={publicData} />
                   <SectionMapMaybe
