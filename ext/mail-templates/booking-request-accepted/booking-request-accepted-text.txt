@@ -4,7 +4,7 @@
 {{~/inline~}}
 
 {{~#*inline "format-date"~}}
-{{date date format="MMM d, YYYY"}}
+{{date date format="MMM d, YYYY" lang="fi-FI"}}
 {{~/inline~}}
 
 Onnea, varauspyyntösi on hyväksytty!
