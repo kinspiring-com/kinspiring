@@ -2,16 +2,16 @@
 <html>
   <body>
     {{#with message}}
-    <h1>You have a new message from {{sender.display-name}}</h1>
+    <h1>{{sender.display-name}} on lähettänyt sinulle uuden viestin!</h1>
 
     <blockquote>"{{content}}"</blockquote>
 
     {{#eq recipient-role "customer"}}
-      <p><a href="{{marketplace.url}}/order/{{url-encode transaction.id}}/details">Reply to {{sender.display-name}}</a></p>
+      <p><a href="{{marketplace.url}}/order/{{url-encode transaction.id}}/details">Vastaa käyttäjälle {{sender.display-name}}</a></p>
     {{/eq}}
 
     {{#eq recipient-role "provider"}}
-      <p><a href="{{marketplace.url}}/sale/{{url-encode transaction.id}}/details">Reply to {{sender.display-name}}</a></p>
+      <p><a href="{{marketplace.url}}/sale/{{url-encode transaction.id}}/details">Vastaa käyttäjälle {{sender.display-name}}</a></p>
     {{/eq}}
 
     {{/with}}
