@@ -4,17 +4,17 @@
 {{~/inline~}}
 
 {{~#*inline "format-date"~}}
-{{date date format="MMM d, YYYY"}}
+{{date date format="MMM d, YYYY" lang="fi-FI"}}
 {{~/inline~}}
 
 {{#with transaction~}}
-You have been paid {{> format-money money=payout-total}}
+Olet ansainnut {{> format-money money=payout-total}}
 
-We have sent you {{> format-money money=payout-total}} for the booking of {{listing.title}} from {{> format-date date=booking.start}} to {{> format-date date=booking.end}} by {{customer.display-name}}. It might take up to 7 days for the money to reach your bank account.
+Olemme maksaneet sinulle {{> format-money money=payout-total}} varauksesta lastentarvikkeelle {{listing.title}}. Vuokraus alkaa {{> format-date date=booking.start}} ja päättyy {{> format-date date=booking.end}}. Vuokraajasi on {{customer.display-name}}. Rahan siirtyminen tilillesi voi kestää enintään seitsemän päivää. 
 
-Here's the breakdown.
+Tässä maksun tiedot.
 
-Payment
+Maksutapahtuma
 {{#each line-items~}}
 {{~#contains include-for "provider"~}}
 {{~#eq "day" code~}}
@@ -24,9 +24,9 @@ Payment
 {{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "night" "nights"}}: {{> format-money money=line-total}}
 {{/eq~}}
 {{~#eq "provider-commission" code~}}
-{{marketplace.name}} fee: {{> format-money money=line-total}}
+{{marketplace.name}} komissio: {{> format-money money=line-total}}
 {{/eq~}}
 {{~/contains~}}
 {{/each~}}
-You earn: {{> format-money money=payout-total}}
+Sinä tienaat: {{> format-money money=payout-total}}
 {{~/with}}
