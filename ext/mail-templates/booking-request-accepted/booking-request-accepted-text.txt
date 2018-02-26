@@ -7,14 +7,14 @@
 {{date date format="MMM d, YYYY"}}
 {{~/inline~}}
 
-Your booking request was accepted!
+Onnea, varauspyyntösi on hyväksytty!
 
 {{#with transaction~}}
-{{provider.display-name}} has accepted your booking request for {{listing.title}} from {{> format-date date=booking.start}} to {{> format-date date=booking.end}}.
+{{provider.display-name}} on hyväksynyt varauspyyntösi lastentarvikkeelle {{listing.title}}. Vuokrauksesi alkaa {{> format-date date=booking.start}} ja päättyy {{> format-date date=booking.end}}.
 
-We have charged {{> format-money money=payin-total}} from your credit card. Here's your receipt.
+Olemme veloittaneet {{> format-money money=payin-total}} luottokortiltasi. Tässä kuittisi.
 
-Payment
+Maksutapahtuma
 {{#each line-items~}}
 {{~#contains include-for "customer"~}}
 {{~#eq "day" code~}}
@@ -25,6 +25,6 @@ Payment
 {{/eq~}}
 {{~/contains~}}
 {{/each~}}
-Payment total: {{> format-money money=payin-total}}
+Yhteensä: {{> format-money money=payin-total}}
 
 {{~/with}}
