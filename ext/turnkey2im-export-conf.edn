@@ -1,0 +1,61 @@
+{:image-base-url "https://user-assets.sharetribe.com/images/"
+ :category-key :category
+
+ :categories {161175 "juoksurattaat"
+              161216 "kantovalineetJaRinkat"
+              161263 "matkasangyt"
+              163499 "matkarattaat"
+              163502 "yhdistelmavaunut"
+              163503 "tuplaJaSisarusrattaat"
+              163504 "turvaistuimet"
+              163805 "kuljetuslaukutJaVaunutarvikkeet"
+              163806 "muutLastentarvikkeet"
+              163966 "pyoraily"}
+
+ :custom-fields {26438 :modelYear
+                 26439 :crashFree
+                 26441 :seatDirectionChangeable
+                 26442 :backrestLeanAdjustment
+                 26444 :accessories
+                 26446 :weightAgeLimit
+                 26447 :rentingTerms
+                 26988 :brand
+                 40434 :minRentingPeriod
+                 40437 :containsBrandMaterial}
+
+ :convert-fields {:containsBrandMaterial :single-enum
+                  :seatDirectionChangeable :single-enum
+                  :backrestLeanAdjustment :single-enum}
+
+ :option-values {99137 true
+                 99138 false
+
+                 99139 true
+                 99140 false
+
+                 101288 "babyzen"
+                 101289 "babybjorn"
+                 101290 "bugaboo"
+                 101291 "cybex"
+                 101292 "emmaljunga"
+                 101293 "manduca"
+                 101294 "mountainBuggy"
+                 101295 "philAndTeds"
+                 101296 "stokke"
+                 101298 "maxiCosi"
+                 101299 "samsonite"
+                 101302 "babyJogger"
+                 101303 "other"
+                 101549 "kidco"
+                 101716 "recaro"
+                 101717 "maclaren"
+                 101718 "gesslain"
+                 101719 "britax"
+                 101805 "quinny"
+                 103928 "deuter"
+                 103929 "ergobaby"
+                 138550 "ora"
+                 193754 "tula"
+
+                 149616 true
+                 149617 false}}
