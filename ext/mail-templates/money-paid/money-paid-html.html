@@ -4,22 +4,22 @@
 {{~/inline~}}
 
 {{~#*inline "format-date"~}}
-{{date date format="MMM d, YYYY"}}
+{{date date format="MMM d, YYYY" lang="fi-FI"}}
 {{~/inline~}}
 
 <html>
   <body>
     {{#with transaction}}
-    <h1>You have been paid {{> format-money money=payout-total}}</h1>
+    <h1>Olet ansainnut {{> format-money money=payout-total}}</h1>
 
-    <p>We have sent you {{> format-money money=payout-total}} for the booking of {{listing.title}} from {{> format-date date=booking.start}} to {{> format-date date=booking.end}} by {{customer.display-name}}. It might take up to 7 days for the money to reach your bank account.</p>
+    <p>Olemme maksaneet sinulle {{> format-money money=payout-total}} varauksesta lastentarvikkeelle {{listing.title}}. Vuokraus alkaa {{> format-date date=booking.start}} ja päättyy {{> format-date date=booking.end}}. Vuokraajasi on {{customer.display-name}}. Rahan siirtyminen tilillesi voi kestää enintään seitsemän päivää.</p>
 
-    <p>Here's the breakdown.</p>
+    <p>Tässä maksun tiedot..</p>
 
     <table>
       <thead>
         <tr>
-          <th style="text-align: left;">Payment</th>
+          <th style="text-align: left;">Maksutapahtuma</th>
         </tr>
       </thead>
       <tbody>
@@ -37,7 +37,7 @@
             {{/eq}}
 
             {{#eq "provider-commission" code}}
-            <td>{{marketplace.name}} fee:</td>
+            <td>{{marketplace.name}} komissio:</td>
             <td style="text-align: right; padding-left: 20px;">{{> format-money money=line-total}}</td>
             {{/eq}}
           </tr>
@@ -46,7 +46,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <th style="text-align: left;">You earn</th>
+          <th style="text-align: left;">Sinä tienaat</th>
           <th style="text-align: right; padding-left: 20px;">{{> format-money money=payout-total}}</th>
         </tr>
       </tfoot>
