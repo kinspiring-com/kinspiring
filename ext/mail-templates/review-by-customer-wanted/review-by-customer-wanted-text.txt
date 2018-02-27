@@ -1,7 +1,7 @@
 
 {{~#with transaction~}}
 
-Millaista oli vuokrata {{listing.title}}? Anna vuokranantajallesi arvostelu!
+Millaista oli vuokrata {{listing.title}}? Kirjoita vuokranantajallesi arvostelu!
 
 Vuokrasit vähän aikaa sitten lastentarvikkeen {{listing.title}}. Vuokranantajasi oli {{provider.display-name}}. Kerrothan muillekin käyttäjille kokemuksestasi ja kirjoitat arvostelun vuokranantajallesi. Arvostelut ovat tärkeitä {{marketplace.name}}-yhteisölle.
 
