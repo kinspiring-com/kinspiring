@@ -1,1 +1,1 @@
-Read the review {{other-party.display-name}} wrote you
+Lue millaisen arvostelun {{other-party.display-name}} kirjoitti sinulle
