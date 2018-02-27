@@ -1,7 +1,7 @@
 <html>
   <body>
     {{#with transaction}}
-    <h1>{{other-party.display-name}} irjoitti sinulle arvostelun. Näin hän kirjoitti.</h1>
+    <h1>{{other-party.display-name}} kirjoitti sinulle arvostelun. Näin hän kirjoitti.</h1>
 
     {{#each reviews}}
       {{#eq recipient.id subject.id}}
