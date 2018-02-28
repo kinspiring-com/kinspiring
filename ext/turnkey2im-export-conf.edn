@@ -1,4 +1,9 @@
 {:image-base-url "https://user-assets.sharetribe.com/images/"
+
+ :defaults {:im.listing/description "Kuvaus puuttuu."}
+
+ :review-rating {:down :skip}
+
  :category-key :category
 
  :categories {161175 "juoksurattaat"
