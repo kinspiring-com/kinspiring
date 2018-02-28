@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import { array, string, func } from 'prop-types';
+import { array, bool, func, string } from 'prop-types';
 import classNames from 'classnames';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 
-import SelectMultipleFilterMobileForm from './SelectMultipleFilterMobileForm';
+import SelectMultipleFilterPlainForm from './SelectMultipleFilterPlainForm';
 import { arrayToFormValues, formValuesToArray } from '../../util/data';
 
-import css from './SelectMultipleFilterMobile.css';
+import css from './SelectMultipleFilterPlain.css';
 
-class SelectMultipleFilterMobileComponent extends Component {
+class SelectMultipleFilterPlainComponent extends Component {
   constructor(props) {
     super(props);
     this.state = { isOpen: true };
@@ -34,7 +34,17 @@ class SelectMultipleFilterMobileComponent extends Component {
   }
 
   render() {
-    const { rootClassName, className, name, label, options, initialValues, intl } = this.props;
+    const {
+      rootClassName,
+      className,
+      id,
+      name,
+      label,
+      options,
+      initialValues,
+      intl,
+      twoColumns,
+    } = this.props;
 
     const classes = classNames(rootClassName || css.root, className);
 
@@ -43,14 +53,16 @@ class SelectMultipleFilterMobileComponent extends Component {
 
     const labelText = hasInitialValues
       ? intl.formatMessage(
-          { id: 'SelectMultipleFilterMobileForm.labelSelected' },
+          { id: 'SelectMultipleFilterPlainForm.labelSelected' },
           { labelText: label, count: initialValues.length }
         )
       : label;
 
-    const optionsContainerClass = this.state.isOpen
-      ? css.optionsContainerOpen
-      : css.optionsContainerClosed;
+    const optionsContainerClass = classNames({
+      [css.optionsContainerOpen]: this.state.isOpen,
+      [css.optionsContainerClosed]: !this.state.isOpen,
+      [css.columnLayout]: twoColumns,
+    });
 
     const initialValuesObj = arrayToFormValues(initialValues);
     const namedInitialValues = { [name]: initialValuesObj };
@@ -62,44 +74,49 @@ class SelectMultipleFilterMobileComponent extends Component {
             <span className={labelClass}>{labelText}</span>
           </button>
           <button type="button" className={css.clearButton} onClick={this.handleClear}>
-            <FormattedMessage id={'SelectMultipleFilterMobileForm.clear'} />
+            <FormattedMessage id={'SelectMultipleFilterPlainForm.clear'} />
           </button>
         </div>
-        <SelectMultipleFilterMobileForm
-          form={`SelectMultipleFilterMobileForm.${name}`}
+        <SelectMultipleFilterPlainForm
+          form={`SelectMultipleFilterPlainForm.${id ? id : name}`}
           className={optionsContainerClass}
           name={name}
           options={options}
           initialValues={namedInitialValues}
           onChange={this.handleSelect}
-          enableReinitialize={true}
-          keepDirtyOnReinitialize={true}
+          twoColumns={twoColumns}
+          enableReinitialize
+          keepDirtyOnReinitialize
         />
       </div>
     );
   }
 }
 
-SelectMultipleFilterMobileComponent.defaultProps = {
+SelectMultipleFilterPlainComponent.defaultProps = {
   rootClassName: null,
   className: null,
+  id: undefined,
   initialValues: [],
+  twoColumns: false,
 };
 
-SelectMultipleFilterMobileComponent.propTypes = {
+SelectMultipleFilterPlainComponent.propTypes = {
   rootClassName: string,
   className: string,
+  id: string,
   name: string.isRequired,
   urlParam: string.isRequired,
   label: string.isRequired,
   onSelect: func.isRequired,
   options: array.isRequired,
   initialValues: array,
+  twoColumns: bool,
 
   // from injectIntl
   intl: intlShape.isRequired,
 };
 
-const SelectMultipleFilterMobile = injectIntl(SelectMultipleFilterMobileComponent);
+const SelectMultipleFilterPlain = injectIntl(SelectMultipleFilterPlainComponent);
 
-export default SelectMultipleFilterMobile;
+export default SelectMultipleFilterPlain;

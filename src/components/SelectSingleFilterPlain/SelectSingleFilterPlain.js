@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { string, func, arrayOf, shape } from 'prop-types';
+import { arrayOf, bool, func, shape, string } from 'prop-types';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
-import css from './SelectSingleFilterMobile.css';
+import css from './SelectSingleFilterPlain.css';
 
-class SelectSingleFilterMobile extends Component {
+class SelectSingleFilterPlain extends Component {
   constructor(props) {
     super(props);
     this.state = { isOpen: true };
@@ -28,13 +28,25 @@ class SelectSingleFilterMobile extends Component {
   }
 
   render() {
-    const { rootClassName, className, label, options, initialValue } = this.props;
+    const {
+      rootClassName,
+      className,
+      label,
+      options,
+      initialValue,
+      twoColumns,
+      useBullets,
+    } = this.props;
 
     const labelClass = initialValue ? css.filterLabelSelected : css.filterLabel;
 
-    const optionsContainerClass = this.state.isOpen
-      ? css.optionsContainerOpen
-      : css.optionsContainerClosed;
+    const hasBullets = useBullets || twoColumns;
+    const optionsContainerClass = classNames({
+      [css.optionsContainerOpen]: this.state.isOpen,
+      [css.optionsContainerClosed]: !this.state.isOpen,
+      [css.hasBullets]: hasBullets,
+      [css.twoColumns]: twoColumns,
+    });
 
     const classes = classNames(rootClassName || css.root, className);
 
@@ -45,19 +57,28 @@ class SelectSingleFilterMobile extends Component {
             <span className={labelClass}>{label}</span>
           </button>
           <button className={css.clearButton} onClick={e => this.selectOption(null, e)}>
-            <FormattedMessage id={'SelectSingleFilterMobile.clear'} />
+            <FormattedMessage id={'SelectSingleFilterPlain.clear'} />
           </button>
         </div>
         <div className={optionsContainerClass}>
           {options.map(option => {
             // check if this option is selected
             const selected = initialValue === option.key;
-            // menu item border class
-            const optionBorderClass = selected ? css.optionBorderSelected : css.optionBorder;
+            const optionClass = hasBullets && selected ? css.optionSelected : css.option;
+            // menu item selected bullet or border class
+            const optionBorderClass = hasBullets
+              ? classNames({
+                  [css.optionBulletSelected]: selected,
+                  [css.optionBullet]: !selected,
+                })
+              : classNames({
+                  [css.optionBorderSelected]: selected,
+                  [css.optionBorder]: !selected,
+                });
             return (
               <button
                 key={option.key}
-                className={css.option}
+                className={optionClass}
                 onClick={() => this.selectOption(option.key)}
               >
                 <span className={optionBorderClass} />
@@ -71,13 +92,15 @@ class SelectSingleFilterMobile extends Component {
   }
 }
 
-SelectSingleFilterMobile.defaultProps = {
+SelectSingleFilterPlain.defaultProps = {
   rootClassName: null,
   className: null,
   initialValue: null,
+  twoColumns: false,
+  useBullets: false,
 };
 
-SelectSingleFilterMobile.propTypes = {
+SelectSingleFilterPlain.propTypes = {
   rootClassName: string,
   className: string,
   urlParam: string.isRequired,
@@ -91,6 +114,8 @@ SelectSingleFilterMobile.propTypes = {
     })
   ).isRequired,
   initialValue: string,
+  twoColumns: bool,
+  useBullets: bool,
 };
 
-export default SelectSingleFilterMobile;
+export default SelectSingleFilterPlain;

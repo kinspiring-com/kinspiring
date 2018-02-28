@@ -26,6 +26,7 @@ import {
   SearchResultsPanel,
   SearchFilters,
   SearchFiltersMobile,
+  SearchFiltersPanel,
 } from '../../components';
 import { TopbarContainer } from '../../containers';
 import { searchListings, searchMapListings } from './SearchPage.duck';
@@ -36,14 +37,15 @@ import css from './SearchPage.css';
 // Current design has max 3 columns 12 is divisible by 2 and 3
 // So, there's enough cards to fill all columns on full pagination pages
 const RESULT_PAGE_SIZE = 12;
-const SHARETRIBE_API_MAX_PAGE_SIZE = 100;
-const MAX_SEARCH_RESULT_PAGES_ON_MAP = 5; // 100 * 5 = 500 listings are shown on a map.
+const MAX_SEARCH_RESULT_PAGE_SIZE_ON_MAP = 80; // max page size is 100 in API
+const MAX_SEARCH_RESULT_PAGES_ON_MAP = 1; // page size * n pages = number of listings shown on a map.
 const MODAL_BREAKPOINT = 768; // Search is in modal on mobile layout
 const SEARCH_WITH_MAP_DEBOUNCE = 300; // Little bit of debounce before search is initiated.
 const BOUNDS_FIXED_PRECISION = 8;
 
 const CATEGORY_URL_PARAM = 'pub_category';
 const AMENITIES_URL_PARAM = 'pub_amenities';
+const USE_SEARCH_FILTER_PANEL = false;
 
 // Find correct extended data key from config.custom
 // e.g. 'pub_category' -> 'categories'.
@@ -99,6 +101,7 @@ export class SearchPageComponent extends Component {
     this.state = {
       isSearchMapOpenOnMobile: props.tab === 'map',
       isMobileModalOpen: false,
+      isSearchFiltersPanelOpen: false,
     };
 
     // Initiating map creates 'bounds_changes' event
@@ -183,7 +186,7 @@ export class SearchPageComponent extends Component {
       latlngBounds: ['bounds'],
     });
 
-    const perPage = SHARETRIBE_API_MAX_PAGE_SIZE;
+    const perPage = MAX_SEARCH_RESULT_PAGE_SIZE_ON_MAP;
     const page = 1;
     const { address, country, ...rest } = searchInURL;
     const searchParamsForMapResults = { ...rest, include: ['images'], page, perPage };
@@ -318,6 +321,51 @@ export class SearchPageComponent extends Component {
       this.setState({ isSearchMapOpenOnMobile: true });
     };
 
+    const extraSearchFiltersPanelOrListings =
+      USE_SEARCH_FILTER_PANEL && this.state.isSearchFiltersPanelOpen ? (
+        <div className={classNames(css.searchFiltersPanel)}>
+          <SearchFiltersPanel
+            urlQueryParams={validQueryParams}
+            listingsAreLoaded={listingsAreLoaded}
+            categories={categories}
+            amenities={amenities}
+            onClosePanel={() => this.setState({ isSearchFiltersPanelOpen: false })}
+          />
+        </div>
+      ) : (
+        <div
+          className={classNames(css.listings, {
+            [css.newSearchInProgress]: !listingsAreLoaded,
+          })}
+        >
+          {searchListingsError ? searchError : null}
+          <SearchResultsPanel
+            className={css.searchListingsPanel}
+            listings={listings}
+            pagination={listingsAreLoaded ? pagination : null}
+            search={searchParamsForPagination}
+          />
+        </div>
+      );
+
+    // An example how to check how many filters are selected on SearchFilterPanel
+    // if it is in use.
+    //
+    // const searchFiltersPanelSelectedCount = [
+    //   validQueryParams[FILTER_1_URL_PARAM],
+    //   validQueryParams[FILTER_2_URL_PARAM],
+    // ].filter(param => !!param).length
+    const searchFiltersPanelSelectedCount = 0;
+    const searchFiltersPanelProps = USE_SEARCH_FILTER_PANEL
+      ? {
+          isSearchFiltersPanelOpen: this.state.isSearchFiltersPanelOpen,
+          toggleSearchFiltersPanel: isOpen => {
+            this.setState({ isSearchFiltersPanelOpen: isOpen });
+          },
+          searchFiltersPanelSelectedCount,
+        }
+      : {};
+
     // Set topbar class based on if a modal is open in
     // a child component
     const topbarClasses = this.state.isMobileModalOpen
@@ -353,6 +401,7 @@ export class SearchPageComponent extends Component {
               onManageDisableScrolling={onManageDisableScrolling}
               categories={categories}
               amenities={amenities}
+              {...searchFiltersPanelProps}
             />
             <SearchFiltersMobile
               className={css.searchFiltersMobile}
@@ -369,20 +418,7 @@ export class SearchPageComponent extends Component {
               categories={categories}
               amenities={amenities}
             />
-            <div
-              className={classNames(css.listings, {
-                [css.newSearchInProgress]: !listingsAreLoaded,
-              })}
-            >
-              {searchListingsError ? searchError : null}
-
-              <SearchResultsPanel
-                className={css.searchListingsPanel}
-                listings={listings}
-                pagination={listingsAreLoaded ? pagination : null}
-                search={searchParamsForPagination}
-              />
-            </div>
+            {extraSearchFiltersPanelOrListings}
           </div>
           <ModalInMobile
             className={css.mapPanel}

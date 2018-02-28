@@ -98,6 +98,7 @@ export { default as ReviewRating } from './ReviewRating/ReviewRating';
 export { default as Reviews } from './Reviews/Reviews';
 export { default as SearchFilters } from './SearchFilters/SearchFilters';
 export { default as SearchFiltersMobile } from './SearchFiltersMobile/SearchFiltersMobile';
+export { default as SearchFiltersPanel } from './SearchFiltersPanel/SearchFiltersPanel';
 export { default as SearchMap } from './SearchMap/SearchMap';
 export { default as SearchMapGroupLabel } from './SearchMapGroupLabel/SearchMapGroupLabel';
 export { default as SearchMapInfoCard } from './SearchMapInfoCard/SearchMapInfoCard';
@@ -110,12 +111,12 @@ export { default as SectionThumbnailLinks } from './SectionThumbnailLinks/Sectio
 export { default as SelectField } from './SelectField/SelectField';
 export { default as SelectMultipleFilter } from './SelectMultipleFilter/SelectMultipleFilter';
 export {
-  default as SelectMultipleFilterMobile,
-} from './SelectMultipleFilterMobile/SelectMultipleFilterMobile';
+  default as SelectMultipleFilterPlain,
+} from './SelectMultipleFilterPlain/SelectMultipleFilterPlain';
 export { default as SelectSingleFilter } from './SelectSingleFilter/SelectSingleFilter';
 export {
-  default as SelectSingleFilterMobile,
-} from './SelectSingleFilterMobile/SelectSingleFilterMobile';
+  default as SelectSingleFilterPlain,
+} from './SelectSingleFilterPlain/SelectSingleFilterPlain';
 export {
   default as StripeBankAccountTokenInputField,
 } from './StripeBankAccountTokenInputField/StripeBankAccountTokenInputField';
