@@ -11,8 +11,8 @@ import {
   SecondaryButton,
   ModalInMobile,
   Button,
-  SelectSingleFilterMobile,
-  SelectMultipleFilterMobile,
+  SelectSingleFilterPlain,
+  SelectMultipleFilterPlain,
 } from '../../components';
 import css from './SearchFiltersMobile.css';
 
@@ -34,7 +34,7 @@ const hasFilterQueryParams = queryParams => {
 class SearchFiltersMobileComponent extends Component {
   constructor(props) {
     super(props);
-    this.state = { isFiltersOpenOnMobile: false };
+    this.state = { isFiltersOpenOnMobile: false, initialQueryParams: null };
 
     this.openFilters = this.openFilters.bind(this);
     this.cancelFilters = this.cancelFilters.bind(this);
@@ -156,7 +156,7 @@ class SearchFiltersMobileComponent extends Component {
     const initialCategory = urlQueryParams[CATEGORY_URL_PARAM];
 
     const categoryFilter = categories ? (
-      <SelectSingleFilterMobile
+      <SelectSingleFilterPlain
         urlParam={CATEGORY_URL_PARAM}
         label={categoryLabel}
         onSelect={this.handleSelectSingle}
@@ -173,7 +173,7 @@ class SearchFiltersMobileComponent extends Component {
       : [];
 
     const amenitiesFilter = amenities ? (
-      <SelectMultipleFilterMobile
+      <SelectMultipleFilterPlain
         name="amenities"
         urlParam={AMENITIES_URL_PARAM}
         label={amenitiesLabel}
