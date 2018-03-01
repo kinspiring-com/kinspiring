@@ -17,7 +17,7 @@ export const categories = [
   { key: 'muutLastentarvikkeet', label: 'Muut lastentarvikkeet' },
 ];
 
-const brands = [
+export const brands = [
   { key: 'babyzen', label: 'Babyzen' }, // turnkey id: 101288
   { key: 'bugaboo', label: 'Bugaboo' }, // turnkey id: 101290
   { key: 'babybjorn', label: 'BabyBjörn' }, // turnkey id: 101289

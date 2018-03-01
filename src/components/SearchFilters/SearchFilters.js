@@ -9,13 +9,31 @@ import { omit } from 'lodash';
 import { SelectSingleFilter, SelectMultipleFilter } from '../../components';
 import routeConfiguration from '../../routeConfiguration';
 import { createResourceLocatorString } from '../../util/routes';
+import config from '../../config';
 import css from './SearchFilters.css';
 
 const CATEGORY_URL_PARAM = 'pub_category';
 const AMENITIES_URL_PARAM = 'pub_amenities';
+const KINSPIRING_MANUFACTURER_URL_PARAM = 'pub_brand';
 
 // Dropdown container can have a positional offset (in pixels)
 const FILTER_DROPDOWN_OFFSET = -14;
+
+const KinspiringManufacturerFilter = props => {
+  const { onSelect, initialValue, brands, intl } = props;
+  return (
+    <SelectSingleFilter
+      urlParam={KINSPIRING_MANUFACTURER_URL_PARAM}
+      label={intl.formatMessage({
+        id: 'SearchFilters.kinspiring.brandFilterLabel',
+      })}
+      onSelect={onSelect}
+      options={brands}
+      initialValue={initialValue}
+      contentPlacementOffset={FILTER_DROPDOWN_OFFSET}
+    />
+  );
+};
 
 const SearchFiltersComponent = props => {
   const {
@@ -115,6 +133,12 @@ const SearchFiltersComponent = props => {
       <div className={css.filters}>
         {categoryFilter}
         {amenitiesFilter}
+        <KinspiringManufacturerFilter
+          onSelect={handleSelectOption}
+          initialValue={urlQueryParams[KINSPIRING_MANUFACTURER_URL_PARAM]}
+          brands={config.custom.brands}
+          intl={intl}
+        />
         {toggleSearchFiltersPanelButton}
       </div>
 
