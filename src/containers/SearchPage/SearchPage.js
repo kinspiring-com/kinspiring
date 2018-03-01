@@ -45,6 +45,7 @@ const BOUNDS_FIXED_PRECISION = 8;
 
 const CATEGORY_URL_PARAM = 'pub_category';
 const AMENITIES_URL_PARAM = 'pub_amenities';
+const KINSPIRING_MANUFACTURER_URL_PARAM = 'pub_brand';
 const USE_SEARCH_FILTER_PANEL = false;
 
 // Find correct extended data key from config.custom
@@ -55,6 +56,8 @@ const customConfigKey = paramKey => {
       return 'categories';
     case AMENITIES_URL_PARAM:
       return 'amenities';
+    case KINSPIRING_MANUFACTURER_URL_PARAM:
+      return 'brands';
     default:
       return null;
   }

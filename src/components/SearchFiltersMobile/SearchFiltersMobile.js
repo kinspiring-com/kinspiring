@@ -14,14 +14,32 @@ import {
   SelectSingleFilterPlain,
   SelectMultipleFilterPlain,
 } from '../../components';
+import config from '../../config';
 import css from './SearchFiltersMobile.css';
 
 const CATEGORY_URL_PARAM = 'pub_category';
 const AMENITIES_URL_PARAM = 'pub_amenities';
-const allowedParams = [CATEGORY_URL_PARAM, AMENITIES_URL_PARAM];
+const KINSPIRING_MANUFACTURER_URL_PARAM = 'pub_brand';
+const allowedParams = [CATEGORY_URL_PARAM, AMENITIES_URL_PARAM, KINSPIRING_MANUFACTURER_URL_PARAM];
 
 const validateParamValue = value => value !== null && value !== undefined && value.length > 0;
 const validateParamKey = key => allowedParams.includes(key);
+
+const KinspiringManufacturerFilter = props => {
+  const { onSelect, initialValue, brands, intl } = props;
+  return (
+    <SelectSingleFilterPlain
+      urlParam={KINSPIRING_MANUFACTURER_URL_PARAM}
+      label={intl.formatMessage({
+        id: 'SearchFiltersMobile.kinspiring.brandFilterLabel',
+      })}
+      onSelect={onSelect}
+      options={brands}
+      initialValue={initialValue}
+      intl={intl}
+    />
+  );
+};
 
 // Check if a filter parameter is included query parameters
 const hasFilterQueryParams = queryParams => {
@@ -214,6 +232,12 @@ class SearchFiltersMobileComponent extends Component {
           <div className={css.filtersWrapper}>
             {categoryFilter}
             {amenitiesFilter}
+            <KinspiringManufacturerFilter
+              onSelect={this.handleSelectSingle}
+              initialValue={urlQueryParams[KINSPIRING_MANUFACTURER_URL_PARAM]}
+              brands={config.custom.brands}
+              intl={intl}
+            />
           </div>
           <div className={css.showListingsContainer}>
             <Button className={css.showListingsButton} onClick={this.closeFilters}>
