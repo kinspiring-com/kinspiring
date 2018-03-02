@@ -69,10 +69,7 @@ exports[`LandingPage matches snapshot 1`] = `
       <ul>
         <li>
           <div>
-            <SectionLocations
-              className={null}
-              rootClassName={null}
-            />
+            <InjectIntl(KinspiringSectionLinks) />
           </div>
         </li>
         <li>
