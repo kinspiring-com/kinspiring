@@ -3,7 +3,7 @@
 
 Millainen vuokrauskokemus sinulla oli käyttäjän {{customer.display-name}} kanssa? Kirjoita arvostelu!
 
-{{customer.display-name}} vuokrasi vastikään lastentarvikkeesi {{listing.title}}. Olisi mukavaa jos kertoisit kokemuksestasi ja kirjoittaisit arvostelun käyttäjälle {{customer.display-name}}. Reviews are important part of the {{marketplace.name}} community.
+{{customer.display-name}} vuokrasi vastikään lastentarvikkeesi {{listing.title}}. Olisi mukavaa jos kertoisit kokemuksestasi ja kirjoittaisit arvostelun käyttäjälle {{customer.display-name}}. Arvostelut ovat tärkeitä {{marketplace.name}}-yhteisölle.
 
 Kirjoita arvostelu: {{marketplace.url}}/sale/{{url-encode id}}/details
 {{~/with~}}
