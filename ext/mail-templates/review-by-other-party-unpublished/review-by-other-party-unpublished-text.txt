@@ -1,10 +1,10 @@
 
 {{~#with transaction~}}
 
-Find out what {{other-party.display-name}} wrote!
+Ota selvää, millaisen arvostelun {{other-party.display-name}} kirjoitti sinulle!
 
-{{other-party.display-name}} has left you a new review. To see what they wrote, please leave them a review to describe your experience.
+{{other-party.display-name}} on kirjoittanut sinulle arvostelun. Nähdäksesi arvostelu, kerro vuokrakokemuksestasi ja jätä hänellekin arvostelu. 
 
-Leave a review: {{marketplace.url}}/{{#eq recipient-role "customer"}}order{{else}}sale{{/eq}}/{{url-encode id}}/details
+Kirjoita arvostelu: {{marketplace.url}}/{{#eq recipient-role "customer"}}order{{else}}sale{{/eq}}/{{url-encode id}}/details
 
 {{~/with~}}
