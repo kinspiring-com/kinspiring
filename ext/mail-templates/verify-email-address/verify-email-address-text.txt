@@ -1,6 +1,6 @@
 Heipähei {{recipient.first-name}},
 
-Viimeistelläksesi liittymisesi Kinspiringiin vahvista sähköpostisi ja klikkaa alla olevaa linkkiä:
+Vahvista rekisteröitymisesi Kinspiringiin napsauttamalla alla olevaa linkkiä:
 
 {{marketplace.url}}/verify-email?t={{url-encode email-verification.token}}
 
