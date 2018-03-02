@@ -10,7 +10,6 @@ import {
   Page,
   SectionHero,
   SectionHowItWorks,
-  SectionLocations,
   LayoutSingleColumn,
   LayoutWrapperTopbar,
   LayoutWrapperMain,
@@ -18,6 +17,7 @@ import {
   Footer,
 } from '../../components';
 import { TopbarContainer } from '../../containers';
+import KinspiringSectionLinks from './KinspiringSectionLinks';
 
 import facebookImage from '../../assets/saunatimeFacebook-1200x630.jpg';
 import twitterImage from '../../assets/saunatimeTwitter-600x314.jpg';
@@ -62,7 +62,7 @@ export const LandingPageComponent = props => {
           <ul className={css.sections}>
             <li className={css.section}>
               <div className={css.sectionContent}>
-                <SectionLocations />
+                <KinspiringSectionLinks />
               </div>
             </li>
             <li className={css.section}>
