@@ -1,12 +1,12 @@
-Hello {{recipient.first-name}},
+Heipähei {{recipient.first-name}},
 
-To complete your signup to {{marketplace.name}}, verify your email by clicking the link below:
+Viimeistelläksesi liittymisesi Kinspiringiin vahvista sähköpostisi ja klikkaa alla olevaa linkkiä:
 
 {{marketplace.url}}/verify-email?t={{url-encode email-verification.token}}
 
-Alternatively, you can copy the link to your browser's address bar.
+Voit myös myös kopioida linkin selaimen osoitekenttään.
 
-If you don't use this link within 2 days, it will expire. You can request a new verification link, if you need to.
+Linkki vanhenee kahden vuorokauden päästä. Voit tarvittaessa pyytää uuden vahvistuslinkin.
 
-Best regards,
-The {{marketplace.name}} team
+Iloisin terveisin,
+{{marketplace.name}}-tiimi
