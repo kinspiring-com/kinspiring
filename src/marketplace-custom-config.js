@@ -9,10 +9,10 @@ export const categories = [
   { key: 'yhdistelmarattaat', label: 'Yhdistelmärattaat' },
   { key: 'tuplaJaSisarusrattaat', label: 'Tupla- ja sisarusrattaat' },
   { key: 'juoksurattaat', label: 'Juoksurattaat' },
-  { key: 'kantovalineetJaRinkat', label: 'Kantovälineet ja rinkat' },
+  { key: 'kantovalineetJaRinkat', label: 'Kantovälineet' },
   { key: 'matkasangyt', label: 'Matkasängyt' },
   { key: 'turvaistuimet', label: 'Turvaistuimet' },
-  { key: 'kuljetuslaukutJaVaunutarvikkeet', label: 'Kuljetuslaukut & vaunutarvikkeet' },
+  { key: 'kuljetuslaukutJaVaunutarvikkeet', label: 'Kuljetuslaukut & matkailu' },
   { key: 'pyoraily', label: 'Pyöräily' },
   { key: 'muutLastentarvikkeet', label: 'Muut lastentarvikkeet' },
 ];
