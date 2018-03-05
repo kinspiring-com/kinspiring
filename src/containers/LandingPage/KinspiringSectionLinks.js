@@ -7,14 +7,16 @@ import link1Image from './images/link1-648x448.jpg';
 import link2Image from './images/link2-648x448.jpg';
 import link3Image from './images/link3-648x448.jpg';
 
-const BOUNDS = '60.41,25.52,60.05,24.18';
-
-const searchQuery = category => {
+const searchLinkProps = category => {
   const params = {
-    bounds: BOUNDS,
+    bounds: '60.41,25.52,60.05,24.18', // Uusimaa
     pub_category: category,
   };
-  return `?${stringify(params)}`;
+  return {
+    type: 'NamedLink',
+    name: 'SearchPage',
+    to: { search: `?${stringify(params)}` },
+  };
 };
 
 const KinspiringSectionLinks = props => {
@@ -26,11 +28,7 @@ const KinspiringSectionLinks = props => {
       imageAltText: intl.formatMessage({
         id: 'KinspiringSectionLinks.link1ImageAltText',
       }),
-      linkProps: {
-        type: 'NamedLink',
-        name: 'SearchPage',
-        to: { search: searchQuery('matkarattaat') },
-      },
+      linkProps: searchLinkProps('matkarattaat'),
       text: intl.formatMessage({
         id: 'KinspiringSectionLinks.link1Text',
       }),
@@ -40,11 +38,7 @@ const KinspiringSectionLinks = props => {
       imageAltText: intl.formatMessage({
         id: 'KinspiringSectionLinks.link2ImageAltText',
       }),
-      linkProps: {
-        type: 'NamedLink',
-        name: 'SearchPage',
-        to: { search: searchQuery('kantovalineetJaRinkat') },
-      },
+      linkProps: searchLinkProps('kantovalineetJaRinkat'),
       text: intl.formatMessage({
         id: 'KinspiringSectionLinks.link2Text',
       }),
@@ -54,11 +48,7 @@ const KinspiringSectionLinks = props => {
       imageAltText: intl.formatMessage({
         id: 'KinspiringSectionLinks.link3ImageAltText',
       }),
-      linkProps: {
-        type: 'NamedLink',
-        name: 'SearchPage',
-        to: { search: searchQuery('kuljetuslaukutJaVaunutarvikkeet') },
-      },
+      linkProps: searchLinkProps('kuljetuslaukutJaVaunutarvikkeet'),
       text: intl.formatMessage({
         id: 'KinspiringSectionLinks.link3Text',
       }),
