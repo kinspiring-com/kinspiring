@@ -7,6 +7,10 @@ import { NamedLink } from '../../components';
 
 import css from './SectionHowItWorks.css';
 
+import KinspiringIconCalendar from './KinspiringIconCalendar.js';
+import KinspiringIconCard from './KinspiringIconCard.js';
+import KinspiringIconBubble from './KinspiringIconBubble.js';
+
 const SectionHowItWorks = props => {
   const { rootClassName, className } = props;
 
@@ -21,6 +25,7 @@ const SectionHowItWorks = props => {
 
       <div className={css.steps}>
         <div className={css.step}>
+          <KinspiringIconCalendar className={css.kinspiringIcon} />
           <h2 className={css.stepTitle}>
             <FormattedMessage id="SectionHowItWorks.part1Title" />
           </h2>
@@ -30,6 +35,7 @@ const SectionHowItWorks = props => {
         </div>
 
         <div className={css.step}>
+          <KinspiringIconCard className={css.kinspiringIcon} />
           <h2 className={css.stepTitle}>
             <FormattedMessage id="SectionHowItWorks.part2Title" />
           </h2>
@@ -39,6 +45,7 @@ const SectionHowItWorks = props => {
         </div>
 
         <div className={css.step}>
+          <KinspiringIconBubble className={css.kinspiringIcon} />
           <h2 className={css.stepTitle}>
             <FormattedMessage id="SectionHowItWorks.part3Title" />
           </h2>

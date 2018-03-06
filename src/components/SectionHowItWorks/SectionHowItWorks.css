@@ -44,3 +44,14 @@
     margin-top: 52px;
   }
 }
+
+.kinspiringIcon {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  margin-top: 46px;
+
+  @media (--viewportMedium) {
+    margin-top: 48px;
+  }
+}
