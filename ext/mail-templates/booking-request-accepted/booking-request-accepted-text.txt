@@ -1,16 +1,19 @@
-
 {{~#*inline "format-money"~}}
 {{money-amount money}} {{money.currency}}
 {{~/inline~}}
 
 {{~#*inline "format-date"~}}
-{{date date format="MMM d, YYYY" lang="fi-FI"}}
+{{date date format="d. MMM YYYY" lang="fi-FI"}}
+{{~/inline~}}
+
+{{~#*inline "format-date-inclusive"~}}
+{{date-day-before date format="d. MMM YYYY" lang="fi-FI"}}
 {{~/inline~}}
 
 Onnea, varauspyyntösi on hyväksytty!
 
 {{#with transaction~}}
-{{provider.display-name}} on hyväksynyt varauspyyntösi lastentarvikkeelle {{listing.title}}. Vuokrauksesi alkaa {{> format-date date=booking.start}} ja päättyy {{> format-date date=booking.end}}.
+{{provider.display-name}} on hyväksynyt varauspyyntösi lastentarvikkeelle {{listing.title}}. Vuokrauksesi alkaa {{> format-date date=booking.start}} ja päättyy {{> format-date-inclusive date=booking.end}}.
 
 Olemme veloittaneet {{> format-money money=payin-total}} luottokortiltasi. Tässä kuittisi.
 

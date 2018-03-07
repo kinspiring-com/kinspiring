@@ -1,10 +1,13 @@
-
 {{~#*inline "format-money"~}}
 {{money-amount money}} {{money.currency}}
 {{~/inline~}}
 
 {{~#*inline "format-date"~}}
-{{date date format="MMM d, YYYY" lang="fi-FI"}}
+{{date date format="d. MMM YYYY" lang="fi-FI"}}
+{{~/inline~}}
+
+{{~#*inline "format-date-inclusive"~}}
+{{date-day-before date format="d. MMM YYYY" lang="fi-FI"}}
 {{~/inline~}}
 
 <html>
@@ -12,7 +15,7 @@
     {{#with transaction}}
     <h1>Vastaathan käyttäjän {{customer.display-name}} varauspyyntöön</h1>
 
-    <p>Hyviä uutisia! {{customer.display-name}} haluaa vuokrata lastentarvikkeesi {{listing.title}} ajalle {{> format-date date=booking.start}} – {{> format-date date=booking.end}}. Tässä varauksen tiedot.</p>
+    <p>Hyviä uutisia! {{customer.display-name}} haluaa vuokrata lastentarvikkeesi {{listing.title}} ajalle {{> format-date date=booking.start}} – {{> format-date-inclusive date=booking.end}}. Tässä varauksen tiedot.</p>
 
     <table>
       <thead>

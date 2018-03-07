@@ -1,12 +1,15 @@
-
 {{~#*inline "format-date"~}}
-{{date date format="MMM d, YYYY" lang="fi-FI"}}
+{{date date format="d. MMM YYYY" lang="fi-FI"}}
+{{~/inline~}}
+
+{{~#*inline "format-date-inclusive"~}}
+{{date-day-before date format="d. MMM YYYY" lang="fi-FI"}}
 {{~/inline~}}
 
 Varauspyyntösi on hylätty.
 
 {{#with transaction~}}
-Voi harmi, {{provider.display-name}} hylkäsi varaupyyntösi lastentarvikkeelle {{listing.title}} ajalle {{> format-date date=booking.start}} – {{> format-date date=booking.end}}. Sinua ei ole laskutettu.
+Voi harmi, {{provider.display-name}} hylkäsi varaupyyntösi lastentarvikkeelle {{listing.title}} ajalle {{> format-date date=booking.start}} – {{> format-date-inclusive date=booking.end}}. Sinua ei ole laskutettu.
 {{~/with}}
 
 Mitä jos varaisit toisen vastaavaan lastentarvikkeen Kinspiringissa? Katso vuokralla olevat lastentarvikkeet: {{marketplace.url}}
