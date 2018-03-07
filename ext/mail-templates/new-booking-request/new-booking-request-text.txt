@@ -3,11 +3,11 @@
 {{~/inline~}}
 
 {{~#*inline "format-date"~}}
-{{date date format="d. MMM YYYY"}}
+{{date date format="d. MMM YYYY" lang="fi-FI"}}
 {{~/inline~}}
 
 {{~#*inline "format-date-inclusive"~}}
-{{date-day-before date format="d. MMM YYYY"}}
+{{date-day-before date format="d. MMM YYYY" lang="fi-FI"}}
 {{~/inline~}}
 
 {{#with transaction~}}
