@@ -1,16 +1,19 @@
-
 {{~#*inline "format-money"~}}
 {{money-amount money}} {{money.currency}}
 {{~/inline~}}
 
 {{~#*inline "format-date"~}}
-{{date date format="MMM d, YYYY" lang="fi-FI"}}
+{{date date format="d. MMM YYYY"}}
+{{~/inline~}}
+
+{{~#*inline "format-date-inclusive"~}}
+{{date-day-before date format="d. MMM YYYY"}}
 {{~/inline~}}
 
 {{#with transaction~}}
 Olet ansainnut {{> format-money money=payout-total}}
 
-Olemme maksaneet sinulle {{> format-money money=payout-total}} varauksesta lastentarvikkeelle {{listing.title}}. Vuokraus alkaa {{> format-date date=booking.start}} ja päättyy {{> format-date date=booking.end}}. Vuokraajasi on {{customer.display-name}}. Rahan siirtyminen tilillesi voi kestää enintään seitsemän päivää. 
+Olemme maksaneet sinulle {{> format-money money=payout-total}} varauksesta lastentarvikkeelle {{listing.title}}. Vuokraus alkaa {{> format-date date=booking.start}} ja päättyy {{> format-date-inclusive date=booking.end}}. Vuokraajasi on {{customer.display-name}}. Rahan siirtyminen tilillesi voi kestää enintään seitsemän päivää.
 
 Tässä maksun tiedot.
 
@@ -18,10 +21,10 @@ Maksutapahtuma
 {{#each line-items~}}
 {{~#contains include-for "provider"~}}
 {{~#eq "day" code~}}
-{{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "day" "days"}}: {{> format-money money=line-total}}
+{{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "päivä" "päivää"}}: {{> format-money money=line-total}}
 {{/eq~}}
 {{~#eq "night" code~}}
-{{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "night" "nights"}}: {{> format-money money=line-total}}
+{{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "yö" "yötä"}}: {{> format-money money=line-total}}
 {{/eq~}}
 {{~#eq "provider-commission" code~}}
 {{marketplace.name}} komissio: {{> format-money money=line-total}}
