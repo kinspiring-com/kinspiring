@@ -1,0 +1,198 @@
+;; Preauth with daily booking transaction process
+;;
+
+{:params {:param/provider-commission 0.12M}
+ :states {:state/initial {}
+          :state/enquiry {}
+          :state/preauthorized
+          {:triggers [{:name :tegel.trigger/delayed
+                       :params {:delay {:days 6}
+                                :transition [:transition/expire {}]}}
+                      {:name :tegel.trigger/on-booking-end
+                       :params {:delay {:days 1}
+                                :transition [:transition/expire {}]}}]}
+          :state/accepted
+          {:triggers [{:name :tegel.trigger/on-booking-end
+                       :params {:transition [:transition/complete {}]}}]}
+          :state/declined {}
+          :state/cancelled {}
+          :state/delivered
+          {:triggers [{:name :tegel.trigger/delayed
+                       :params {:delay {:days 7}
+                                :transition [:transition/expire-review-period {}]}}]}
+          :state/reviewed-by-customer
+          {:triggers [{:name :tegel.trigger/on-booking-end
+                       :params {:delay {:days 7}
+                                :transition [:transition/expire-provider-review-period {}]}}]}
+          :state/reviewed-by-provider
+          {:triggers [{:name :tegel.trigger/on-booking-end
+                       :params {:delay {:days 7}
+                                :transition [:transition/expire-customer-review-period {}]}}]}
+          :state/reviewed {}}
+
+ :initializer :tegel.action.initializer/init-listing-tx
+
+ :transitions {:transition/enquire
+               {:name :transition/enquire
+                :actor #{:actor.role/customer}
+                :actions []}
+               :transition/request
+               {:name :transition/request
+                :actor #{:actor.role/customer}
+                :actions [:tegel.action/create-booking
+                          :tegel.action/calculate-tx-daily-total-price
+                          :tegel.action/calculate-tx-provider-commission
+                          :tegel.action/stripe-create-charge]}
+               :transition/request-after-enquiry
+               {:name :transition/request-after-enquiry
+                :actor #{:actor.role/customer}
+                :actions [:tegel.action/create-booking
+                          :tegel.action/calculate-tx-daily-total-price
+                          :tegel.action/calculate-tx-provider-commission
+                          :tegel.action/stripe-create-charge]}
+               :transition/accept
+               {:name :transition/accept
+                :actor #{:actor.role/provider}
+                :actions [:tegel.action/accept-booking
+                          :tegel.action/stripe-capture-charge]}
+               :transition/decline
+               {:name :transition/decline
+                :actor #{:actor.role/provider}
+                :actions [:tegel.action/decline-booking
+                          :tegel.action/calculate-full-refund
+                          :tegel.action/stripe-refund-charge]}
+               :transition/expire
+               {:name :transition/expire
+                :actor #{:actor.role/system}
+                :actions [:tegel.action/decline-booking
+                          :tegel.action/calculate-full-refund
+                          :tegel.action/stripe-refund-charge]}
+               :transition/complete
+               {:name :transition/complete
+                :actor #{:actor.role/system}
+                :actions [:tegel.action/stripe-create-payout]}
+               :transition/cancel
+               {:name :transition/cancel
+                :actor #{:actor.role/operator}
+                :actions [:tegel.action/cancel-booking
+                          :tegel.action/calculate-full-refund
+                          :tegel.action/stripe-refund-charge]}
+               :transition/review-1-by-provider
+               {:name :transition/review-1-by-provider
+                :actor #{:actor.role/provider}
+                :actions [:tegel.action/post-review-by-provider]}
+               :transition/review-2-by-provider
+               {:name :transition/review-2-by-provider
+                :actor #{:actor.role/provider}
+                :actions [:tegel.action/post-review-by-provider
+                          :tegel.action/publish-reviews]}
+               :transition/review-1-by-customer
+               {:name :transition/review-1-by-customer
+                :actor #{:actor.role/customer}
+                :actions [:tegel.action/post-review-by-customer]}
+               :transition/review-2-by-customer
+               {:name :transition/review-2-by-customer
+                :actor #{:actor.role/customer}
+                :actions [:tegel.action/post-review-by-customer
+                          :tegel.action/publish-reviews]}
+               :transition/expire-review-period
+               {:name :transition/expire-review-period
+                :actor #{:actor.role/system}
+                :actions []}
+               :transition/expire-provider-review-period
+               {:name :transition/expire-provider-review-period
+                :actor #{:actor.role/system}
+                :actions [:tegel.action/publish-reviews]}
+               :transition/expire-customer-review-period
+               {:name :transition/expire-customer-review-period
+                :actor #{:actor.role/system}
+                :actions [:tegel.action/publish-reviews]}}
+
+ :dag  [[:state/initial :transition/request :state/preauthorized]
+        [:state/initial :transition/enquire :state/enquiry]
+
+        [:state/enquiry :transition/request-after-enquiry :state/preauthorized]
+
+        [:state/preauthorized :transition/accept :state/accepted]
+        [:state/preauthorized :transition/decline :state/declined]
+        [:state/preauthorized :transition/expire :state/declined]
+
+        [:state/accepted :transition/cancel :state/cancelled]
+        [:state/accepted :transition/complete :state/delivered]
+
+        [:state/delivered :transition/expire-review-period :state/reviewed]
+        [:state/delivered :transition/review-1-by-customer :state/reviewed-by-customer]
+        [:state/delivered :transition/review-1-by-provider :state/reviewed-by-provider]
+
+        [:state/reviewed-by-customer :transition/review-2-by-provider :state/reviewed]
+        [:state/reviewed-by-customer :transition/expire-provider-review-period :state/reviewed]
+
+        [:state/reviewed-by-provider :transition/review-2-by-customer :state/reviewed]
+        [:state/reviewed-by-provider :transition/expire-customer-review-period :state/reviewed]]
+
+ :observers {:notification/new-booking-request
+             {:after-transitions #{:transition/request :transition/request-after-enquiry}
+              :handler :tegel.observer/email-notifier
+              :params {:to #{:actor.role/provider}
+                       :template :mail.template/new-booking-request}}
+
+             :notification/booking-request-accepted
+             {:after-transitions #{:transition/accept}
+              :handler :tegel.observer/email-notifier
+              :params {:to #{:actor.role/customer}
+                       :template :mail.template/booking-request-accepted}}
+
+             :notification/booking-request-declined
+             {:after-transitions #{:transition/decline}
+              :handler :tegel.observer/email-notifier
+              :params {:to #{:actor.role/customer}
+                       :template :mail.template/booking-request-declined}}
+
+             :notification/booking-request-auto-declined
+             {:after-transitions #{:transition/expire}
+              :handler :tegel.observer/email-notifier
+              :params {:to #{:actor.role/customer}
+                       :template :mail.template/booking-request-auto-declined}}
+
+             :notification/money-paid
+             {:after-transitions #{:transition/complete}
+              :handler :tegel.observer/email-notifier
+              :params {:to #{:actor.role/provider}
+                       :template :mail.template/money-paid}}
+
+             :notification/review-period-start-provider
+             {:after-transitions #{:transition/complete}
+              :handler :tegel.observer/email-notifier
+              :params {:to #{:actor.role/provider}
+                       :template :mail.template/review-by-provider-wanted}}
+
+             :notification/review-period-start-customer
+             {:after-transitions #{:transition/complete}
+              :handler :tegel.observer/email-notifier
+              :params {:to #{:actor.role/customer}
+                       :template :mail.template/review-by-customer-wanted}}
+
+             :notification/review-by-provider-first
+             {:after-transitions #{:transition/review-1-by-provider}
+              :handler :tegel.observer/email-notifier
+              :params {:to #{:actor.role/customer}
+                       :template :mail.template/review-by-other-party-unpublished}}
+
+             :notification/review-by-customer-first
+             {:after-transitions #{:transition/review-1-by-customer}
+              :handler :tegel.observer/email-notifier
+              :params {:to #{:actor.role/provider}
+                       :template :mail.template/review-by-other-party-unpublished}}
+
+             :notification/review-by-provider-second
+             {:after-transitions #{:transition/review-2-by-provider}
+              :handler :tegel.observer/email-notifier
+              :params {:to #{:actor.role/customer}
+                       :template :mail.template/review-by-other-party-published}}
+
+             :notification/review-by-customer-second
+             {:after-transitions #{:transition/review-2-by-customer}
+              :handler :tegel.observer/email-notifier
+              :params {:to #{:actor.role/provider}
+                       :template :mail.template/review-by-other-party-published}}}
+ }
