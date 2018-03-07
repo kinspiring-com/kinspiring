@@ -22,6 +22,7 @@ import {
   StyleguidePage,
   TermsOfServicePage,
   TransactionPage,
+  KinspiringContactUsPage,
 } from './containers';
 
 // routeConfiguration needs to initialize containers first
@@ -54,6 +55,11 @@ const routeConfiguration = () => {
       path: '/about',
       name: 'AboutPage',
       component: AboutPage,
+    },
+    {
+      path: '/contact',
+      name: 'KinspiringContactUsPage',
+      component: KinspiringContactUsPage,
     },
     {
       path: '/s',

@@ -2,12 +2,12 @@ import React from 'react';
 import { string } from 'prop-types';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import classNames from 'classnames';
-import { twitterPageURL, stringify } from '../../util/urlHelpers';
+import { stringify } from '../../util/urlHelpers';
 import config from '../../config';
 import {
   // IconSocialMediaFacebook,
   // IconSocialMediaInstagram,
-  IconSocialMediaTwitter,
+  // IconSocialMediaTwitter,
   Logo,
   ExternalLink,
   NamedLink,
@@ -20,12 +20,12 @@ import KinspiringIconInstagram from './KinspiringIconInstagram';
 import KinspiringIconLinkedin from './KinspiringIconLinkedin';
 
 const renderSocialMediaLinks = intl => {
-  const { siteFacebookPage, siteInstagramPage, siteTwitterHandle } = config;
-  const siteTwitterPage = twitterPageURL(siteTwitterHandle);
+  const { siteFacebookPage, siteInstagramPage } = config;
+  // const siteTwitterPage = twitterPageURL(siteTwitterHandle);
 
   const goToFb = intl.formatMessage({ id: 'Footer.goToFacebook' });
   const goToInsta = intl.formatMessage({ id: 'Footer.goToInstagram' });
-  const goToTwitter = intl.formatMessage({ id: 'Footer.goToTwitter' });
+  // const goToTwitter = intl.formatMessage({ id: 'Footer.goToTwitter' });
   const goToLinkedin = intl.formatMessage({ id: 'Footer.kinspiring.goToLinkedin' });
 
   const fbLink = siteFacebookPage ? (
@@ -34,16 +34,16 @@ const renderSocialMediaLinks = intl => {
     </ExternalLink>
   ) : null;
 
-  const twitterLink = siteTwitterPage ? (
-    <ExternalLink
-      key="linkToTwitter"
-      href={siteTwitterPage}
-      className={css.icon}
-      title={goToTwitter}
-    >
-      <IconSocialMediaTwitter />
-    </ExternalLink>
-  ) : null;
+  // const twitterLink = siteTwitterPage ? (
+  //   <ExternalLink
+  //     key="linkToTwitter"
+  //     href={siteTwitterPage}
+  //     className={css.icon}
+  //     title={goToTwitter}
+  //   >
+  //     <IconSocialMediaTwitter />
+  //   </ExternalLink>
+  // ) : null;
 
   const instragramLink = siteInstagramPage ? (
     <ExternalLink
@@ -66,7 +66,7 @@ const renderSocialMediaLinks = intl => {
       <KinspiringIconLinkedin />
     </ExternalLink>
   );
-  return [fbLink, twitterLink, instragramLink, linkedinLink].filter(v => v != null);
+  return [fbLink, instragramLink, linkedinLink].filter(v => v != null);
 };
 
 const searchLinkProps = category => {
@@ -100,9 +100,9 @@ const Footer = props => {
                   <FormattedMessage id="Footer.organizationDescription" />
                 </p>
                 <p className={css.organizationCopyright}>
-                  <ExternalLink href="https://www.sharetribe.com/" className={css.copyrightLink}>
+                  <NamedLink name="LandingPage" className={css.copyrightLink}>
                     <FormattedMessage id="Footer.copyright" />
-                  </ExternalLink>
+                  </NamedLink>
                 </p>
               </div>
             </div>
@@ -129,7 +129,7 @@ const Footer = props => {
                   </NamedLink>
                 </li>
                 <li className={css.listItem}>
-                  <NamedLink name="AboutPage" to={{ hash: '#contact' }} className={css.link}>
+                  <NamedLink name="KinspiringContactUsPage" className={css.link}>
                     <FormattedMessage id="Footer.toContactPage" />
                   </NamedLink>
                 </li>
@@ -215,12 +215,9 @@ const Footer = props => {
             </div>
           </div>
           <div className={css.copyrightAndTermsMobile}>
-            <ExternalLink
-              href="https://www.sharetribe.com/"
-              className={css.organizationCopyrightMobile}
-            >
+            <NamedLink name="LandingPage" className={css.organizationCopyrightMobile}>
               <FormattedMessage id="Footer.copyright" />
-            </ExternalLink>
+            </NamedLink>
             <div className={css.tosAndPrivacyMobile}>
               <NamedLink name="PrivacyPolicyPage" className={css.privacy}>
                 <FormattedMessage id="Footer.privacy" />
