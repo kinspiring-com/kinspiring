@@ -5,8 +5,8 @@ import classNames from 'classnames';
 import { twitterPageURL, stringify } from '../../util/urlHelpers';
 import config from '../../config';
 import {
-  IconSocialMediaFacebook,
-  IconSocialMediaInstagram,
+  // IconSocialMediaFacebook,
+  // IconSocialMediaInstagram,
   IconSocialMediaTwitter,
   Logo,
   ExternalLink,
@@ -15,6 +15,10 @@ import {
 
 import css from './Footer.css';
 
+import KinspiringIconFacebook from './KinspiringIconFacebook';
+import KinspiringIconInstagram from './KinspiringIconInstagram';
+import KinspiringIconLinkedin from './KinspiringIconLinkedin';
+
 const renderSocialMediaLinks = intl => {
   const { siteFacebookPage, siteInstagramPage, siteTwitterHandle } = config;
   const siteTwitterPage = twitterPageURL(siteTwitterHandle);
@@ -22,10 +26,11 @@ const renderSocialMediaLinks = intl => {
   const goToFb = intl.formatMessage({ id: 'Footer.goToFacebook' });
   const goToInsta = intl.formatMessage({ id: 'Footer.goToInstagram' });
   const goToTwitter = intl.formatMessage({ id: 'Footer.goToTwitter' });
+  const goToLinkedin = intl.formatMessage({ id: 'Footer.kinspiring.goToLinkedin' });
 
   const fbLink = siteFacebookPage ? (
     <ExternalLink key="linkToFacebook" href={siteFacebookPage} className={css.icon} title={goToFb}>
-      <IconSocialMediaFacebook />
+      <KinspiringIconFacebook />
     </ExternalLink>
   ) : null;
 
@@ -47,10 +52,21 @@ const renderSocialMediaLinks = intl => {
       className={css.icon}
       title={goToInsta}
     >
-      <IconSocialMediaInstagram />
+      <KinspiringIconInstagram />
     </ExternalLink>
   ) : null;
-  return [fbLink, twitterLink, instragramLink].filter(v => v != null);
+
+  const linkedinLink = (
+    <ExternalLink
+      key="linkToLinkedin"
+      href="https://www.linkedin.com/company/kinspiring-oy"
+      className={css.icon}
+      title={goToLinkedin}
+    >
+      <KinspiringIconLinkedin />
+    </ExternalLink>
+  );
+  return [fbLink, twitterLink, instragramLink, linkedinLink].filter(v => v != null);
 };
 
 const searchLinkProps = category => {
