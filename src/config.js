@@ -224,7 +224,7 @@ const canonicalRootURL = process.env.REACT_APP_CANONICAL_ROOT_URL || 'http://loc
 const siteTitle = 'Kinspiring';
 
 // Twitter handle is needed in meta tags (twitter:site). Start it with '@' character
-const siteTwitterHandle = null;
+const siteTwitterHandle = '@kinspiring';
 
 // Instagram page is used in SEO schema (http://schema.org/Organization)
 const siteInstagramPage = 'https://www.instagram.com/kinspiring/';
