@@ -18,6 +18,7 @@ import {
 } from '../../components';
 import { TopbarContainer } from '../../containers';
 import KinspiringSectionLinks from './KinspiringSectionLinks';
+import KinspiringSectionBlog from './KinspiringSectionBlog';
 
 import facebookImage from '../../assets/saunatimeFacebook-1200x630.jpg';
 import twitterImage from '../../assets/saunatimeTwitter-600x314.jpg';
@@ -68,6 +69,11 @@ export const LandingPageComponent = props => {
             <li className={css.section}>
               <div className={css.sectionContent}>
                 <SectionHowItWorks />
+              </div>
+            </li>
+            <li className={css.section}>
+              <div className={css.sectionContent}>
+                <KinspiringSectionBlog />
               </div>
             </li>
           </ul>
