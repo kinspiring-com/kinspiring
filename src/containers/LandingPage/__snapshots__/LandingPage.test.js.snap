@@ -80,6 +80,11 @@ exports[`LandingPage matches snapshot 1`] = `
             />
           </div>
         </li>
+        <li>
+          <div>
+            <Connect(KinspiringSectionBlogComponent) />
+          </div>
+        </li>
       </ul>
     </LayoutWrapperMain>
     <LayoutWrapperFooter
