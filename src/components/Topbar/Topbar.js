@@ -222,10 +222,18 @@ class TopbarComponent extends Component {
   }
 
   handleSubmit(values) {
+    const { currentSearchParams } = this.props;
     const { search, selectedPlace } = values.location;
     const { history } = this.props;
     const { origin, bounds, country } = selectedPlace;
-    const searchParams = { address: search, origin, bounds, country };
+    const originMaybe = config.sortSearchByDistance ? { origin } : {};
+    const searchParams = {
+      ...currentSearchParams,
+      ...originMaybe,
+      address: search,
+      bounds,
+      country,
+    };
     history.push(createResourceLocatorString('SearchPage', routeConfiguration(), {}, searchParams));
   }
 
