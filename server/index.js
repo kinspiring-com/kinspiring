@@ -128,14 +128,70 @@ const noCacheHeaders = {
   'Cache-control': 'no-cache, no-store, must-revalidate',
 };
 
+// Legacy page redirects
+//
+
+// Use temporary redirects initially. Change to permanent (301)
+// when migration is successfully completed.
+const legacyRedirectsCode = 302;
+
 // Old-style listing URL redirects
-app.get('/listings/:listing_id(\\d+)-?:title?', (req, res) => {
+app.get('/:locale(en|fi)?/listings/:listing_id(\\d+)-?:title?', (req, res) => {
   if (listingRedirects[req.params.listing_id]) {
-    return res.redirect(302, listingRedirects[req.params.listing_id]);
+    return res.redirect(legacyRedirectsCode, listingRedirects[req.params.listing_id]);
   } else {
-    return res.redirect(302, '/');
+    return res.redirect(legacyRedirectsCode, '/');
   }
 });
+
+// Static pages
+app.get('/:locale(en|fi)?/infos/about', (req, res) => {
+  return res.redirect(legacyRedirectsCode, '/about');
+});
+app.get('/:locale(en|fi)?/infos/how_to_use', (req, res) => {
+  return res.redirect(legacyRedirectsCode, '/#how-to-use');
+});
+app.get('/:locale(en|fi)?/infos/privacy', (req, res) => {
+  return res.redirect(legacyRedirectsCode, '/privacy-policy');
+});
+app.get('/:locale(en|fi)?/infos/terms', (req, res) => {
+  return res.redirect(legacyRedirectsCode, '/terms-of-service');
+});
+app.get('/:locale(en|fi)?/user_feedbacks/new', (req, res) => {
+  return res.redirect(legacyRedirectsCode, '/contact');
+});
+app.get('/:locale(en|fi)?/listings/new', (req, res) => {
+  return res.redirect(legacyRedirectsCode, '/l/new');
+});
+app.get('/:locale(en|fi)/signup', (req, res) => {
+  return res.redirect(legacyRedirectsCode, '/signup');
+});
+app.get('/:locale(en|fi)/login', (req, res) => {
+  return res.redirect(legacyRedirectsCode, '/login');
+});
+
+// Category pages
+app.get('/:locale(en|fi)?', (req, res, next) => {
+  const categoryRedirects = {
+    juoksurattaat: '/s?pub_category=juoksurattaat',
+    'kantovalineet-ja-rinkat': '/s?pub_category=kantovalineetJaRinkat',
+    'kuljetuslaukut-and-vaunutarvikkeet': '/s?pub_category=kuljetuslaukutJaVaunutarvikkeet',
+    matkarattaat: '/s?pub_category=matkarattaat',
+    matkasangyt: '/s?pub_category=matkasangyt',
+    'muut-lastentarvikkeet': '/s?pub_category=muutLastentarvikkeet',
+    pyoraily: '/s?pub_category=pyoraily',
+    'tupla-ja-sisarusrattaat': '/s?pub_category=tuplaJaSisarusrattaat',
+    turvaistuimet: '/s?pub_category=turvaistuimet',
+    yhdistelmavaunut: '/s?pub_category=yhdistelmarattaat',
+  };
+  if (req.query.category && categoryRedirects[req.query.category]) {
+    return res.redirect(legacyRedirectsCode, categoryRedirects[req.query.category]);
+  } else {
+    next();
+  }
+});
+
+// END Legacy page redirects
 
 app.get('*', (req, res) => {
   if (req.url.startsWith('/static/')) {
