@@ -37,6 +37,10 @@
             <td>{{> format-money money=unit-price}} &times; {{number quantity}} {{inflect quantity "yö" "yötä"}}</td>
             <td style="padding-left: 20px;">{{> format-money money=line-total}}</td>
             {{/eq}}
+            {{#eq "customer-commission" code}}
+            <td>{{marketplace.name}} palvelumaksu</td>
+            <td style="text-align: right; padding-left: 20px;">{{> format-money money=line-total}}</td>
+            {{/eq}}
           </tr>
         {{/contains}}
       {{/each}}
