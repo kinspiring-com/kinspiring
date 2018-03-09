@@ -1,7 +1,8 @@
 ;; Preauth with daily booking transaction process
 ;;
 
-{:params {:param/provider-commission 0.12M}
+{:params {:param/provider-commission 0.10M
+          :param/customer-commission 0.10M}
  :states {:state/initial {}
           :state/enquiry {}
           :state/preauthorized
@@ -41,6 +42,7 @@
                 :actor #{:actor.role/customer}
                 :actions [:tegel.action/create-booking
                           :tegel.action/calculate-tx-daily-total-price
+                          :tegel.action/calculate-tx-customer-commission
                           :tegel.action/calculate-tx-provider-commission
                           :tegel.action/stripe-create-charge]}
                :transition/request-after-enquiry
@@ -48,6 +50,7 @@
                 :actor #{:actor.role/customer}
                 :actions [:tegel.action/create-booking
                           :tegel.action/calculate-tx-daily-total-price
+                          :tegel.action/calculate-tx-customer-commission
                           :tegel.action/calculate-tx-provider-commission
                           :tegel.action/stripe-create-charge]}
                :transition/accept
