@@ -36,7 +36,7 @@ import css from './SearchPage.css';
 // Pagination page size might need to be dynamic on responsive page layouts
 // Current design has max 3 columns 12 is divisible by 2 and 3
 // So, there's enough cards to fill all columns on full pagination pages
-const RESULT_PAGE_SIZE = 12;
+const RESULT_PAGE_SIZE = 24;
 const MAX_SEARCH_RESULT_PAGE_SIZE_ON_MAP = 80; // max page size is 100 in API
 const MAX_SEARCH_RESULT_PAGES_ON_MAP = 1; // page size * n pages = number of listings shown on a map.
 const MODAL_BREAKPOINT = 768; // Search is in modal on mobile layout
@@ -89,9 +89,10 @@ const validURLParamsForExtendedData = params => {
 // extract search parameters, including a custom attribute named category
 const pickSearchParamsOnly = params => {
   const { address, origin, bounds, country, ...rest } = params || {};
+  const originMaybe = config.sortSearchByDistance ? { origin } : {};
   return {
-    origin,
     bounds,
+    ...originMaybe,
     ...validURLParamForExtendedData(CATEGORY_URL_PARAM, rest),
     ...validURLParamForExtendedData(AMENITIES_URL_PARAM, rest),
   };
@@ -109,9 +110,10 @@ export class SearchPageComponent extends Component {
 
     // Initiating map creates 'bounds_changes' event
     // we listen to that event to make new searches
-    // So, if the search comes from location search input,
-    // we need to by pass 2nd search created by initial 'bounds_changes' event
-    this.locationInputSearch = true;
+    // So, if the search comes from location search input (this.viewportBounds == null),
+    // we need to by pass extra searches created by Google Map's 'indle' event.
+    // This is done by keeping track of map's viewport bounds (which differ from location bounds)
+    this.viewportBounds = null;
     this.modalOpenedBoundsChange = false;
     this.searchMapListingsInProgress = false;
 
@@ -135,7 +137,7 @@ export class SearchPageComponent extends Component {
         latlngBounds: ['bounds'],
       });
       if (!mapSearch) {
-        this.locationInputSearch = true;
+        this.viewportBounds = null;
       }
     }
   }
@@ -156,33 +158,44 @@ export class SearchPageComponent extends Component {
       googleBoundsToSDKBounds(viewportGMapBounds),
       BOUNDS_FIXED_PRECISION
     );
-    const boundsChanged = !hasSameSDKBounds(viewportBounds, bounds);
-    const isRealMapSearch = mapSearch && !this.modalOpenedBoundsChange;
+
+    // ViewportBounds from (previous) rendering differ from viewportBounds currently set to map
+    // I.e. user has changed the map somehow: moved, panned, zoomed, resized
+    const viewportBoundsChanged =
+      this.viewportBounds && !hasSameSDKBounds(this.viewportBounds, viewportBounds);
 
     // If mapSearch url param is given (and we have not just opened mobile map modal)
     // or original location search is rendered once,
     // we start to react to 'bounds_changed' event by generating new searches
-    if (boundsChanged && (isRealMapSearch || !this.locationInputSearch)) {
-      const origin = googleLatLngToSDKLatLng(viewportGMapBounds.getCenter());
+    if (viewportBoundsChanged && !this.modalOpenedBoundsChange) {
+      const originMaybe = config.sortSearchByDistance
+        ? { origin: googleLatLngToSDKLatLng(viewportGMapBounds.getCenter()) }
+        : {};
       const searchParams = {
         address,
-        origin,
+        ...originMaybe,
         bounds: viewportBounds,
         country,
         mapSearch: true,
         ...validURLParamForExtendedData(CATEGORY_URL_PARAM, rest),
         ...validURLParamForExtendedData(AMENITIES_URL_PARAM, rest),
       };
+      this.viewportBounds = viewportBounds;
       history.push(
         createResourceLocatorString('SearchPage', routeConfiguration(), {}, searchParams)
       );
     } else {
-      this.locationInputSearch = false;
+      this.viewportBounds = viewportBounds;
       this.modalOpenedBoundsChange = false;
     }
   }
 
   fetchMoreListingsToMap(location) {
+    // TODO Remove this function.
+    // Temporarily just return immediately to avoid merge conflicts.
+    return;
+
+    // eslint-disable-next-line no-unreachable
     const { onSearchMapListings } = this.props;
     const searchInURL = parse(location.search, {
       latlng: ['origin'],
@@ -191,13 +204,16 @@ export class SearchPageComponent extends Component {
 
     const perPage = MAX_SEARCH_RESULT_PAGE_SIZE_ON_MAP;
     const page = 1;
-    const { address, country, ...rest } = searchInURL;
+    const { address, country, origin, ...rest } = searchInURL;
+    const originMaybe = config.sortSearchByDistance ? { origin } : {};
     const searchParamsForMapResults = {
       ...rest,
+      ...originMaybe,
       include: ['images'],
       page,
       perPage,
       'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
+      'limit.images': 1,
     };
     this.searchMapListingsInProgress = true;
 
@@ -253,6 +269,8 @@ export class SearchPageComponent extends Component {
       latlngBounds: ['bounds'],
     });
 
+    // urlQueryParams doesn't contain page specific url params
+    // like mapSearch, page or origin (origin depends on config.sortSearchByDistance)
     const urlQueryParams = pickSearchParamsOnly(searchInURL);
 
     // Page transition might initially use values from previous search
@@ -284,7 +302,7 @@ export class SearchPageComponent extends Component {
         onCloseAsModal={() => {
           onManageDisableScrolling('SearchPage.map', false);
         }}
-        useLocationSearchBounds={this.locationInputSearch}
+        useLocationSearchBounds={!this.viewportBounds}
       />
     );
     const showSearchMapInMobile = this.state.isSearchMapOpenOnMobile ? searchMap : null;
@@ -397,7 +415,11 @@ export class SearchPageComponent extends Component {
           mainEntity: [schemaMainEntity],
         }}
       >
-        <TopbarContainer className={topbarClasses} />
+        <TopbarContainer
+          className={topbarClasses}
+          currentPage="SearchPage"
+          currentSearchParams={urlQueryParams}
+        />
         <div className={css.container}>
           <div className={css.searchResultContainer}>
             <SearchFilters
@@ -532,13 +554,16 @@ SearchPage.loadData = (params, search) => {
     latlng: ['origin'],
     latlngBounds: ['bounds'],
   });
-  const { page = 1, address, country, ...rest } = queryParams;
+  const { page = 1, address, country, origin, ...rest } = queryParams;
+  const originMaybe = config.sortSearchByDistance ? { origin } : {};
   return searchListings({
     ...rest,
+    ...originMaybe,
     page,
     perPage: RESULT_PAGE_SIZE,
     include: ['author', 'images'],
     'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
+    'limit.images': 1,
   });
 };
 
