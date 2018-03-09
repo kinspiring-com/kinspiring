@@ -53,6 +53,9 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
     googleStaticMaps,
   ];
 
+  // Kinspiring blog post images come from Squarespace
+  imgSrc.push('*.squarespace.com');
+
   const connectSrc = [self, sharetribeApi, googleMaps, stripeApi];
 
   const fontSrc = [self, data, sharetribeAssets, googleStaticFonts];
