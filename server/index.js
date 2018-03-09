@@ -33,6 +33,7 @@ const fs = require('fs');
 const log = require('./log');
 const { sitemapStructure } = require('./sitemap');
 const csp = require('./csp');
+const kinspiring = require('./kinspiring');
 
 const buildPath = path.resolve(__dirname, '..', 'build');
 const env = process.env.REACT_APP_ENV || 'production';
@@ -181,6 +182,18 @@ app.get('*', (req, res) => {
 
   dataLoader
     .loadData(req.url, sdk)
+    .then(preloadedState => {
+      return kinspiring.getBlogData().then(data => {
+        // We must use an existing key within the Redux
+        // store. Otherwise the initialisation will not pick up the
+        // key. Let's use the generic marketplaceData key for the
+        // custom blog content.
+        const marketplaceData = Object.assign({}, preloadedState.marketplaceData || {}, {
+          kinspiringBlogData: data,
+        });
+        return Object.assign({}, preloadedState, { marketplaceData });
+      });
+    })
     .then(preloadedState => {
       const html = renderer.render(req.url, context, preloadedState);
 
