@@ -26,6 +26,9 @@ Maksutapahtuma
 {{~#eq "night" code~}}
 {{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "yö" "yötä"}}: {{> format-money money=line-total}}
 {{/eq~}}
+{{#eq "customer-commission" code}}
+{{marketplace.name}} palvelumaksu: {{> format-money money=line-total}}
+{{/eq}}
 {{~/contains~}}
 {{/each~}}
 Yhteensä: {{> format-money money=payin-total}}
