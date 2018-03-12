@@ -681,7 +681,7 @@
   "TermsOfServicePage.privacyTabTitle": "Tietosuojaseloste",
   "TermsOfServicePage.schemaTitle": "Käyttöehdot | {siteTitle}",
   "TermsOfServicePage.tosTabTitle": "Käyttöehdot",
-  "Topbar.checkInbox": "Tarkista sähköpostisi ja vahvista sähköpostisi {email}",
+  "Topbar.checkInbox": "Tarkista ja vahvista sähköpostisi {email}",
   "Topbar.closeVerifyEmailReminder": "Myöhemmin",
   "Topbar.fixEmail": "Ups, onko sähköpostiosoitteessasi kirjoitusvirhe? {fixEmailLink}",
   "Topbar.fixEmailLinkText": "Korjaa se.",
