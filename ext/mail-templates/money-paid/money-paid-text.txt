@@ -27,7 +27,7 @@ Maksutapahtuma
 {{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "yö" "yötä"}}: {{> format-money money=line-total}}
 {{/eq~}}
 {{~#eq "provider-commission" code~}}
-{{marketplace.name}} komissio: {{> format-money money=line-total}}
+Kinspiringin palvelumaksu: {{> format-money money=line-total}}
 {{/eq~}}
 {{~/contains~}}
 {{/each~}}
