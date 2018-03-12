@@ -748,7 +748,7 @@
   "TransactionPanel.orderDeclinedTitle": "{customerName}, vuokrauksesi lastentarvikkeelle {listingLink} on hylätty.",
   "TransactionPanel.orderDeliveredTitle": "{customerName}, vuokrauksesi lastentarvikkeelle {listingLink} on toteutunut.",
   "TransactionPanel.orderEnquiredTitle": "Lähetit kyselyn lastentarvikkeesta {listingLink}",
-  "TransactionPanel.orderPreauthorizedInfo": "{providerName} on saanut viestin varauspyynnöstäni. Odottele rauhassa vastausta. Kinspiring ei jaa yhteytietojasi kuten puhelinnumeroasi vuokranantajan kanssa. ",
+  "TransactionPanel.orderPreauthorizedInfo": "{providerName} on saanut viestin varauspyynnöstäni. Odottele rauhassa vastausta. Kinspiring ei jaa yhteytietojasi kuten puhelinnumeroasi vuokranantajan kanssa. Voit vaihtaa tiedot yksityisviestillä",
   "TransactionPanel.orderPreauthorizedSubtitle": "Olet lähettänyt varauspyynnön lastentarvikkeelle {listingLink}.",
   "TransactionPanel.orderPreauthorizedTitle": "Hienoa, {customerName}!",
   "TransactionPanel.requestToBook": "Lähetä varauspyyntö",
