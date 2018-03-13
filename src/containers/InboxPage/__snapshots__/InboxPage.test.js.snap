@@ -74,6 +74,23 @@ exports[`InboxPage matches snapshot 1`] = `
       className={null}
       rootClassName={null}
     >
+      <p>
+        <FormattedMessage
+          id="InboxPage.oldMessages"
+          values={
+            Object {
+              "link": <ExternalLink
+                href="https://old.kinspiring.com"
+            >
+                <FormattedMessage
+                    id="InboxPage.oldMessagesLink"
+                    values={Object {}}
+                />
+            </ExternalLink>,
+            }
+          }
+        />
+      </p>
       <ul>
         <li>
           <Component
@@ -476,6 +493,23 @@ exports[`InboxPage matches snapshot 3`] = `
       className={null}
       rootClassName={null}
     >
+      <p>
+        <FormattedMessage
+          id="InboxPage.oldMessages"
+          values={
+            Object {
+              "link": <ExternalLink
+                href="https://old.kinspiring.com"
+            >
+                <FormattedMessage
+                    id="InboxPage.oldMessagesLink"
+                    values={Object {}}
+                />
+            </ExternalLink>,
+            }
+          }
+        />
+      </p>
       <ul>
         <li>
           <Component

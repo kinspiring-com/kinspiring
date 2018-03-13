@@ -386,3 +386,8 @@
     color: var(--matterColorAnti);
   }
 }
+
+.oldMessages {
+  margin-bottom: 48px;
+  color: var(--matterColorAnti);
+}

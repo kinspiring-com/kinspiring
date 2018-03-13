@@ -24,6 +24,7 @@ import { getMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { isScrollingDisabled } from '../../ducks/UI.duck';
 import {
   Avatar,
+  ExternalLink,
   NamedLink,
   NotificationBadge,
   Page,
@@ -330,6 +331,11 @@ export const InboxPageComponent = props => {
     },
   ];
   const nav = <TabNav rootClassName={css.tabs} tabRootClassName={css.tab} tabs={tabs} />;
+  const link = (
+    <ExternalLink href="https://old.kinspiring.com">
+      <FormattedMessage id="InboxPage.oldMessagesLink" />
+    </ExternalLink>
+  );
 
   return (
     <Page title={title} scrollingDisabled={scrollingDisabled}>
@@ -350,6 +356,9 @@ export const InboxPageComponent = props => {
         </LayoutWrapperSideNav>
         <LayoutWrapperMain>
           {error}
+          <p className={css.oldMessages}>
+            <FormattedMessage id="InboxPage.oldMessages" values={{ link }} />
+          </p>
           <ul className={css.itemList}>
             {!fetchInProgress ? transactions.map(toTxItem) : null}
             {noResults}

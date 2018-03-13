@@ -252,6 +252,8 @@
   "InboxPage.fetchFailed": "Viestien lataaminen ei onnistunut. Yritä uudelleen.",
   "InboxPage.noOrdersFound": "Sinulla ei ole vielä varauksia.",
   "InboxPage.noSalesFound": "Kukaan ei ole vielä vuokrannut lastentarvikkeitasi.",
+  "InboxPage.oldMessagesLink": "täältä",
+  "InboxPage.oldMessages": "Vanhat viestit ja transaktiot löytyvät {link}!",
   "InboxPage.ordersTabTitle": "Vuokraan",
   "InboxPage.ordersTitle": "Viestit: Vuokraaminen",
   "InboxPage.salesTabTitle": "Tarjoan",
