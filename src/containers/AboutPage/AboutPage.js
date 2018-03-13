@@ -87,7 +87,7 @@ const AboutPage = () => {
 
               <p>
                 Me haluamme, että jokaisella perheellä on mahdollisuus käyttää laadukkaita
-                lastentarvikkeita ja uskomme jakamistalouden ratkaisevat monia lapsiperheiden
+                lastentarvikkeita ja uskomme jakamistalouden ratkaisevan monia lapsiperheiden
                 haasteita. Antamalla lastentarvikkeesi vuokralle tienaat ja annat muidenkin nauttia
                 hyvästä laadusta. Vuokraamalla tarpeeseen edistät kestävää kehitystä ja säästät
                 rahaa.
