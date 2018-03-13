@@ -2,7 +2,7 @@
 ;;
 
 {:params {:param/provider-commission 0.10M
-          :param/customer-commission 0.10M}
+          :param/customer-commission 0.02M}
  :states {:state/initial {}
           :state/enquiry {}
           :state/preauthorized
