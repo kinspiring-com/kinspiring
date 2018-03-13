@@ -23,4 +23,17 @@
       margin-bottom: 54px;
     }
   }
+
+  & .bold {
+    font-weight: bold;
+  }
+
+  & li {
+    @apply --marketplaceH4FontStyles;
+  }
+
+  & .indentedBullet {
+    list-style-type: circle;
+    margin-left: 24px;
+  }
 }
