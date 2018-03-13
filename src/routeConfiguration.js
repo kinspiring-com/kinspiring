@@ -23,6 +23,8 @@ import {
   TermsOfServicePage,
   TransactionPage,
   KinspiringContactUsPage,
+  KinspiringFaqProviderPage,
+  KinspiringFaqCustomerPage,
 } from './containers';
 
 // routeConfiguration needs to initialize containers first
@@ -264,6 +266,16 @@ const routeConfiguration = () => {
       path: '/privacy-policy',
       name: 'PrivacyPolicyPage',
       component: props => <PrivacyPolicyPage {...props} />,
+    },
+    {
+      path: '/faq-provider',
+      name: 'KinspiringFaqProviderPage',
+      component: props => <KinspiringFaqProviderPage {...props} />,
+    },
+    {
+      path: '/faq-customer',
+      name: 'KinspiringFaqCustomerPage',
+      component: props => <KinspiringFaqCustomerPage {...props} />,
     },
     {
       path: '/styleguide',
