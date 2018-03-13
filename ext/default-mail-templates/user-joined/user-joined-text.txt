@@ -1,6 +1,6 @@
-Heipähei {{recipient.first-name}},
+Hello {{recipient.first-name}},
 
-Kiva kun liityit Kinspiringiin! 
+Welcome to {{marketplace.name}}!
 
-Iloisin terveisin,
-{{marketplace.name}}-tiimi
+Best regards,
+The {{marketplace.name}} team

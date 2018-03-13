@@ -1,0 +1,1 @@
+Sinulle on maksettu {{money-amount transaction.payout-total}} {{transaction.payout-total.currency}}

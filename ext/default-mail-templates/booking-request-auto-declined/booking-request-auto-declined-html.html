@@ -1,19 +1,16 @@
-{{~#*inline "format-date"~}}
-{{date date format="d. MMM YYYY" lang="fi-FI"}}
-{{~/inline~}}
 
-{{~#*inline "format-date-inclusive"~}}
-{{date-day-before date format="d. MMM YYYY" lang="fi-FI"}}
+{{~#*inline "format-date"~}}
+{{date date format="MMM d, YYYY"}}
 {{~/inline~}}
 
 <html>
   <body>
-    <h1>Varauspyyntösi on hylätty.</h1>
+    <h1>Your booking request has expired.</h1>
 
     {{#with transaction}}
-    <p>Voi harmi, {{provider.display-name}} ei vastannut ajallaan varauspyyntöösi lastentarvikkeelle {{listing.title}} ajalle {{> format-date date=booking.start}} – {{> format-date-inclusive date=booking.end}} ja varauksesi on siten hylätty. Sinua ei ole laskutettu.</p>
+    <p>Unfortunately {{provider.display-name}} didn't respond to your booking request for {{listing.title}} from {{> format-date date=booking.start}} to {{> format-date date=booking.end}} on time, so the request has expired. You have not been billed.</p>
     {{/with}}
 
-    <p>Mitä jos varaisit toisen vastaavaan lastentarvikkeen Kinspiringissa? <a href="{{marketplace.url}}">Katso vuokralla olevat lastentarvikkeet!</a></p>
+    <p><a href="{{marketplace.url}}">Try to book something else instead</a></p>
   </body>
 </html>

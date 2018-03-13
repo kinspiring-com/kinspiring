@@ -1,1 +1,1 @@
-{{transaction.provider.display-name}} hylkäsi varauspyyntösi
+{{transaction.provider.display-name}} declined your booking request

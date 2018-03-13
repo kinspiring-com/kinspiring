@@ -1,36 +1,30 @@
+
 {{~#*inline "format-money"~}}
 {{money-amount money}} {{money.currency}}
 {{~/inline~}}
 
 {{~#*inline "format-date"~}}
-{{date date format="d. MMM YYYY" lang="fi-FI"}}
+{{date date format="MMM d, YYYY"}}
 {{~/inline~}}
 
-{{~#*inline "format-date-inclusive"~}}
-{{date-day-before date format="d. MMM YYYY" lang="fi-FI"}}
-{{~/inline~}}
-
-Onnea, varauspyyntösi on hyväksytty!
+Your booking request was accepted!
 
 {{#with transaction~}}
-{{provider.display-name}} on hyväksynyt varauspyyntösi lastentarvikkeelle {{listing.title}}. Vuokrauksesi alkaa {{> format-date date=booking.start}} ja päättyy {{> format-date-inclusive date=booking.end}}.
+{{provider.display-name}} has accepted your booking request for {{listing.title}} from {{> format-date date=booking.start}} to {{> format-date date=booking.end}}.
 
-Olemme veloittaneet {{> format-money money=payin-total}} luottokortiltasi. Tässä kuittisi.
+We have charged {{> format-money money=payin-total}} from your credit card. Here's your receipt.
 
-Maksutapahtuma
+Payment
 {{#each line-items~}}
 {{~#contains include-for "customer"~}}
 {{~#eq "day" code~}}
-{{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "päivä" "päivää"}}: {{> format-money money=line-total}}
+{{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "day" "days"}}: {{> format-money money=line-total}}
 {{/eq~}}
 {{~#eq "night" code~}}
-{{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "yö" "yötä"}}: {{> format-money money=line-total}}
+{{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "night" "nights"}}: {{> format-money money=line-total}}
 {{/eq~}}
-{{#eq "customer-commission" code}}
-{{marketplace.name}} palvelumaksu: {{> format-money money=line-total}}
-{{/eq}}
 {{~/contains~}}
 {{/each~}}
-Yhteensä: {{> format-money money=payin-total}}
+Payment total: {{> format-money money=payin-total}}
 
 {{~/with}}

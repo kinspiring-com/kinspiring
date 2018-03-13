@@ -1,1 +1,1 @@
-Tervetuloa Kinspiringiin!
+Welcome to {{marketplace.name}}

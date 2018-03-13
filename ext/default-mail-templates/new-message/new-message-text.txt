@@ -1,15 +1,15 @@
 {{#with message~}}
 
-{{sender.display-name}} on lähettänyt sinulle uuden viestin!
+You have a new message from {{sender.display-name}}
 
 "{{content}}"
 
 {{#eq recipient-role "customer"~}}
-Vastaa käyttäjälle {{sender.display-name}}: {{marketplace.url}}/order/{{url-encode transaction.id}}/details
+Reply to {{sender.display-name}}: {{marketplace.url}}/order/{{url-encode transaction.id}}/details
 {{/eq~}}
 
 {{#eq recipient-role "provider"~}}
-Vastaa käyttäjälle {{sender.display-name}}: {{marketplace.url}}/sale/{{url-encode transaction.id}}/details
+Reply to {{sender.display-name}}: {{marketplace.url}}/sale/{{url-encode transaction.id}}/details
 {{/eq~}}
 
 {{~/with}}

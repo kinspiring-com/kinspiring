@@ -1,1 +1,1 @@
-Kirjoita arvostelu käyttäjälle {{transaction.customer.display-name}}
+Write a review for {{transaction.customer.display-name}}

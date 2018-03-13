@@ -1,0 +1,35 @@
+{{~#*inline "format-money"~}}
+{{money-amount money}} {{money.currency}}
+{{~/inline~}}
+
+{{~#*inline "format-date"~}}
+{{date date format="d. MMM YYYY" lang="fi-FI"}}
+{{~/inline~}}
+
+{{~#*inline "format-date-inclusive"~}}
+{{date-day-before date format="d. MMM YYYY" lang="fi-FI"}}
+{{~/inline~}}
+
+{{#with transaction~}}
+Olet ansainnut {{> format-money money=payout-total}}
+
+Olemme maksaneet sinulle {{> format-money money=payout-total}} varauksesta lastentarvikkeelle {{listing.title}}. Vuokraus alkaa {{> format-date date=booking.start}} ja päättyy {{> format-date-inclusive date=booking.end}}. Vuokraajasi on {{customer.display-name}}. Rahan siirtyminen tilillesi voi kestää enintään seitsemän päivää.
+
+Tässä maksun tiedot.
+
+Maksutapahtuma
+{{#each line-items~}}
+{{~#contains include-for "provider"~}}
+{{~#eq "day" code~}}
+{{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "päivä" "päivää"}}: {{> format-money money=line-total}}
+{{/eq~}}
+{{~#eq "night" code~}}
+{{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "yö" "yötä"}}: {{> format-money money=line-total}}
+{{/eq~}}
+{{~#eq "provider-commission" code~}}
+Kinspiringin palvelumaksu: {{> format-money money=line-total}}
+{{/eq~}}
+{{~/contains~}}
+{{/each~}}
+Sinä tienaat: {{> format-money money=payout-total}}
+{{~/with}}

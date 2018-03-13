@@ -1,0 +1,1 @@
+Kirjoita arvostelu vuokrauksestasi: {{transaction.listing.title}}

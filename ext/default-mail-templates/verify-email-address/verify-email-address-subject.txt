@@ -1,1 +1,1 @@
-Vahvista rekisteröitymisesi Kinspiringiin
+Email verification instructions for {{marketplace.name}}

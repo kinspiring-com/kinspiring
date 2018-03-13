@@ -1,1 +1,1 @@
-{{transaction.provider.display-name}} hyväksyi varauspyyntösi!
+{{transaction.provider.display-name}} accepted your booking request!

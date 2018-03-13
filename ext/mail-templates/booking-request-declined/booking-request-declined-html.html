@@ -1,0 +1,19 @@
+{{~#*inline "format-date"~}}
+{{date date format="d. MMM YYYY" lang="fi-FI"}}
+{{~/inline~}}
+
+{{~#*inline "format-date-inclusive"~}}
+{{date-day-before date format="d. MMM YYYY" lang="fi-FI"}}
+{{~/inline~}}
+
+<html>
+  <body>
+    <h1>Varauspyyntösi on hylätty.</h1>
+
+    {{#with transaction}}
+    <p>Voi harmi, {{provider.display-name}} hylkäsi varaupyyntösi lastentarvikkeelle {{listing.title}} ajalle {{> format-date date=booking.start}} – {{> format-date-inclusive date=booking.end}}. Sinua ei ole laskutettu.</p>
+    {{/with}}
+
+    <p>Mitä jos varaisit toisen vastaavaan lastentarvikkeen Kinspiringissa? <a href="{{marketplace.url}}">Katso vuokralla olevat lastentarvikkeet!</a></p>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+Heipähei {{recipient.first-name}},
+
+Vahvista rekisteröitymisesi Kinspiringiin napsauttamalla alla olevaa linkkiä:
+
+{{marketplace.url}}/verify-email?t={{form-encode email-verification.token}}
+
+Voit myös myös kopioida linkin selaimen osoitekenttään.
+
+Linkki vanhenee kahden vuorokauden päästä. Voit tarvittaessa pyytää uuden vahvistuslinkin.
+
+Iloisin terveisin,
+{{marketplace.name}}-tiimi

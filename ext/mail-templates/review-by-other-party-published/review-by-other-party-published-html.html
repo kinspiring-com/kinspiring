@@ -1,0 +1,19 @@
+<html>
+  <body>
+    {{#with transaction}}
+    <h1>{{other-party.display-name}} kirjoitti sinulle arvostelun. Näin hän kirjoitti.</h1>
+
+    {{#each reviews}}
+      {{#eq recipient.id subject.id}}
+        <blockquote><i>"{{content}}"</i></blockquote>
+      {{/eq}}
+    {{/each}}
+
+    <p>Arvostelu on julkaistu {{marketplace.name}}-profiilissasi.</p>
+
+    <p>
+      <a href="{{marketplace.url}}/u/{{url-encode recipient.id}}">Katso profiiliasi.</a>
+    </p>
+    {{/with}}
+  </body>
+</html>

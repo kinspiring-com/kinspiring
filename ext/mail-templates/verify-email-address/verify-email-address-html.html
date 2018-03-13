@@ -1,0 +1,15 @@
+<html>
+  <body>
+    <p>Heipähei {{recipient.first-name}},</p>
+
+    <p>Vahvista rekisteröitymisesi Kinspiringiin napsauttamalla alla olevaa linkkiä:</p>
+
+    <p><a href="{{marketplace.url}}/verify-email?t={{form-encode email-verification.token}}">{{marketplace.url}}/verify-email?t={{form-encode email-verification.token}}</a></p>
+
+    <p>Voit myös myös kopioida linkin selaimen osoitekenttään.</p>
+
+    <p>Linkki vanhenee kahden vuorokauden päästä. Voit tarvittaessa pyytää uuden vahvistuslinkin.</p>
+
+    <p>Iloisin terveisin,<br />{{marketplace.name}}-tiimi</p>
+  </body>
+</html>

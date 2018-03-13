@@ -1,1 +1,1 @@
-{{marketplace.name}} sähköpostisi on nyt vaihdettu
+{{marketplace.name}} email address changed

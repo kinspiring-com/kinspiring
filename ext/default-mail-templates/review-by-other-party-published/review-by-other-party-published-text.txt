@@ -1,14 +1,14 @@
 
 {{~#with transaction~}}
 
-{{other-party.display-name}} kirjoitti sinulle arvostelun. Näin hän kirjoitti:
+{{other-party.display-name}} wrote you a review. Here's what they wrote.
 
 {{#each reviews~}}
 {{#eq recipient.id subject.id}}"{{content}}"{{/eq}}
 {{~/each}}
 
-Arvostelu on julkaistu {{marketplace.name}}-profiilissasi.
+The review has been published on your {{marketplace.name}} profile.
 
-Katso profiilisia: {{marketplace.url}}/u/{{url-encode recipient.id}}
+View your profile: {{marketplace.url}}/u/{{url-encode recipient.id}}
 
 {{~/with~}}

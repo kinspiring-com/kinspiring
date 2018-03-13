@@ -1,0 +1,62 @@
+{{~#*inline "format-money"~}}
+{{money-amount money}} {{money.currency}}
+{{~/inline~}}
+
+{{~#*inline "format-date"~}}
+{{date date format="d. MMM YYYY" lang="fi-FI"}}
+{{~/inline~}}
+
+{{~#*inline "format-date-inclusive"~}}
+{{date-day-before date format="d. MMM YYYY" lang="fi-FI"}}
+{{~/inline~}}
+
+<html>
+  <body>
+    {{#with transaction}}
+    <h1>Vastaathan käyttäjän {{customer.display-name}} varauspyyntöön</h1>
+
+    <p>Hyviä uutisia! {{customer.display-name}} haluaa vuokrata lastentarvikkeesi {{listing.title}} ajalle {{> format-date date=booking.start}} – {{> format-date-inclusive date=booking.end}}. Tässä varauksen tiedot.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align: left;">Maksutapahtuma</th>
+        </tr>
+      </thead>
+      <tbody>
+      {{#each line-items}}
+        {{#contains include-for "provider"}}
+          <tr>
+            {{#eq "day" code}}
+            <td>{{> format-money money=unit-price}} &times; {{number quantity}} {{inflect quantity "päivä" "päivää"}}</td>
+            <td style="text-align: right; padding-left: 20px">{{> format-money money=line-total}}</td>
+            {{/eq}}
+
+            {{#eq "night" code}}
+            <td>{{> format-money money=unit-price}} &times; {{number quantity}} {{inflect quantity "yö" "yötä"}}</td>
+            <td style="text-align: right; padding-left: 20px">{{> format-money money=line-total}}</td>
+            {{/eq}}
+
+            {{#eq "provider-commission" code}}
+            <td>Kinspiringin palvelumaksu</td>
+            <td style="text-align: right; padding-left: 20px;">{{> format-money money=line-total}}</td>
+            {{/eq}}
+          </tr>
+        {{/contains}}
+      {{/each}}
+      </tbody>
+      <tfoot>
+        <tr>
+          <th style="text-align: left;">Sinä tienaat</th>
+          <th style="text-align: left; padding-left: 20px;">{{> format-money money=payout-total}}</th>
+        </tr>
+      </tfoot>
+    </table>
+
+    <p>Sinun tulee hyväksyä varauspyyntö viimeistään {{> format-date date=delayed-transition.run-at}}. Jos hyväksyt tilauksen ennen määräaikaa, maksu veloitetaan ostajalta. Muussa tapauksessa tilaus hylätään automaattisesti eikä maksua veloiteta. Jos et hyväksy varausta määräajassa, se hylätään, etkä saa maksua. Mikäli vuokrauksen päivät eivät sovi sinulle, voit myös hylätä varauspyynnön.</p>
+
+    <p><a href="{{marketplace.url}}/sale/{{url-encode id}}/details">Hyväksy tai hylkää varauspyyntö</a></p>
+
+    {{/with}}
+  </body>
+</html>

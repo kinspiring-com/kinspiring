@@ -1,38 +1,35 @@
+
 {{~#*inline "format-money"~}}
 {{money-amount money}} {{money.currency}}
 {{~/inline~}}
 
 {{~#*inline "format-date"~}}
-{{date date format="d. MMM YYYY" lang="fi-FI"}}
-{{~/inline~}}
-
-{{~#*inline "format-date-inclusive"~}}
-{{date-day-before date format="d. MMM YYYY" lang="fi-FI"}}
+{{date date format="MMM d, YYYY"}}
 {{~/inline~}}
 
 {{#with transaction~}}
-Vastaathan käyttäjän {{customer.display-name}} varauspyyntöön!
+Please respond to a request by {{customer.display-name}}
 
-Hyviä uutisia! {{customer.display-name}} haluaa vuokrata lastentarvikkeesi {{listing.title}} ajalle {{> format-date date=booking.start}} – {{> format-date-inclusive date=booking.end}}. Tässä varauksen tiedot.
+Good news! {{customer.display-name}} just requested to book {{listing.title}} from {{> format-date date=booking.start}} to {{> format-date date=booking.end}}. Here's the breakdown.
 
-Maksutapahtuma
+Payment
 {{#each line-items~}}
 {{~#contains include-for "provider"~}}
 {{~#eq "day" code~}}
-{{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "päivä" "päivää"}}: {{> format-money money=line-total}}
+{{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "day" "days"}}: {{> format-money money=line-total}}
 {{/eq~}}
 {{~#eq "night" code~}}
-{{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "yö" "yötä"}}: {{> format-money money=line-total}}
+{{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "night" "nights"}}: {{> format-money money=line-total}}
 {{/eq~}}
 {{~#eq "provider-commission" code~}}
-Kinspiringin palvelumaksu: {{> format-money money=line-total}}
+{{marketplace.name}} fee: {{> format-money money=line-total}}
 {{/eq~}}
 {{~/contains~}}
 {{/each~}}
-Sinä tienaat: {{> format-money money=payout-total}}
+You earn: {{> format-money money=payout-total}}
 
-Sinun tulee hyväksyä varauspyyntö viimeistään {{> format-date date=delayed-transition.run-at}}. Jos hyväksyt tilauksen ennen määräaikaa, maksu veloitetaan ostajalta. Muussa tapauksessa tilaus hylätään automaattisesti eikä maksua veloiteta. Jos et hyväksy varausta määräajassa, se hylätään, etkä saa maksua. Mikäli vuokrauksen päivät eivät sovi sinulle, voit myös hylätä varauspyynnön.
+You need to accept the request by {{> format-date date=delayed-transition.run-at}}. Otherwise the request will be expired and you won't get paid. If the booked dates won't work for you, you can also choose to decline the request.
 
-Hyväksy tai hylkää varauspyyntö: {{marketplace.url}}/sale/{{url-encode id}}/details
+Accept or decline the booking: {{marketplace.url}}/sale/{{url-encode id}}/details
 
 {{~/with}}

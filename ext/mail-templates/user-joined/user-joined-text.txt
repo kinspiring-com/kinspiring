@@ -1,0 +1,6 @@
+Heipähei {{recipient.first-name}},
+
+Kiva kun liityit Kinspiringiin! 
+
+Iloisin terveisin,
+{{marketplace.name}}-tiimi

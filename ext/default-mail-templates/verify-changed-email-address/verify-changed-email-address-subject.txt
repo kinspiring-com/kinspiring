@@ -1,1 +1,1 @@
-Vahvista uusi sähköpostisi Kinspiringissa
+Email verification instructions for {{marketplace.name}}

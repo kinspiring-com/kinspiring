@@ -1,0 +1,60 @@
+{{~#*inline "format-money"~}}
+{{money-amount money}} {{money.currency}}
+{{~/inline~}}
+
+{{~#*inline "format-date"~}}
+{{date date format="d. MMM YYYY" lang="fi-FI"}}
+{{~/inline~}}
+
+{{~#*inline "format-date-inclusive"~}}
+{{date-day-before date format="d. MMM YYYY" lang="fi-FI"}}
+{{~/inline~}}
+
+<html>
+  <body>
+    {{#with transaction}}
+    <h1>Olet ansainnut {{> format-money money=payout-total}}</h1>
+
+    <p>Olemme maksaneet sinulle {{> format-money money=payout-total}} varauksesta lastentarvikkeelle {{listing.title}}. Vuokraus alkaa {{> format-date date=booking.start}} ja päättyy {{> format-date-inclusive date=booking.end}}. Vuokraajasi on {{customer.display-name}}. Rahan siirtyminen tilillesi voi kestää enintään seitsemän päivää.</p>
+
+    <p>Tässä maksun tiedot..</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align: left;">Maksutapahtuma</th>
+        </tr>
+      </thead>
+      <tbody>
+      {{#each line-items}}
+        {{#contains include-for "provider"}}
+          <tr>
+            {{#eq "day" code}}
+            <td>{{> format-money money=unit-price}} &times; {{number quantity}} {{inflect quantity "päivä" "päivää"}}</td>
+            <td style="text-align: right; padding-left: 20px">{{> format-money money=line-total}}</td>
+            {{/eq}}
+
+            {{#eq "night" code}}
+            <td>{{> format-money money=unit-price}} &times; {{number quantity}} {{inflect quantity "yö" "yötä"}}</td>
+            <td style="text-align: right; padding-left: 20px">{{> format-money money=line-total}}</td>
+            {{/eq}}
+
+            {{#eq "provider-commission" code}}
+            <td>Kinspiringin palvelumaksu</td>
+            <td style="text-align: right; padding-left: 20px;">{{> format-money money=line-total}}</td>
+            {{/eq}}
+          </tr>
+        {{/contains}}
+      {{/each}}
+      </tbody>
+      <tfoot>
+        <tr>
+          <th style="text-align: left;">Sinä tienaat</th>
+          <th style="text-align: right; padding-left: 20px;">{{> format-money money=payout-total}}</th>
+        </tr>
+      </tfoot>
+    </table>
+
+    {{/with}}
+  </body>
+</html>

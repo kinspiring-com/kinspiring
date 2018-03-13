@@ -1,1 +1,1 @@
-{{other-party.display-name}} kirjoitti sinulle arvostelun
+{{other-party.display-name}} wrote you a review

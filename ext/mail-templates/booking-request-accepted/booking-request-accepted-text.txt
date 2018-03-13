@@ -1,0 +1,36 @@
+{{~#*inline "format-money"~}}
+{{money-amount money}} {{money.currency}}
+{{~/inline~}}
+
+{{~#*inline "format-date"~}}
+{{date date format="d. MMM YYYY" lang="fi-FI"}}
+{{~/inline~}}
+
+{{~#*inline "format-date-inclusive"~}}
+{{date-day-before date format="d. MMM YYYY" lang="fi-FI"}}
+{{~/inline~}}
+
+Onnea, varauspyyntösi on hyväksytty!
+
+{{#with transaction~}}
+{{provider.display-name}} on hyväksynyt varauspyyntösi lastentarvikkeelle {{listing.title}}. Vuokrauksesi alkaa {{> format-date date=booking.start}} ja päättyy {{> format-date-inclusive date=booking.end}}.
+
+Olemme veloittaneet {{> format-money money=payin-total}} luottokortiltasi. Tässä kuittisi.
+
+Maksutapahtuma
+{{#each line-items~}}
+{{~#contains include-for "customer"~}}
+{{~#eq "day" code~}}
+{{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "päivä" "päivää"}}: {{> format-money money=line-total}}
+{{/eq~}}
+{{~#eq "night" code~}}
+{{> format-money money=unit-price}} x {{number quantity}} {{inflect quantity "yö" "yötä"}}: {{> format-money money=line-total}}
+{{/eq~}}
+{{#eq "customer-commission" code}}
+{{marketplace.name}} palvelumaksu: {{> format-money money=line-total}}
+{{/eq}}
+{{~/contains~}}
+{{/each~}}
+Yhteensä: {{> format-money money=payin-total}}
+
+{{~/with}}

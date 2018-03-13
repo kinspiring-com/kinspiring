@@ -1,8 +1,8 @@
-Heipähei {{recipient.first-name}},
+Hello {{recipient.first-name}},
 
-Sinun {{marketplace.name}} tilisi sähköposti on nyt vaihdettu. 
+Your {{marketplace.name}} account's email address was changed.
 
-Jos et muuttanut sähköpostiasi, ota meihin yhteyttä. 
+If you didn't make this change, please contact us.
 
-Iloisin terveisin,
-Kinspiring-tiimi
+Best regards,
+The {{marketplace.name}} team

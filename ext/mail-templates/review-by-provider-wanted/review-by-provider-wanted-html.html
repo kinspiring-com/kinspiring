@@ -1,0 +1,11 @@
+<html>
+  <body>
+    {{#with transaction}}
+    <h1>Millainen vuokrauskokemus sinulla oli käyttäjän {{customer.display-name}} kanssa? Kirjoita arvostelu!</h1>
+
+    <p>{{customer.display-name}} vuokrasi vastikään lastentarvikkeesi {{listing.title}}. Olisi mukavaa jos kertoisit kokemuksestasi ja kirjoittaisit arvostelun käyttäjälle {{customer.display-name}}. Arvostelut ovat tärkeitä {{marketplace.name}}-yhteisölle.</p>
+
+    <p><a href="{{marketplace.url}}/sale/{{url-encode id}}/details">Kirjoita arvostelu</a></p>
+    {{/with}}
+  </body>
+</html>

@@ -1,0 +1,1 @@
+Kirjoita arvostelu käyttäjälle {{transaction.customer.display-name}}
