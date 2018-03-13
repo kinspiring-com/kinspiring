@@ -52,8 +52,8 @@ describe('BookingDatesForm', () => {
     expect(booking.attributes.start).toEqual(startDate);
     expect(booking.attributes.end).toEqual(endDate);
     expect(transaction.attributes.lastTransition).toEqual(TRANSITION_REQUEST);
-    expect(transaction.attributes.payinTotal).toEqual(new Money(2198, 'USD'));
-    expect(transaction.attributes.payoutTotal).toEqual(new Money(2198, 'USD'));
+    expect(transaction.attributes.payinTotal).toEqual(new Money(2242, 'USD'));
+    expect(transaction.attributes.payoutTotal).toEqual(new Money(2242, 'USD'));
     expect(transaction.attributes.lineItems).toEqual([
       {
         code: 'line-item/night',
@@ -61,6 +61,13 @@ describe('BookingDatesForm', () => {
         unitPrice: price,
         quantity: new Decimal(2),
         lineTotal: new Money(2198, 'USD'),
+        reversal: false,
+      },
+      {
+        code: 'line-item/customer-commission',
+        includeFor: ['customer'],
+        unitPrice: new Money(2198, 'USD'),
+        lineTotal: new Money(44, 'USD'),
         reversal: false,
       },
     ]);

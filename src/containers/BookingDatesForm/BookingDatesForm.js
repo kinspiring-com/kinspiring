@@ -26,12 +26,39 @@ import css from './BookingDatesForm.css';
 
 const { Money, UUID } = sdkTypes;
 
-const estimatedTotalPrice = (unitPrice, unitCount) => {
+const estimatedUnitsTotal = (unitPrice, unitCount) => {
   const numericPrice = convertMoneyToNumber(unitPrice);
   const numericTotalPrice = new Decimal(numericPrice).times(unitCount).toNumber();
   return new Money(
     convertUnitToSubUnit(numericTotalPrice, unitDivisor(unitPrice.currency)),
     unitPrice.currency
+  );
+};
+
+const estimatedCustomerCommission = (unitsTotal, percentage) => {
+  const numericTotal = convertMoneyToNumber(unitsTotal);
+  // Divide the commission percentage with 100 to get the
+  // commission multiplier and use precision of 2 when
+  // rounding the sub units.
+  const numericCommission = new Decimal(percentage)
+    .div(100)
+    .times(numericTotal)
+    .toDP(2)
+    .toNumber();
+
+  return new Money(
+    convertUnitToSubUnit(numericCommission, unitDivisor(unitsTotal.currency)),
+    unitsTotal.currency
+  );
+};
+
+const estimatedPayInTotal = (unitsTotal, customerCommission) => {
+  const numericTotal = convertMoneyToNumber(unitsTotal);
+  const numericCommission = convertMoneyToNumber(customerCommission);
+  const numericPayIn = new Decimal(numericTotal).plus(numericCommission).toNumber();
+  return new Money(
+    convertUnitToSubUnit(numericPayIn, unitDivisor(unitsTotal.currency)),
+    unitsTotal.currency
   );
 };
 
@@ -47,7 +74,13 @@ const estimatedTransaction = (unitType, bookingStart, bookingEnd, unitPrice, qua
     ? nightsBetween(bookingStart, bookingEnd)
     : isDaily ? daysBetween(bookingStart, bookingEnd) : quantity;
 
-  const totalPrice = estimatedTotalPrice(unitPrice, unitCount);
+  const unitsTotal = estimatedUnitsTotal(unitPrice, unitCount);
+  const customerCommission = estimatedCustomerCommission(
+    unitsTotal,
+    config.custom.customerCommissionPercentage
+  );
+
+  const payInTotal = estimatedPayInTotal(unitsTotal, customerCommission);
 
   return {
     id: new UUID('estimated-transaction'),
@@ -56,15 +89,22 @@ const estimatedTransaction = (unitType, bookingStart, bookingEnd, unitPrice, qua
       createdAt: now,
       lastTransitionedAt: now,
       lastTransition: TRANSITION_REQUEST,
-      payinTotal: totalPrice,
-      payoutTotal: totalPrice,
+      payinTotal: payInTotal,
+      payoutTotal: payInTotal,
       lineItems: [
         {
           code: unitType,
           includeFor: ['customer', 'provider'],
           unitPrice: unitPrice,
           quantity: new Decimal(unitCount),
-          lineTotal: totalPrice,
+          lineTotal: unitsTotal,
+          reversal: false,
+        },
+        {
+          code: 'line-item/customer-commission',
+          includeFor: ['customer'],
+          unitPrice: unitsTotal,
+          lineTotal: customerCommission,
           reversal: false,
         },
       ],
