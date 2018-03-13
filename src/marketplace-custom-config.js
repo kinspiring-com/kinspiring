@@ -149,3 +149,9 @@ export const categoryFields = {
   pyoraily: [...commonFields, FIELD_ACCESSORIES],
   muutLastentarvikkeet: [...commonFields, FIELD_ACCESSORIES],
 };
+
+/**
+ * Customer commission percentage which is added
+ * to the total price of every booking.
+ */
+export const customerCommissionPercentage = 2;
