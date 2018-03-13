@@ -55,3 +55,9 @@ export { default as TransactionPage } from './TransactionPage/TransactionPage';
 export {
   default as KinspiringContactUsPage,
 } from './KinspiringContactUsPage/KinspiringContactUsPage';
+export {
+  default as KinspiringFaqProviderPage,
+} from './KinspiringFaqProviderPage/KinspiringFaqProviderPage';
+export {
+  default as KinspiringFaqCustomerPage,
+} from './KinspiringFaqCustomerPage/KinspiringFaqCustomerPage';

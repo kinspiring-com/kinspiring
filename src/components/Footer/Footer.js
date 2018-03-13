@@ -119,13 +119,13 @@ const Footer = props => {
                   </NamedLink>
                 </li>
                 <li className={css.listItem}>
-                  <NamedLink name="LandingPage" className={css.link}>
-                    <FormattedMessage id="Footer.toFAQPage" />
+                  <NamedLink name="KinspiringFaqProviderPage" className={css.link}>
+                    <FormattedMessage id="Footer.kinspiring.toFaqProvider" />
                   </NamedLink>
                 </li>
                 <li className={css.listItem}>
-                  <NamedLink name="LandingPage" className={css.link}>
-                    <FormattedMessage id="Footer.toHelpPage" />
+                  <NamedLink name="KinspiringFaqCustomerPage" className={css.link}>
+                    <FormattedMessage id="Footer.kinspiring.toFaqCustomer" />
                   </NamedLink>
                 </li>
                 <li className={css.listItem}>
