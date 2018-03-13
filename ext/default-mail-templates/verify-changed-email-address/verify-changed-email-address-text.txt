@@ -2,7 +2,7 @@ Heipähei {{recipient.first-name}},
 
 Vahvistaaksesi uuden sähköpostiosoitteesi Kinspiringissa klikkaa alla olevaa linkkiä: 
 
-{{marketplace.url}}/verify-email?t={{url-encode email-verification.token}}
+{{marketplace.url}}/verify-email?t={{form-encode email-verification.token}}
 
 Voit myös myös kopioida linkin selaimen osoitekenttään.
 
