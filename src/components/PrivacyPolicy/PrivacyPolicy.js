@@ -11,51 +11,56 @@ const PrivacyPolicy = props => {
   // prettier-ignore
   return (
     <div className={classes}>
-      <p className={css.lastUpdated}>Last updated: October 30, 2017</p>
+      <p className={css.lastUpdated}>Päivitetty: 14. maaliskuuta 2018</p>
+      <h2>Rekisterinpitäjä</h2>
+      <p>Kinspiring Oy</p>
+      <p>Y-tunnus: 2819831-1</p>
 
-      <p>
-        Thank you for using Saunatime! Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-        voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </p>
+      <h2>Yhteyshenkilö rekisteriä koskevissa asioissa</h2>
+      <p>Krista Pohjanlehto</p>
+      <p><a href="mailto:hello@kinspiring.com">hello@kinspiring.com</a></p>
 
-      <h2>1 Lorem ipsum dolor sit amet</h2>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-        voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </p>
+      <h2>Rekisterin nimi</h2>
+      <p>Kinspiring-palvelun käyttäjärekisteri</p>
 
-      <h2>2 Sed ut perspiciatis unde</h2>
-      <p>
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-        laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi
-        architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
-        aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
-        voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet,
-        consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et
-        dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum
-        exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi
-        consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil
-        molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
-      </p>
+      <h2>Henkilötietojen käsittelyn tarkoitus</h2>
+      <p>Tietoja kerätään, jotta palvelun käyttö ja yhteydenpito käyttäjien kanssa on mahdollista. Yhteydenpitoa voi tapahtua sekä palvelun ylläpitäjän ja käyttäjän välillä että suoraan käyttäjien välillä. Tilastotietoa palvelun käytöstä voidaan hyödyntää palvelun kehittämisessä ja markkinoinnissa.</p>
+      <p>Henkilöllisyyttä koskeva informaatio jää yksinomaan Kinspiringin vastuulle ja rekisteriin. Vain käyttäjän etunimi ja sukunimen ensimmäinen kirjain ovat lähtökohtaisesti muiden käyttäjien nähtävissä. Lisäksi käyttäjät voivat halutessaan jakaa muuta tietoa itsestään toisille käyttäjille profiilisivullaan ja vuokraustapahtumien yhteydessä.</p>
+      <p>Henkilötietojen käsittelyä ei ole ulkoistettu, mutta niiden tallentaminen tapahtuu ulkopuoliselta yritykseltä vuokratuille palvelimille.</p>
 
-      <h2>3 At vero eos et accusamus</h2>
-      <p>
-        At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium
-        voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati
-        cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id
-        est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam
-        libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod
-        maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.
-        Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut
-        et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a
-        sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis
-        doloribus asperiores repellat
-      </p>
+      <h2>Rekisterin tietosisältö</h2>
+      <p>Rekisteriin voidaan tallentaa:</p>
+
+      <ul className={css.indentedBullet}>
+        <li>Yksilöintitiedot: nimi, sähköpostiosoite, puhelinnumero, katuosoite, syntymäaika (tarvitaan maksujen välittämiseen)</li>
+        <li>Kirjautumistiedot: käyttäjätunnus, salasana (tallennetaan salattuna)</li>
+        <li>Käyttäjän itse kirjoittama kuvaus itsestään</li>
+        <li>Käyttäjän palveluun jättämät pyynnöt ja tarjoukset</li>
+        <li>Käyttäjän saamat ja antamat palautteet</li>
+        <li>Tilastotietoa palvelun käytöstä, esimerkiksi kirjautumisten lukumäärä</li>
+        <li>Luottokortti- ja tilitiedot</li>
+      </ul>
+
+      <h2>Säännönmukaiset tietolähteet</h2>
+      <p>Henkilötiedot ovat käyttäjän itsensä ilmoittamia, joko rekisteröitymisen yhteydessä tai palvelua myöhemmin käytettäessä.</p>
+
+      <h2>Tietojen säännönmukaiset luovutukset</h2>
+      <p>Asiakastietoja ei luovuteta Kinspiring palveluiden tuotantoon osallistuvien osapuolien ulkopuolelle ilman lakisääteistä perustetta.</p>
+
+      <h2>Tietojen siirto EU:n tai ETA:n ulkopuolelle</h2>
+      <p>Tiedot on lähtökohtaisesti tallennettu palvelimille, jotka sijaitsevat EU:n sisäpuolella. Maksutapahtumien tietoja välitetään EU-alueen ulkopuolelle. Maksuliikenteen osalta palveluntarjoaja varmistaa, että tiedonsiirto täyttää EU:n tietosuoja-asetuksen vaatimukset: https://support.stripe.com/questions/stripe-and-european-data-transfers.</p>
+
+      <h2>Rekisterin suojauksen periaatteet</h2>
+      <p>Tiedot tallennetaan palvelimille. Ohjelmallinen pääsy niihin on rajattu salasanoilla ja fyysinen pääsy laitetilaan on rajattu palvelimet tarjoavan yrityksen toimesta.</p>
+
+      <h2>Tarkastusoikeus ja tarkastusoikeuden toteuttaminen</h2>
+      <p>Käyttäjillä on henkilötietolain 523/1999 6. luvun mukaisesti oikeus tarkistaa, mitä häntä koskevia tietoja Kinspiring-palvelun käyttäjärekisteriin on tallennettu. Käyttäjän tulee esittää tarkastuspyynnössä tiedon etsimiseen tarpeelliset tiedot: Nimi, osoite, puhelinnumero ja käyttäjätunnus.</p>
+
+      <h2>Tietojen poistaminen</h2>
+      <p>Jos käyttäjä poistaa profiilinsa Kinspiring-palvelusta, poistetaan kaikki häneen liittyvät henkilötiedot kohtuullisen ajan sisällä, ellei niiden säilyttämiseen ole perusteltua syytä.</p>
+
+      <h2>Tiedon korjaaminen ja tiedon korjaamisen toteuttaminen</h2>
+      <p>Asiakas voi päivittää omia perustietojaan Kinspiring-palvelun profiilisivulla.</p>
     </div>
   );
 };

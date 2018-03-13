@@ -677,7 +677,7 @@
   "StripePaymentForm.stripe.validation_error.missing": "Asiakkaalla ei ole veloitettavaa korttia.",
   "StripePaymentForm.stripe.validation_error.processing_error": "Maksua käsitellessä tapahtui virhe.",
   "StripePaymentForm.submitPaymentInfo": "Lähetä pyyntö",
-  "TermsOfServicePage.heading": "Käyttöehdot",
+  "TermsOfServicePage.heading": "Kinspiring - käyttöehdot",
   "TermsOfServicePage.privacyTabTitle": "Tietosuojaseloste",
   "TermsOfServicePage.schemaTitle": "Käyttöehdot | {siteTitle}",
   "TermsOfServicePage.tosTabTitle": "Käyttöehdot",
