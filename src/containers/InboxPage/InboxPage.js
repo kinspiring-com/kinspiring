@@ -336,7 +336,7 @@ export const InboxPageComponent = props => {
   const nav = <TabNav rootClassName={css.tabs} tabRootClassName={css.tab} tabs={tabs} />;
   const link = (
     <ExternalLink href="https://old.kinspiring.com">
-      <FormattedMessage id="InboxPage.oldMessagesLink" />
+      <FormattedMessage id="InboxPage.kinspiring.oldMessagesLink" />
     </ExternalLink>
   );
 
@@ -360,7 +360,7 @@ export const InboxPageComponent = props => {
         <LayoutWrapperMain>
           {error}
           <p className={css.oldMessages}>
-            <FormattedMessage id="InboxPage.oldMessages" values={{ link }} />
+            <FormattedMessage id="InboxPage.kinspiring.oldMessages" values={{ link }} />
           </p>
           <ul className={css.itemList}>
             {!fetchInProgress ? transactions.map(toTxItem) : null}
