@@ -76,14 +76,14 @@ exports[`InboxPage matches snapshot 1`] = `
     >
       <p>
         <FormattedMessage
-          id="InboxPage.oldMessages"
+          id="InboxPage.kinspiring.oldMessages"
           values={
             Object {
               "link": <ExternalLink
                 href="https://old.kinspiring.com"
             >
                 <FormattedMessage
-                    id="InboxPage.oldMessagesLink"
+                    id="InboxPage.kinspiring.oldMessagesLink"
                     values={Object {}}
                 />
             </ExternalLink>,
@@ -495,14 +495,14 @@ exports[`InboxPage matches snapshot 3`] = `
     >
       <p>
         <FormattedMessage
-          id="InboxPage.oldMessages"
+          id="InboxPage.kinspiring.oldMessages"
           values={
             Object {
               "link": <ExternalLink
                 href="https://old.kinspiring.com"
             >
                 <FormattedMessage
-                    id="InboxPage.oldMessagesLink"
+                    id="InboxPage.kinspiring.oldMessagesLink"
                     values={Object {}}
                 />
             </ExternalLink>,
