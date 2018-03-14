@@ -221,7 +221,7 @@ export const TRANSITION_COMPLETE = 'transition/complete';
 // Reviews are given through transaction transitions. Review 1 can be
 // by provider or customer, and review 2 will be the other party of
 // the transaction.
-export const TRANSITION_REVIEW_1_BY_PROVIDER = 'transition/review-1_by-provider';
+export const TRANSITION_REVIEW_1_BY_PROVIDER = 'transition/review-1-by-provider';
 export const TRANSITION_REVIEW_2_BY_PROVIDER = 'transition/review-2-by-provider';
 export const TRANSITION_REVIEW_1_BY_CUSTOMER = 'transition/review-1-by-customer';
 export const TRANSITION_REVIEW_2_BY_CUSTOMER = 'transition/review-2-by-customer';
@@ -302,6 +302,21 @@ export const areReviewsCompleted = transition => {
     TRANSITION_EXPIRE_REVIEW_PERIOD,
     TRANSITION_REVIEW_2_BY_CUSTOMER,
     TRANSITION_REVIEW_2_BY_PROVIDER,
+  ].includes(transition);
+};
+
+export const txHasBeenAccepted = tx => {
+  const transition = txLastTransition(tx);
+  return [
+    TRANSITION_ACCEPT,
+    TRANSITION_REVIEW_1_BY_CUSTOMER,
+    TRANSITION_REVIEW_1_BY_PROVIDER,
+    TRANSITION_REVIEW_2_BY_CUSTOMER,
+    TRANSITION_REVIEW_2_BY_PROVIDER,
+    TRANSITION_EXPIRE_CUSTOMER_REVIEW_PERIOD,
+    TRANSITION_EXPIRE_PROVIDER_REVIEW_PERIOD,
+    TRANSITION_EXPIRE_REVIEW_PERIOD,
+    TRANSITION_COMPLETE,
   ].includes(transition);
 };
 

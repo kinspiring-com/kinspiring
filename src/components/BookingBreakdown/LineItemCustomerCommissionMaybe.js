@@ -15,14 +15,11 @@ const isValidCommission = commissionLineItem => {
   return commissionLineItem.lineTotal instanceof Money && commissionLineItem.lineTotal.amount >= 0;
 };
 
-const LineItemStudioTimeCustomerCommissionMaybe = props => {
+const LineItemCustomerCommissionMaybe = props => {
   const { transaction, isCustomer, intl } = props;
 
   const customerCommissionLineItem = transaction.attributes.lineItems.find(
     item => item.code === LINE_ITEM_CUSTOMER_COMMISSION && !item.reversal
-  );
-  const commissionRefund = transaction.attributes.lineItems.find(
-    item => item.code === LINE_ITEM_CUSTOMER_COMMISSION && item.reversal
   );
 
   // If commission is passed it will be shown as a fee already reduces from the total price
@@ -38,7 +35,7 @@ const LineItemStudioTimeCustomerCommissionMaybe = props => {
     const commission = customerCommissionLineItem.lineTotal;
     const formattedCommission = commission ? formatMoney(intl, commission) : null;
 
-    commissionItem = commissionRefund ? null : (
+    commissionItem = (
       <div className={css.lineItem}>
         <span className={css.itemLabel}>
           <FormattedMessage id="BookingBreakdown.commission" />
@@ -51,10 +48,10 @@ const LineItemStudioTimeCustomerCommissionMaybe = props => {
   return commissionItem;
 };
 
-LineItemStudioTimeCustomerCommissionMaybe.propTypes = {
+LineItemCustomerCommissionMaybe.propTypes = {
   transaction: propTypes.transaction.isRequired,
   isCustomer: bool.isRequired,
   intl: intlShape.isRequired,
 };
 
-export default LineItemStudioTimeCustomerCommissionMaybe;
+export default LineItemCustomerCommissionMaybe;

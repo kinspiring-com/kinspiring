@@ -39,6 +39,9 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
 
   const scriptSrc = [self, inline, data, googleMaps, stripeJs];
 
+  // Kinspiring Facebook Pixel
+  scriptSrc.push('connect.facebook.net');
+
   const styleSrc = [self, inline, googleFonts];
 
   const imgSrc = [
@@ -55,6 +58,9 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
 
   // Kinspiring blog post images come from Squarespace
   imgSrc.push('*.squarespace.com');
+
+  // Kinspiring Facebook Pixel
+  imgSrc.push('www.facebook.com');
 
   const connectSrc = [self, sharetribeApi, googleMaps, stripeApi];
 
