@@ -83,6 +83,7 @@ const validURLParamsForExtendedData = params => {
     ...rest,
     ...validURLParamForExtendedData(CATEGORY_URL_PARAM, params),
     ...validURLParamForExtendedData(AMENITIES_URL_PARAM, params),
+    ...validURLParamForExtendedData(KINSPIRING_MANUFACTURER_URL_PARAM, params),
   };
 };
 
@@ -96,6 +97,7 @@ const pickSearchParamsOnly = params => {
     ...originMaybe,
     ...validURLParamForExtendedData(CATEGORY_URL_PARAM, rest),
     ...validURLParamForExtendedData(AMENITIES_URL_PARAM, rest),
+    ...validURLParamForExtendedData(KINSPIRING_MANUFACTURER_URL_PARAM, rest),
   };
 };
 
@@ -180,6 +182,7 @@ export class SearchPageComponent extends Component {
         mapSearch: true,
         ...validURLParamForExtendedData(CATEGORY_URL_PARAM, rest),
         ...validURLParamForExtendedData(AMENITIES_URL_PARAM, rest),
+        ...validURLParamForExtendedData(KINSPIRING_MANUFACTURER_URL_PARAM, rest),
       };
       this.viewportBounds = viewportBounds;
       history.push(
