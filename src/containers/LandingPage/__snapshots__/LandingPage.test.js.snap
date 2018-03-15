@@ -19,7 +19,7 @@ exports[`LandingPage matches snapshot 1`] = `
       "@type": "WebPage",
       "description": "LandingPage.schemaDescription",
       "image": Array [
-        "http://localhost:3000/kinspiringFacebook.jpg",
+        "http://localhost:3000kinspiringFacebook.jpg",
       ],
       "name": "LandingPage.schemaTitle",
     }
@@ -29,9 +29,9 @@ exports[`LandingPage matches snapshot 1`] = `
   twitterImages={
     Array [
       Object {
-        "height": 314,
-        "url": "kinspiringTwitter.jpg",
-        "width": 600,
+        "height": 512,
+        "url": "http://localhost:3000kinspiringTwitter.jpg",
+        "width": 1024,
       },
     ]
   }
