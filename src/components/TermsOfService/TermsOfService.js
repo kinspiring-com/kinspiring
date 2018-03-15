@@ -18,8 +18,8 @@ const TermsOfService = props => {
       <h2>1. Määritelmät</h2>
       <p>Kinspiring on Kinspiring Oy:n tuottama vertaisvuokrauspalvelu, jonka käyttäjiä ovat</p>
       <ul className={css.indentedBullet}>
-        <li><span className={css.bold}>Tavaran vuokralle tarjoava henkilö (A)</span>, joka on rekisteröitynyt Kinspiring-palveluun</li>
-        <li><span className={css.bold}>Tavaran vuokraava henkilö (B)</span>, joka on rekisteröitynyt Kinspiring-palveluun ja maksaa tavaran vuokran henkilökohtaisella maksukortillaan</li>
+        <li><span className={css.bold}>Vuokrantaja</span> eli tavaran vuokralle tarjoava henkilö (A), joka on rekisteröitynyt Kinspiring-palveluun</li>
+        <li><span className={css.bold}>Vuokraaja</span> eli tavaran vuokraava henkilö (B), joka on rekisteröitynyt Kinspiring-palveluun ja maksaa tavaran vuokran henkilökohtaisella maksukortillaan</li>
       </ul>
 
       <p><span className={css.bold}>Tavara</span> tarkoittaa Kinspiring-palvelun kautta vuokralle tarjottua tuotetta.</p>
@@ -41,19 +41,18 @@ const TermsOfService = props => {
       <p>Kinspiring-palvelun ylläpitäjällä on oikeus juridisiin toimiin ehtoja rikkonutta käyttäjää vastaan.</p>
 
       <h2>4.1 Tavaran vuokralle tarjoavan käyttäjän (A) turvallisuus</h2>
-      <p>Kinspiring ei vastaa, jos palvelun kautta vuokrattu tuote rikkoutuu. Kinspiring edellyttää, että tavaran vuokraavalla käyttäjällä (B) on voimassa oleva kotivakuutus suomalaisessa vakuutusyhtiössä, ja että vuokrattu tavara on kotivakuutuksen piirissä koko vuokrauksen ajan.</p>
+      <p>Kinspiring ei vastaa, jos palvelun kautta vuokrattu tuote rikkoutuu. Kinspiring edellyttää, että tavaran vuokraavalla käyttäjällä (B) on voimassa oleva koti- tai matkavakuutus suomalaisessa vakuutusyhtiössä, ja että vuokrattu tavara on vakuutuksen piirissä koko vuokrauksen ajan.</p>
       <p>Tavaran vuokralle antava käyttäjä (A) arvioi itse kyseisen tuotteen nykyarvon, joka on kohtuullinen jälleenmyyntihinta ostovuosi huomioon ottaen. Käyttäjä A on vastuussa saattaa nykyarvo vuokraajan tietoon. Nykyarvo voi olla maksimissaan 2000€.</p>
-      <p>Käyttäjä A on oikeutettu esittämään korvausvaatimuksen käyttäjälle B, jos palvelun kautta vuokrattu tavara on vaurioitunut vuokrauksen aikana. Käyttäjän A on pystyttävä osoittamaan tavaran vaurioituminen. Korvaus on suhteutettava vaurion suuruuteen. Normaali käytöstä johtuva kuluminen ei oikeuta korvauksiin. Käyttäjä B on velvollinen korvaamaan korkeintaan nykyarvon suuruisen summan käyttäjälle A viivytyksettä. Käyttäjä B on itse halutessaan vastuullinen hakemaan korvausta oman vakuutusyhtiönsä kotivakuutuksesta. Mikäli käyttäjä B rikkoo näitä ehtoja, on hän velvollinen täysimääräisesti korvaamaan sopijakumppanilleen aiheuttamansa välittömät vahingot.</p>
-      <p>Käyttäjän B tulee huomioida, että kotivakuutus ei välttämättä korvaa tavaran vientiä ulkomaille. Käyttäjä A voi kieltää tavaran viemisen Suomen rajojen ulkopuolelle.</p>
+      <p>Käyttäjä A on oikeutettu esittämään korvausvaatimuksen käyttäjälle B, jos palvelun kautta vuokrattu tavara on vaurioitunut vuokrauksen aikana. Käyttäjän A on pystyttävä osoittamaan tavaran vaurioituminen. Korvaus on suhteutettava vaurion suuruuteen. Normaali käytöstä johtuva kuluminen ei oikeuta korvauksiin. Käyttäjä B on velvollinen korvaamaan korkeintaan nykyarvon suuruisen summan käyttäjälle A viivytyksettä. Käyttäjä B on itse halutessaan vastuullinen hakemaan korvausta oman vakuutusyhtiönsä koti- tai matkavakuutuksesta. Mikäli käyttäjä B rikkoo näitä ehtoja, on hän velvollinen täysimääräisesti korvaamaan sopijakumppanilleen aiheuttamansa välittömät vahingot.</p>
 
       <h2>4.2 Tavaran vuokraavan käyttäjän (B) turvallisuus</h2>
-      <p>Käyttäjän B maksukortilta tehdään katevaraus vuokrauspyynnön yhteydessä. Maksu tavaran vuokrauksesta veloitetaan käyttäjältä B vain siinä tapauksessa, että käyttäjä A hyväksyy vuokrauspyynnön Kinspiring-palvelussa. Käyttäjän A on hyväksyttävä vuokrauspyyntö viimeistään kolmen (3) vuorokauden sisällä siitä, kun käyttäjä B on tehnyt vuokrauspyynnön. Jos kuitenkin vuokrausjakson ensimmäinen päivä on alle kolme (3) vuorokautta varauspyynnön tekohetkestä lukien, on käyttäjän A hyväksyttävä vuokrauspyyntö viimeistään vuokrausjakson ensimmäisen päivän aikana.</p>
-      <p>Maksu välitetään käyttäjälle A vasta, kun pyyntö on kuitattu toteutuneeksi Kinspiring. Jos vuokrauksen kesto on alle seitsemän (7) vuorokautta, käyttäjällä B on vuokrausjakson viimeiseen päivään saakka aikaa joko kuitata pyyntö toteutuneeksi tai tehdä reklamaatio Kinspiring. Vuokrausjakson ollessa tätä pidempi, on kuittaaminen toteutuneeksi tai vaihtoehtoisesti reklamaatio tehtävä seitsemän (7) vuorokauden sisällä vuokrausjakson ensimmäisestä päivästä lukien. Jos käyttäjä ei tee kumpaakaan esitettyjen aikarajojen puitteissa, merkitään pyyntö automaattisesti toteutuneeksi ja rahat välitetään käyttäjälle A.</p>
-      <p>Käyttäjä B on velvollinen tekemään perustellun reklamaation Kinspiring ylläpidolle viivytyksettä, mikäli käyttäjä A ei luovuta tavaraa sovitun ajan puitteissa tai tavara poikkeaa merkittävästi ilmoituksesta, jonka käyttäjä A on luonut Kinspiring-palveluun. Tällaisessa tapauksessa Kinspiring on oikeus olla välittämättä kyseessä olevaan vuokraukseen liittyvää maksua käyttäjälle A ja rahat palautetaan käyttäjälle B.</p>
+      <p>Käyttäjän B maksukortilta tehdään katevaraus vuokrauspyynnön yhteydessä. Maksu tavaran vuokrauksesta veloitetaan käyttäjältä B vain siinä tapauksessa, että käyttäjä A hyväksyy vuokrauspyynnön Kinspiring-palvelussa. Käyttäjän A on hyväksyttävä vuokrauspyyntö viimeistään kolmen (3) vuorokauden sisällä siitä, kun käyttäjä B on tehnyt vuokrauspyynnön. Jos kuitenkin vuokrausjakson ensimmäinen päivä on alle kolme (3) vuorokautta varauspyynnön tekohetkestä lukien, on käyttäjän A hyväksyttävä vuokrauspyyntö viimeistään vuokrausjakson viimeisen päivän aikana.</p>
+      <p>Maksu välitetään käyttäjälle A varauksen viimeisen päivän jälkeen.</p>
+      <p>Käyttäjä B on velvollinen tekemään perustellun reklamaation Kinspiringin ylläpidolle viivytyksettä, mikäli käyttäjä A ei luovuta tavaraa sovitun ajan puitteissa tai tavara poikkeaa merkittävästi ilmoituksesta, jonka käyttäjä A on luonut Kinspiring-palveluun. Tällaisessa tapauksessa Kinspiringilla on oikeus olla välittämättä kyseessä olevaan vuokraukseen liittyvää maksua käyttäjälle A ja rahat palautetaan käyttäjälle B.</p>
 
       <h2>5. Hinnoittelu, maksut ja tilitykset</h2>
       <p>Minimivuokra-aika on yksi päivä. Yksi vuokrauspäivä vastaa yhtä kokonaista vuorokautta (24 tuntia) ja vuokraa tulee maksaa myös tuotteen nouto- ja palautuspäivästä.</p>
-      <p>Käyttäjälle A tilitettävästä maksusta vähennetään palveluveloitus, joka on suuruudeltaan 10% ja käyttäjältä B peritään 2% palveluveloitus, joka lisätään vuokrausmaksun päälle. Palvelumaksua ei kuitenkaan peritä, mikäli käyttäjältä B peritty maksu palautetaan (ks.4.2 Tavaran vuokraavan käyttäjän (B) turvallisuus). Kinspiring ei vastaa mahdollisesta viiveestä maksunvälityksessä, joka aiheutuu maksunvälityspalvelusta. Hyväksymällä nämä ehdot, käyttäjä hyväksyy myös <ExternalLink href="https://stripe.com/fi/legal/">Stripe-maksunvälityspalvelun ehdot</ExternalLink>. Maksunvälityspalvelun ehdot koskevat vain käyttäjiä, jotka tarjoavat tavaroitaan vuokralle (käyttäjä A) Kinspiring-palvelussa.</p>
+      <p>Käyttäjälle A tilitettävästä maksusta vähennetään palveluveloitus, joka on suuruudeltaan 10 % ja käyttäjältä B peritään 2 % palveluveloitus, joka lisätään vuokrausmaksun päälle. Palvelumaksua ei kuitenkaan peritä, mikäli käyttäjältä B peritty maksu palautetaan ennen vuokrauksen päättymispäivää (ks.4.2 Tavaran vuokraavan käyttäjän (B) turvallisuus). Kinspiring ei vastaa mahdollisesta viiveestä maksunvälityksessä, joka aiheutuu maksunvälityspalvelusta. Hyväksymällä nämä ehdot, käyttäjä hyväksyy myös <ExternalLink href="https://stripe.com/fi/legal">Stripe-maksunvälityspalvelun ehdot</ExternalLink>. Maksunvälityspalvelun ehdot koskevat vain käyttäjiä, jotka tarjoavat tavaroitaan vuokralle (käyttäjä A) Kinspiring-palvelussa.</p>
       <p>Kinspiring pidättää luvan kaikkiin muutoksiin (esim. hinnoittelumalli).</p>
 
       <h2>6. Käyttäjän poistaminen</h2>
@@ -61,7 +60,8 @@ const TermsOfService = props => {
 
       <h2>7. Sovellettava laki</h2>
       <p>Palveluun ja näihin käyttöehtoihin sovelletaan Suomen lakia.</p>
-      </div>
+
+    </div>
   );
 };
 
