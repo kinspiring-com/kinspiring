@@ -106,95 +106,97 @@ const Footer = props => {
                 </p>
               </div>
             </div>
-            <div className={css.infoLinks}>
-              <ul className={css.list}>
-                <li className={css.listItem}>
-                  <NamedLink name="NewListingPage" className={css.link}>
-                    <FormattedMessage id="Footer.toNewListingPage" />
-                  </NamedLink>
-                </li>
-                <li className={css.listItem}>
-                  <NamedLink name="AboutPage" className={css.link}>
-                    <FormattedMessage id="Footer.toAboutPage" />
-                  </NamedLink>
-                </li>
-                <li className={css.listItem}>
-                  <NamedLink name="KinspiringFaqProviderPage" className={css.link}>
-                    <FormattedMessage id="Footer.kinspiring.toFaqProvider" />
-                  </NamedLink>
-                </li>
-                <li className={css.listItem}>
-                  <NamedLink name="KinspiringFaqCustomerPage" className={css.link}>
-                    <FormattedMessage id="Footer.kinspiring.toFaqCustomer" />
-                  </NamedLink>
-                </li>
-                <li className={css.listItem}>
-                  <NamedLink name="KinspiringContactUsPage" className={css.link}>
-                    <FormattedMessage id="Footer.toContactPage" />
-                  </NamedLink>
-                </li>
-              </ul>
-            </div>
-            <div className={css.searches}>
-              <ul className={css.list}>
-                <li className={css.listItem}>
-                  <NamedLink {...searchLinkProps('matkarattaat')} className={css.link}>
-                    <FormattedMessage id="Footer.searchHelsinki" />
-                  </NamedLink>
-                </li>
-                <li className={css.listItem}>
-                  <NamedLink {...searchLinkProps('pyoraily')} className={css.link}>
-                    <FormattedMessage id="Footer.searchTurku" />
-                  </NamedLink>
-                </li>
-                <li className={css.listItem}>
-                  <NamedLink
-                    {...searchLinkProps('kuljetuslaukutJaVaunutarvikkeet')}
-                    className={css.link}
-                  >
-                    <FormattedMessage id="Footer.searchTampere" />
-                  </NamedLink>
-                </li>
-                <li className={css.listItem}>
-                  <NamedLink {...searchLinkProps('kantovalineetJaRinkat')} className={css.link}>
-                    <FormattedMessage id="Footer.searchOulu" />
-                  </NamedLink>
-                </li>
-                <li className={css.listItem}>
-                  <NamedLink {...searchLinkProps('turvaistuimet')} className={css.link}>
-                    <FormattedMessage id="Footer.searchRuka" />
-                  </NamedLink>
-                </li>
-              </ul>
-            </div>
-            <div className={css.searchesExtra}>
-              <ul className={css.list}>
-                <li className={css.listItem}>
-                  <NamedLink {...searchLinkProps('tuplaJaSisarusrattaat')} className={css.link}>
-                    <FormattedMessage id="Footer.searchKuopio" />
-                  </NamedLink>
-                </li>
-                <li className={css.listItem}>
-                  <NamedLink {...searchLinkProps('juoksurattaat')} className={css.link}>
-                    <FormattedMessage id="Footer.searchMikkeli" />
-                  </NamedLink>
-                </li>
-                <li className={css.listItem}>
-                  <NamedLink {...searchLinkProps('matkasangyt')} className={css.link}>
-                    <FormattedMessage id="Footer.searchEspoo" />
-                  </NamedLink>
-                </li>
-                <li className={css.listItem}>
-                  <NamedLink {...searchLinkProps('muutLastentarvikkeet')} className={css.link}>
-                    <FormattedMessage id="Footer.searchVantaa" />
-                  </NamedLink>
-                </li>
-                <li className={css.listItem}>
-                  <NamedLink {...searchLinkProps('yhdistelmarattaat')} className={css.link}>
-                    <FormattedMessage id="Footer.searchAhvenanmaa" />
-                  </NamedLink>
-                </li>
-              </ul>
+            <div className={css.kinspiringLinkWrapper}>
+              <div className={css.infoLinks}>
+                <ul className={css.list}>
+                  <li className={css.listItem}>
+                    <NamedLink name="NewListingPage" className={css.link}>
+                      <FormattedMessage id="Footer.toNewListingPage" />
+                    </NamedLink>
+                  </li>
+                  <li className={css.listItem}>
+                    <NamedLink name="AboutPage" className={css.link}>
+                      <FormattedMessage id="Footer.toAboutPage" />
+                    </NamedLink>
+                  </li>
+                  <li className={css.listItem}>
+                    <NamedLink name="KinspiringFaqProviderPage" className={css.link}>
+                      <FormattedMessage id="Footer.kinspiring.toFaqProvider" />
+                    </NamedLink>
+                  </li>
+                  <li className={css.listItem}>
+                    <NamedLink name="KinspiringFaqCustomerPage" className={css.link}>
+                      <FormattedMessage id="Footer.kinspiring.toFaqCustomer" />
+                    </NamedLink>
+                  </li>
+                  <li className={css.listItem}>
+                    <NamedLink name="KinspiringContactUsPage" className={css.link}>
+                      <FormattedMessage id="Footer.toContactPage" />
+                    </NamedLink>
+                  </li>
+                </ul>
+              </div>
+              <div className={css.searches}>
+                <ul className={css.list}>
+                  <li className={css.listItem}>
+                    <NamedLink {...searchLinkProps('matkarattaat')} className={css.link}>
+                      <FormattedMessage id="Footer.searchHelsinki" />
+                    </NamedLink>
+                  </li>
+                  <li className={css.listItem}>
+                    <NamedLink {...searchLinkProps('pyoraily')} className={css.link}>
+                      <FormattedMessage id="Footer.searchTurku" />
+                    </NamedLink>
+                  </li>
+                  <li className={css.listItem}>
+                    <NamedLink
+                      {...searchLinkProps('kuljetuslaukutJaVaunutarvikkeet')}
+                      className={css.link}
+                    >
+                      <FormattedMessage id="Footer.searchTampere" />
+                    </NamedLink>
+                  </li>
+                  <li className={css.listItem}>
+                    <NamedLink {...searchLinkProps('kantovalineetJaRinkat')} className={css.link}>
+                      <FormattedMessage id="Footer.searchOulu" />
+                    </NamedLink>
+                  </li>
+                  <li className={css.listItem}>
+                    <NamedLink {...searchLinkProps('turvaistuimet')} className={css.link}>
+                      <FormattedMessage id="Footer.searchRuka" />
+                    </NamedLink>
+                  </li>
+                </ul>
+              </div>
+              <div className={css.searchesExtra}>
+                <ul className={css.list}>
+                  <li className={css.listItem}>
+                    <NamedLink {...searchLinkProps('tuplaJaSisarusrattaat')} className={css.link}>
+                      <FormattedMessage id="Footer.searchKuopio" />
+                    </NamedLink>
+                  </li>
+                  <li className={css.listItem}>
+                    <NamedLink {...searchLinkProps('juoksurattaat')} className={css.link}>
+                      <FormattedMessage id="Footer.searchMikkeli" />
+                    </NamedLink>
+                  </li>
+                  <li className={css.listItem}>
+                    <NamedLink {...searchLinkProps('matkasangyt')} className={css.link}>
+                      <FormattedMessage id="Footer.searchEspoo" />
+                    </NamedLink>
+                  </li>
+                  <li className={css.listItem}>
+                    <NamedLink {...searchLinkProps('muutLastentarvikkeet')} className={css.link}>
+                      <FormattedMessage id="Footer.searchVantaa" />
+                    </NamedLink>
+                  </li>
+                  <li className={css.listItem}>
+                    <NamedLink {...searchLinkProps('yhdistelmarattaat')} className={css.link}>
+                      <FormattedMessage id="Footer.searchAhvenanmaa" />
+                    </NamedLink>
+                  </li>
+                </ul>
+              </div>
             </div>
             <div className={css.extraLinks}>
               <div className={css.someLinks}>{socialMediaLinks}</div>

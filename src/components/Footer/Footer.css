@@ -43,6 +43,7 @@
   @media (--viewportMedium) {
     max-width: 1056px;
     margin: 0 auto;
+    padding: 0 24px 0 24px;
   }
 }
 
@@ -67,7 +68,7 @@
 .links {
   /* Layout */
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   width: 100%;
   margin-bottom: 42px;
@@ -75,17 +76,40 @@
   @media (--viewportMedium) {
     margin-bottom: 0;
   }
+  @media (--viewportLarge) {
+    flex-direction: row;
+  }
+}
+
+.kinspiringLinkWrapper {
+  order: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 650px;
+
+  @media (--viewportMedium) {
+    flex-direction: row;
+    margin-bottom: 48px;
+  }
+  @media (--viewportLarge) {
+    margin: 0 24px 0 24px;
+  }
 }
 
 /* Desktop: logo and organization stuff */
 .organization {
-  flex-basis: 220px;
+  flex-basis: 160px;
   display: none;
   margin-right: 24px;
 
   @media (--viewportMedium) {
     display: block;
     order: 1;
+  }
+  @media (--viewportLarge) {
+    flex-basis: 220px;
   }
 }
 
@@ -179,19 +203,19 @@
 /* This is not always visible */
 .searchesExtra {
   order: 4;
-  display: none;
+  /* display: none; */
   flex-basis: 165px;
 
   @media (min-width: 550px) {
-    display: block;
+    /* display: block; */
   }
 
   @media (--viewportMedium) {
-    display: none;
+    /* display: none; */
   }
 
   @media (--viewportLarge) {
-    display: block;
+    /* display: block; */
     padding-top: 2px;
   }
 }
@@ -217,6 +241,10 @@
   flex-direction: column;
   justify-content: flex-end;
   margin-bottom: 12px;
+
+  @media (--viewportLarge) {
+    margin-bottom: 20px;
+  }
 }
 
 .tosAndPrivacy {
