@@ -93,7 +93,12 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
     connectSrc,
     fontSrc,
     frameSrc,
-    formAction: [self],
+    formAction: [
+      self,
+
+      // Kinspiring Facebook Pixel
+      'www.facebook.com',
+    ],
     defaultSrc: [self],
     baseUri: [self],
     reportUri,
