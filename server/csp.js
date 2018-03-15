@@ -29,9 +29,8 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
   const googleAnalytics = 'https://www.google-analytics.com/';
   const googleAnalyticsDoubleClick = 'https://stats.g.doubleclick.net/';
   const googleMaps = 'https://maps.googleapis.com/';
-  const googleStaticCsi = 'https://csi.gstatic.com/';
   const googleStaticFonts = 'https://fonts.gstatic.com/';
-  const googleStaticMaps = 'https://maps.gstatic.com/';
+  const googleStatic = '*.gstatic.com';
   const googleFonts = 'https://fonts.googleapis.com/';
   const stripeJs = 'https://js.stripe.com/';
   const stripeQ = 'https://q.stripe.com/';
@@ -45,17 +44,7 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
 
   const styleSrc = [self, inline, googleFonts];
 
-  const imgSrc = [
-    self,
-    data,
-    imgix,
-    loremPixel,
-    placeholder,
-    stripeQ,
-    googleMaps,
-    googleStaticCsi,
-    googleStaticMaps,
-  ];
+  const imgSrc = [self, data, imgix, loremPixel, placeholder, stripeQ, googleMaps, googleStatic];
 
   // Kinspiring blog post images come from Squarespace
   imgSrc.push('*.squarespace.com');
@@ -76,6 +65,7 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
     imgSrc.push(googleAnalytics);
     imgSrc.push(googleAnalyticsDoubleClick);
     connectSrc.push(googleAnalytics);
+    connectSrc.push(googleAnalyticsDoubleClick);
   }
   if (sentryClientEnabled) {
     connectSrc.push(sentryApi);
