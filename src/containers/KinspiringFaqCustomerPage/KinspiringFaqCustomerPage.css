@@ -12,4 +12,25 @@
   @media (--viewportLarge) {
     max-width: 563px;
   }
+
+  & h2 {
+    color: var(--matterColorAnti);
+    margin-top: 45px;
+
+    @media (--viewportMedium) {
+      margin-top: 45px;
+    }
+  }
+  & ul {
+    list-style-type: circle;
+    margin-left: 24px;
+  }
+  & ol {
+    padding: 0;
+    margin-left: 24px;
+  }
+  & p,
+  & li {
+    @apply --marketplaceBodyFontStyles;
+  }
 }
