@@ -7,7 +7,7 @@
           :state/enquiry {}
           :state/preauthorized
           {:triggers [{:name :tegel.trigger/delayed
-                       :params {:delay {:days 6}
+                       :params {:delay {:days 3}
                                 :transition [:transition/expire {}]}}
                       {:name :tegel.trigger/on-booking-end
                        :params {:delay {:days 1}
@@ -19,15 +19,15 @@
           :state/cancelled {}
           :state/delivered
           {:triggers [{:name :tegel.trigger/delayed
-                       :params {:delay {:days 7}
+                       :params {:delay {:days 14}
                                 :transition [:transition/expire-review-period {}]}}]}
           :state/reviewed-by-customer
           {:triggers [{:name :tegel.trigger/on-booking-end
-                       :params {:delay {:days 7}
+                       :params {:delay {:days 14}
                                 :transition [:transition/expire-provider-review-period {}]}}]}
           :state/reviewed-by-provider
           {:triggers [{:name :tegel.trigger/on-booking-end
-                       :params {:delay {:days 7}
+                       :params {:delay {:days 14}
                                 :transition [:transition/expire-customer-review-period {}]}}]}
           :state/reviewed {}}
 
