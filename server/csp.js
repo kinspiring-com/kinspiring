@@ -37,7 +37,7 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
   const stripeApi = 'https://api.stripe.com/';
   const sentryApi = 'https://sentry.io/api/';
 
-  const scriptSrc = [self, inline, data, googleMaps, stripeJs];
+  const scriptSrc = [self, inline, data, googleMaps, stripeJs, "'unsafe-eval'"];
 
   // Kinspiring Facebook Pixel
   scriptSrc.push('connect.facebook.net');
