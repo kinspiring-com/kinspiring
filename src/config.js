@@ -217,8 +217,6 @@ const stripeSupportedCountries = [
 // Address information is used in SEO schema for Organization (http://schema.org/PostalAddress)
 const addressCountry = 'FI';
 const addressRegion = 'Helsinki';
-const postalCode = '00100';
-const streetAddress = 'Bulevardi 14';
 
 // Canonical root url is needed in social media sharing and SEO optimization purposes.
 const canonicalRootURL = process.env.REACT_APP_CANONICAL_ROOT_URL || 'http://localhost:3000';
@@ -291,8 +289,6 @@ const config = {
   address: {
     addressCountry,
     addressRegion,
-    postalCode,
-    streetAddress,
   },
   siteTitle,
   siteFacebookPage,
