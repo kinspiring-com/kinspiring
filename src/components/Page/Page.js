@@ -106,7 +106,7 @@ class PageComponent extends Component {
         name: 'twitter',
         url: `${canonicalRootURL}${twitterImage}`,
         width: 1024,
-        height: 630,
+        height: 512,
       },
     ];
 
