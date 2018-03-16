@@ -39,7 +39,7 @@
   "Avatar.bannedUserDisplayName": "Kielletty käyttäjä",
   "BookingBreakdown.bookingPeriod": "{bookingStart} – {bookingEnd}",
   "BookingBreakdown.commission": "Kinspiringin palvelumaksu *",
-  "BookingBreakdown.commissionFeeNote": "* Palvelumaksu auttaa meitä tarjoamaan parasta mahdollista palvelua!",
+  "BookingBreakdown.commissionFeeNote": "* Palvelumaksu auttaa meitä tarjoamaan parasta mahdollista palvelua ja turvallisen maksutavan!",
   "BookingBreakdown.dayCount": "{count, number} {count, plural, one {päivä} other {päivää}}",
   "BookingBreakdown.nightCount": "{count, number} {count, plural, one {yö} other {yötä}}",
   "BookingBreakdown.pricePerDay": "Päivähinta",
