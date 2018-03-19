@@ -58,6 +58,9 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
 
   const frameSrc = [self, stripeJs];
 
+  // Kinspiring Facebook Pixel
+  frameSrc.push('www.facebook.com');
+
   if (googleAnalyticsEnabled) {
     // Only whitelist Google Analytics URLs when the analytics is
     // enabled.
