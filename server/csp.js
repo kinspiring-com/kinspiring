@@ -90,7 +90,7 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
   // Kinspiring custom: Facebook Pixel, Squarespace
   const customDirectives = {
     scriptSrc: scriptSrc.concat('connect.facebook.net'),
-    imgSrc: imgSrc.concat(['*.squarespace.com', 'www.facebook.com']),
+    imgSrc: imgSrc.concat(['*.squarespace.com', 'www.facebook.com', 'www.google.fi']),
     frameSrc: frameSrc.concat('www.facebook.com'),
     formAction: formAction.concat([self, 'www.facebook.com']),
   };
