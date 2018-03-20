@@ -80,7 +80,12 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
   // below. For format specs and examples, see:
   // https://content-security-policy.com/
 
-  const { scriptSrc = [], imgSrc = [], frameSrc = [], formAction = [] } = defaultDirectives;
+  const {
+    scriptSrc = [self],
+    imgSrc = [self],
+    frameSrc = [self],
+    formAction = [self],
+  } = defaultDirectives;
 
   // Kinspiring custom: Facebook Pixel, Squarespace
   const customDirectives = {
