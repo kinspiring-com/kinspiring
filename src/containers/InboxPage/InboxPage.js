@@ -19,7 +19,7 @@ import {
   propTypes,
 } from '../../util/types';
 import { formatMoney } from '../../util/currency';
-import { userDisplayName } from '../../util/data';
+import { ensureCurrentUser, userDisplayName } from '../../util/data';
 import { daysBetween } from '../../util/dates';
 import { getMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { isScrollingDisabled } from '../../ducks/UI.duck';
@@ -37,6 +37,7 @@ import {
   LayoutWrapperTopbar,
   LayoutWrapperFooter,
   Footer,
+  IconSpinner,
 } from '../../components';
 import { TopbarContainer, NotFoundPage } from '../../containers';
 import config from '../../config';
@@ -254,6 +255,7 @@ export const InboxPageComponent = props => {
     transactions,
   } = props;
   const { tab } = params;
+  const ensuredCurrentUser = ensureCurrentUser(currentUser);
 
   const validTab = tab === 'orders' || tab === 'sales';
   if (!validTab) {
@@ -293,7 +295,7 @@ export const InboxPageComponent = props => {
       : user.id && tx && tx.length > 0 && tx[0].provider.id.uuid === user.id.uuid;
   };
   const hasTransactions =
-    !fetchInProgress && hasOrderOrSaleTransactions(transactions, isOrders, currentUser);
+    !fetchInProgress && hasOrderOrSaleTransactions(transactions, isOrders, ensuredCurrentUser);
   const pagingLinks =
     hasTransactions && pagination && pagination.totalPages > 1 ? (
       <PaginationLinks
@@ -363,7 +365,13 @@ export const InboxPageComponent = props => {
             <FormattedMessage id="InboxPage.kinspiring.oldMessages" values={{ link }} />
           </p>
           <ul className={css.itemList}>
-            {!fetchInProgress ? transactions.map(toTxItem) : null}
+            {!fetchInProgress ? (
+              transactions.map(toTxItem)
+            ) : (
+              <li className={css.listItemsLoading}>
+                <IconSpinner />
+              </li>
+            )}
             {noResults}
           </ul>
           {pagingLinks}
