@@ -92,7 +92,9 @@ exports[`InboxPage matches snapshot 1`] = `
         />
       </p>
       <ul>
-        <li>
+        <li
+          key="order-1"
+        >
           <Component
             intl={
               Object {
@@ -215,7 +217,9 @@ exports[`InboxPage matches snapshot 1`] = `
             unitType="line-item/night"
           />
         </li>
-        <li>
+        <li
+          key="order-2"
+        >
           <Component
             intl={
               Object {
@@ -351,12 +355,8 @@ exports[`InboxPage matches snapshot 1`] = `
 `;
 
 exports[`InboxPage matches snapshot 2`] = `
-<div
-  className={undefined}
->
-  <div
-    className={undefined}
-  >
+<div>
+  <div>
     <a
       className=""
       href="/u/provider-user-id"
@@ -364,9 +364,7 @@ exports[`InboxPage matches snapshot 2`] = `
       style={Object {}}
       title="provider-user-id display name"
     >
-      <span
-        className={undefined}
-      >
+      <span>
         TT
       </span>
     </a>
@@ -378,12 +376,8 @@ exports[`InboxPage matches snapshot 2`] = `
     style={Object {}}
     title={null}
   >
-    <div
-      className={undefined}
-    />
-    <div
-      className={undefined}
-    >
+    <div />
+    <div>
       <div
         className=""
       >
@@ -393,16 +387,12 @@ exports[`InboxPage matches snapshot 2`] = `
         className=""
       >
         2017-02-15 - 2017-02-16
-        <span
-          className={undefined}
-        >
+        <span>
           10
         </span>
       </div>
     </div>
-    <div
-      className={undefined}
-    >
+    <div>
       <div
         className=""
       >
@@ -511,7 +501,9 @@ exports[`InboxPage matches snapshot 3`] = `
         />
       </p>
       <ul>
-        <li>
+        <li
+          key="sale-1"
+        >
           <Component
             intl={
               Object {
@@ -634,7 +626,9 @@ exports[`InboxPage matches snapshot 3`] = `
             unitType="line-item/night"
           />
         </li>
-        <li>
+        <li
+          key="sale-2"
+        >
           <Component
             intl={
               Object {
@@ -770,12 +764,8 @@ exports[`InboxPage matches snapshot 3`] = `
 `;
 
 exports[`InboxPage matches snapshot 4`] = `
-<div
-  className={undefined}
->
-  <div
-    className={undefined}
-  >
+<div>
+  <div>
     <a
       className=""
       href="/u/customer-user-id"
@@ -783,9 +773,7 @@ exports[`InboxPage matches snapshot 4`] = `
       style={Object {}}
       title="customer-user-id display name"
     >
-      <span
-        className={undefined}
-      >
+      <span>
         TT
       </span>
     </a>
@@ -797,16 +785,10 @@ exports[`InboxPage matches snapshot 4`] = `
     style={Object {}}
     title={null}
   >
-    <div
-      className={undefined}
-    >
-      <div
-        className={undefined}
-      />
+    <div>
+      <div />
     </div>
-    <div
-      className={undefined}
-    >
+    <div>
       <div
         className=""
       >
@@ -816,16 +798,12 @@ exports[`InboxPage matches snapshot 4`] = `
         className=""
       >
         2017-02-15 - 2017-02-16
-        <span
-          className={undefined}
-        >
+        <span>
           9
         </span>
       </div>
     </div>
-    <div
-      className={undefined}
-    >
+    <div>
       <div
         className=""
       >
