@@ -94,7 +94,7 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
     scriptSrc: scriptSrc.concat('connect.facebook.net'),
     imgSrc: imgSrc.concat(['*.squarespace.com', 'www.facebook.com', 'www.google.fi']),
     frameSrc: frameSrc.concat('www.facebook.com'),
-    formAction: formAction.concat([self, 'www.facebook.com']),
+    formAction: formAction.concat(['www.facebook.com', 'connect.facebook.net']),
   };
 
   // ================ END CUSTOM CSP URLs ================ //
