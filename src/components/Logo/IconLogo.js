@@ -5,7 +5,6 @@ import config from '../../config';
 
 const IconLogo = props => {
   const { className, ...rest } = props;
-
   return <img className={className} src={IconImage} alt={config.siteTitle} {...rest} />;
 };
 

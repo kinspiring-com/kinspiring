@@ -46,6 +46,10 @@
   display: block;
   height: 25px;
 
+  & path {
+    fill: var(--marketplaceColor);
+  }
+
   @media (--viewportLarge) {
     display: none;
   }
