@@ -118,7 +118,8 @@ const defaultProps = {
   // Stripe holds funds in a reserve for up to 90 days from charge creation.
   // outside range -><- today ... today+89 days -><- outside range
   isOutsideRange: day => {
-    const daysCountAvailableToBook = 90;
+    // const daysCountAvailableToBook = 90;
+    const daysCountAvailableToBook = 174; // increase range to ~(6 months - 1 week)
     const endOfRange = daysCountAvailableToBook - 1;
     return (
       !isInclusivelyAfterDay(day, moment()) ||

@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import { compose } from 'redux';
-import { object, string, bool, number, func, shape, array } from 'prop-types';
+import { object, string, bool, number, func, shape } from 'prop-types';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
@@ -9,30 +10,20 @@ import { omit } from 'lodash';
 import { SelectSingleFilter, SelectMultipleFilter } from '../../components';
 import routeConfiguration from '../../routeConfiguration';
 import { createResourceLocatorString } from '../../util/routes';
-import config from '../../config';
+import { propTypes } from '../../util/types';
 import css from './SearchFilters.css';
-
-const CATEGORY_URL_PARAM = 'pub_category';
-const AMENITIES_URL_PARAM = 'pub_amenities';
-const KINSPIRING_MANUFACTURER_URL_PARAM = 'pub_brand';
 
 // Dropdown container can have a positional offset (in pixels)
 const FILTER_DROPDOWN_OFFSET = -14;
 
-const KinspiringManufacturerFilter = props => {
-  const { onSelect, initialValue, brands, intl } = props;
-  return (
-    <SelectSingleFilter
-      urlParam={KINSPIRING_MANUFACTURER_URL_PARAM}
-      label={intl.formatMessage({
-        id: 'SearchFilters.kinspiring.brandFilterLabel',
-      })}
-      onSelect={onSelect}
-      options={brands}
-      initialValue={initialValue}
-      contentPlacementOffset={FILTER_DROPDOWN_OFFSET}
-    />
-  );
+// resolve initial value for a single value filter
+const initialValue = (queryParams, paramName) => {
+  return queryParams[paramName];
+};
+
+// resolve initial values for a multi value filter
+const initialValues = (queryParams, paramName) => {
+  return !!queryParams[paramName] ? queryParams[paramName].split(',') : [];
 };
 
 const SearchFiltersComponent = props => {
@@ -43,8 +34,9 @@ const SearchFiltersComponent = props => {
     listingsAreLoaded,
     resultsCount,
     searchInProgress,
-    categories,
-    amenities,
+    categoryFilter,
+    amenitiesFilter,
+    brandFilter,
     isSearchFiltersPanelOpen,
     toggleSearchFiltersPanel,
     searchFiltersPanelSelectedCount,
@@ -63,11 +55,9 @@ const SearchFiltersComponent = props => {
     id: 'SearchFilters.amenitiesLabel',
   });
 
-  const initialAmenities = !!urlQueryParams[AMENITIES_URL_PARAM]
-    ? urlQueryParams[AMENITIES_URL_PARAM].split(',')
-    : [];
+  const initialAmenities = initialValues(urlQueryParams, amenitiesFilter.paramName);
 
-  const initialCategory = urlQueryParams[CATEGORY_URL_PARAM];
+  const initialCategory = initialValue(urlQueryParams, categoryFilter.paramName);
 
   const handleSelectOptions = (urlParam, options) => {
     const queryParams =
@@ -88,25 +78,38 @@ const SearchFiltersComponent = props => {
     history.push(createResourceLocatorString('SearchPage', routeConfiguration(), {}, queryParams));
   };
 
-  const categoryFilter = categories ? (
+  const categoryFilterElement = categoryFilter ? (
     <SelectSingleFilter
-      urlParam={CATEGORY_URL_PARAM}
+      urlParam={categoryFilter.paramName}
       label={categoryLabel}
       onSelect={handleSelectOption}
-      options={categories}
+      options={categoryFilter.options}
       initialValue={initialCategory}
       contentPlacementOffset={FILTER_DROPDOWN_OFFSET}
     />
   ) : null;
 
-  const amenitiesFilter = amenities ? (
+  const amenitiesFilterElement = amenitiesFilter ? (
     <SelectMultipleFilter
       name="amenities"
-      urlParam={AMENITIES_URL_PARAM}
+      urlParam={amenitiesFilter.paramName}
       label={amenitiesLabel}
       onSelect={handleSelectOptions}
-      options={amenities}
+      options={amenitiesFilter.options}
       initialValues={initialAmenities}
+      contentPlacementOffset={FILTER_DROPDOWN_OFFSET}
+    />
+  ) : null;
+
+  const kinspiringBrandFilterElement = categoryFilter ? (
+    <SelectSingleFilter
+      urlParam={brandFilter.paramName}
+      label={intl.formatMessage({
+        id: 'SearchFilters.kinspiring.brandFilterLabel',
+      })}
+      onSelect={handleSelectOption}
+      options={brandFilter.options}
+      initialValue={initialValue(urlQueryParams, brandFilter.paramName)}
       contentPlacementOffset={FILTER_DROPDOWN_OFFSET}
     />
   ) : null;
@@ -131,14 +134,9 @@ const SearchFiltersComponent = props => {
   return (
     <div className={classes}>
       <div className={css.filters}>
-        {categoryFilter}
-        {amenitiesFilter}
-        <KinspiringManufacturerFilter
-          onSelect={handleSelectOption}
-          initialValue={urlQueryParams[KINSPIRING_MANUFACTURER_URL_PARAM]}
-          brands={config.custom.brands}
-          intl={intl}
-        />
+        {categoryFilterElement}
+        {/*amenitiesFilterElement*/}
+        {kinspiringBrandFilterElement}
         {toggleSearchFiltersPanelButton}
       </div>
 
@@ -170,8 +168,9 @@ SearchFiltersComponent.defaultProps = {
   className: null,
   resultsCount: null,
   searchingInProgress: false,
-  categories: null,
-  amenities: null,
+  categoryFilter: null,
+  amenitiesFilter: null,
+  brandFilter: null,
   isSearchFiltersPanelOpen: false,
   toggleSearchFiltersPanel: null,
   searchFiltersPanelSelectedCount: 0,
@@ -185,8 +184,9 @@ SearchFiltersComponent.propTypes = {
   resultsCount: number,
   searchingInProgress: bool,
   onManageDisableScrolling: func.isRequired,
-  categories: array,
-  amenities: array,
+  categoriesFilter: propTypes.filterConfig,
+  amenitiesFilter: propTypes.filterConfig,
+  brandFilter: propTypes.filterConfig,
   isSearchFiltersPanelOpen: bool,
   toggleSearchFiltersPanel: func,
   searchFiltersPanelSelectedCount: number,

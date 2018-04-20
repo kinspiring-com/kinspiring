@@ -25,8 +25,8 @@ import { TopbarContainer } from '../../containers';
 import { searchListings, searchMapListings, setActiveListing } from './SearchPage.duck';
 import {
   pickSearchParamsOnly,
-  validURLParamForExtendedData,
   validURLParamsForExtendedData,
+  validFilterParams,
   createSearchResultSchema,
 } from './SearchPage.helpers';
 import MainPanel from './MainPanel';
@@ -39,16 +39,6 @@ const RESULT_PAGE_SIZE = 24;
 const MODAL_BREAKPOINT = 768; // Search is in modal on mobile layout
 const SEARCH_WITH_MAP_DEBOUNCE = 300; // Little bit of debounce before search is initiated.
 const BOUNDS_FIXED_PRECISION = 8;
-
-const CATEGORY_URL_PARAM = 'pub_category';
-const AMENITIES_URL_PARAM = 'pub_amenities';
-const KINSPIRING_MANUFACTURER_URL_PARAM = 'pub_brand';
-
-const customURLParamToConfig = {
-  [CATEGORY_URL_PARAM]: 'categories',
-  [AMENITIES_URL_PARAM]: 'amenities',
-  [KINSPIRING_MANUFACTURER_URL_PARAM]: 'brands',
-};
 
 export class SearchPageComponent extends Component {
   constructor(props) {
@@ -68,9 +58,29 @@ export class SearchPageComponent extends Component {
     this.modalOpenedBoundsChange = false;
     this.searchMapListingsInProgress = false;
 
+    this.filters = this.filters.bind(this);
     this.onIdle = debounce(this.onIdle.bind(this), SEARCH_WITH_MAP_DEBOUNCE);
     this.onOpenMobileModal = this.onOpenMobileModal.bind(this);
     this.onCloseMobileModal = this.onCloseMobileModal.bind(this);
+  }
+
+  filters() {
+    const { categories, amenities, brands } = this.props;
+
+    return {
+      categoryFilter: {
+        paramName: 'pub_category',
+        options: categories,
+      },
+      amenitiesFilter: {
+        paramName: 'pub_amenities',
+        options: amenities,
+      },
+      brandFilter: {
+        paramName: 'pub_brand',
+        options: brands,
+      },
+    };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -121,14 +131,9 @@ export class SearchPageComponent extends Component {
         bounds: viewportBounds,
         country,
         mapSearch: true,
-        ...validURLParamForExtendedData(CATEGORY_URL_PARAM, rest, customURLParamToConfig),
-        ...validURLParamForExtendedData(AMENITIES_URL_PARAM, rest, customURLParamToConfig),
-        ...validURLParamForExtendedData(
-          KINSPIRING_MANUFACTURER_URL_PARAM,
-          rest,
-          customURLParamToConfig
-        ),
+        ...validFilterParams(rest, this.filters()),
       };
+
       this.viewportBounds = viewportBounds;
       history.push(
         createResourceLocatorString('SearchPage', routeConfiguration(), {}, searchParams)
@@ -163,8 +168,6 @@ export class SearchPageComponent extends Component {
       searchInProgress,
       searchListingsError,
       searchParams,
-      categories,
-      amenities,
       activeListingId,
       onActivateListing,
     } = this.props;
@@ -174,30 +177,18 @@ export class SearchPageComponent extends Component {
       latlngBounds: ['bounds'],
     });
 
+    const filters = this.filters();
+
     // urlQueryParams doesn't contain page specific url params
     // like mapSearch, page or origin (origin depends on config.sortSearchByDistance)
-    const urlQueryParams = pickSearchParamsOnly(
-      searchInURL,
-      [AMENITIES_URL_PARAM, CATEGORY_URL_PARAM],
-      customURLParamToConfig
-    );
+    const urlQueryParams = pickSearchParamsOnly(searchInURL, filters);
 
     // Page transition might initially use values from previous search
     const urlQueryString = stringify(urlQueryParams);
-    const paramsQueryString = stringify(
-      pickSearchParamsOnly(
-        searchParams,
-        [AMENITIES_URL_PARAM, CATEGORY_URL_PARAM],
-        customURLParamToConfig
-      )
-    );
+    const paramsQueryString = stringify(pickSearchParamsOnly(searchParams, filters));
     const searchParamsAreInSync = urlQueryString === paramsQueryString;
 
-    const validQueryParams = validURLParamsForExtendedData(
-      searchInURL,
-      [AMENITIES_URL_PARAM, CATEGORY_URL_PARAM],
-      customURLParamToConfig
-    );
+    const validQueryParams = validURLParamsForExtendedData(searchInURL, filters);
 
     const isWindowDefined = typeof window !== 'undefined';
     const isMobileLayout = isWindowDefined && window.innerWidth < MODAL_BREAKPOINT;
@@ -249,8 +240,11 @@ export class SearchPageComponent extends Component {
             pagination={pagination}
             searchParamsForPagination={parse(location.search)}
             showAsModalMaxWidth={MODAL_BREAKPOINT}
-            customURLParamToConfig={customURLParamToConfig}
-            primaryFilters={{ amenities, categories }}
+            primaryFilters={{
+              categoryFilter: filters.categoryFilter,
+              amenitiesFilter: filters.amenitiesFilter,
+              brandFilter: filters.brandFilter,
+            }}
           />
           <ModalInMobile
             className={css.mapPanel}
@@ -293,6 +287,7 @@ SearchPageComponent.defaultProps = {
   tab: 'listings',
   categories: config.custom.categories,
   amenities: config.custom.amenities,
+  brands: config.custom.brands,
   activeListingId: null,
 };
 
@@ -312,6 +307,7 @@ SearchPageComponent.propTypes = {
   tab: oneOf(['filters', 'listings', 'map']).isRequired,
   categories: array,
   amenities: array,
+  brands: array,
 
   // from withRouter
   history: shape({
