@@ -93,7 +93,7 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
   const customDirectives = {
     scriptSrc: scriptSrc.concat('connect.facebook.net'),
     imgSrc: imgSrc.concat(['*.squarespace.com', 'www.facebook.com', 'www.google.fi']),
-    frameSrc: frameSrc.concat('www.facebook.com'),
+    frameSrc: frameSrc.concat(['www.facebook.com', 'connect.facebook.net']),
     formAction: formAction.concat(['www.facebook.com', 'connect.facebook.net']),
   };
 
