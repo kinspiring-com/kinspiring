@@ -1,9 +1,10 @@
+/* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
 import { object, string, bool, number, func, shape, array } from 'prop-types';
 import classNames from 'classnames';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { withRouter } from 'react-router-dom';
-import { omit, toPairs } from 'lodash';
+import { omit } from 'lodash';
 
 import routeConfiguration from '../../routeConfiguration';
 import { createResourceLocatorString } from '../../util/routes';
@@ -14,40 +15,8 @@ import {
   SelectSingleFilterPlain,
   SelectMultipleFilterPlain,
 } from '../../components';
-import config from '../../config';
+import { propTypes } from '../../util/types';
 import css from './SearchFiltersMobile.css';
-
-const CATEGORY_URL_PARAM = 'pub_category';
-const AMENITIES_URL_PARAM = 'pub_amenities';
-const KINSPIRING_MANUFACTURER_URL_PARAM = 'pub_brand';
-const allowedParams = [CATEGORY_URL_PARAM, AMENITIES_URL_PARAM, KINSPIRING_MANUFACTURER_URL_PARAM];
-
-const validateParamValue = value => value !== null && value !== undefined && value.length > 0;
-const validateParamKey = key => allowedParams.includes(key);
-
-const KinspiringManufacturerFilter = props => {
-  const { onSelect, initialValue, brands, intl } = props;
-  return (
-    <SelectSingleFilterPlain
-      urlParam={KINSPIRING_MANUFACTURER_URL_PARAM}
-      label={intl.formatMessage({
-        id: 'SearchFiltersMobile.kinspiring.brandFilterLabel',
-      })}
-      onSelect={onSelect}
-      options={brands}
-      initialValue={initialValue}
-      intl={intl}
-    />
-  );
-};
-
-// Check if a filter parameter is included query parameters
-const hasFilterQueryParams = queryParams => {
-  const firstFilterParam = toPairs(queryParams).find(entry => {
-    return validateParamKey(entry[0]) && validateParamValue(entry[1]);
-  });
-  return !!firstFilterParam;
-};
 
 class SearchFiltersMobileComponent extends Component {
   constructor(props) {
@@ -60,6 +29,8 @@ class SearchFiltersMobileComponent extends Component {
     this.resetAll = this.resetAll.bind(this);
     this.handleSelectSingle = this.handleSelectSingle.bind(this);
     this.handleSelectMultiple = this.handleSelectMultiple.bind(this);
+    this.initialValue = this.initialValue.bind(this);
+    this.initialValues = this.initialValues.bind(this);
   }
 
   // Open filters modal, set the initial parameters to current ones
@@ -116,9 +87,9 @@ class SearchFiltersMobileComponent extends Component {
 
   // Reset all filter query parameters
   resetAll(e) {
-    const { urlQueryParams, history } = this.props;
+    const { urlQueryParams, history, filterParamNames } = this.props;
 
-    const queryParams = omit(urlQueryParams, [CATEGORY_URL_PARAM, AMENITIES_URL_PARAM]);
+    const queryParams = omit(urlQueryParams, filterParamNames);
     history.push(createResourceLocatorString('SearchPage', routeConfiguration(), {}, queryParams));
 
     // blur event target if event is passed
@@ -127,19 +98,31 @@ class SearchFiltersMobileComponent extends Component {
     }
   }
 
+  // resolve initial value for a single value filter
+  initialValue(paramName) {
+    return this.props.urlQueryParams[paramName];
+  }
+
+  // resolve initial values for a multi value filter
+  initialValues(paramName) {
+    const urlQueryParams = this.props.urlQueryParams;
+    return !!urlQueryParams[paramName] ? urlQueryParams[paramName].split(',') : [];
+  }
+
   render() {
     const {
       rootClassName,
       className,
-      urlQueryParams,
       listingsAreLoaded,
       resultsCount,
       searchInProgress,
       showAsModalMaxWidth,
       onMapIconClick,
       onManageDisableScrolling,
-      categories,
-      amenities,
+      selectedFiltersCount,
+      categoryFilter,
+      amenitiesFilter,
+      brandFilter,
       intl,
     } = this.props;
 
@@ -158,27 +141,28 @@ class SearchFiltersMobileComponent extends Component {
       { count: resultsCount }
     );
 
-    const filtersButton = hasFilterQueryParams(urlQueryParams) ? (
-      <Button className={css.filtersButton} onClick={this.openFilters}>
-        <FormattedMessage id="SearchFilters.filtersButtonLabel" className={css.mapIconText} />
-      </Button>
-    ) : (
-      <SecondaryButton className={css.filtersButton} onClick={this.openFilters}>
-        <FormattedMessage id="SearchFilters.filtersButtonLabel" className={css.mapIconText} />
-      </SecondaryButton>
-    );
+    const filtersButton =
+      selectedFiltersCount > 0 ? (
+        <Button className={css.filtersButton} onClick={this.openFilters}>
+          <FormattedMessage id="SearchFilters.filtersButtonLabel" className={css.mapIconText} />
+        </Button>
+      ) : (
+        <SecondaryButton className={css.filtersButton} onClick={this.openFilters}>
+          <FormattedMessage id="SearchFilters.filtersButtonLabel" className={css.mapIconText} />
+        </SecondaryButton>
+      );
 
     const categoryLabel = intl.formatMessage({
       id: 'SearchFiltersMobile.categoryLabel',
     });
-    const initialCategory = urlQueryParams[CATEGORY_URL_PARAM];
+    const initialCategory = this.initialValue(categoryFilter.paramName);
 
-    const categoryFilter = categories ? (
+    const categoryFilterElement = categoryFilter ? (
       <SelectSingleFilterPlain
-        urlParam={CATEGORY_URL_PARAM}
+        urlParam={categoryFilter.paramName}
         label={categoryLabel}
         onSelect={this.handleSelectSingle}
-        options={categories}
+        options={categoryFilter.options}
         initialValue={initialCategory}
         intl={intl}
       />
@@ -186,20 +170,31 @@ class SearchFiltersMobileComponent extends Component {
 
     const amenitiesLabel = intl.formatMessage({ id: 'SearchFiltersMobile.amenitiesLabel' });
 
-    const initialAmenities = !!urlQueryParams[AMENITIES_URL_PARAM]
-      ? urlQueryParams[AMENITIES_URL_PARAM].split(',')
-      : [];
+    const initialAmenities = this.initialValues(amenitiesFilter.paramName);
 
-    const amenitiesFilter = amenities ? (
+    const amenitiesFilterElement = amenitiesFilter ? (
       <SelectMultipleFilterPlain
         name="amenities"
-        urlParam={AMENITIES_URL_PARAM}
+        urlParam={amenitiesFilter.paramName}
         label={amenitiesLabel}
         onSelect={this.handleSelectMultiple}
-        options={amenities}
+        options={amenitiesFilter.options}
         initialValues={initialAmenities}
       />
     ) : null;
+
+    const kinspiringBrandFilterElement = (
+      <SelectSingleFilterPlain
+        urlParam={brandFilter.paramName}
+        label={intl.formatMessage({
+          id: 'SearchFiltersMobile.kinspiring.brandFilterLabel',
+        })}
+        onSelect={this.handleSelectSingle}
+        options={brandFilter.options}
+        initialValue={this.initialValue(brandFilter.paramName)}
+        intl={intl}
+      />
+    );
 
     return (
       <div className={classes}>
@@ -230,14 +225,9 @@ class SearchFiltersMobileComponent extends Component {
             </button>
           </div>
           <div className={css.filtersWrapper}>
-            {categoryFilter}
-            {amenitiesFilter}
-            <KinspiringManufacturerFilter
-              onSelect={this.handleSelectSingle}
-              initialValue={urlQueryParams[KINSPIRING_MANUFACTURER_URL_PARAM]}
-              brands={config.custom.brands}
-              intl={intl}
-            />
+            {categoryFilterElement}
+            {/*amenitiesFilterElement*/}
+            {kinspiringBrandFilterElement}
           </div>
           <div className={css.showListingsContainer}>
             <Button className={css.showListingsButton} onClick={this.closeFilters}>
@@ -255,8 +245,11 @@ SearchFiltersMobileComponent.defaultProps = {
   className: null,
   resultsCount: null,
   searchingInProgress: false,
-  categories: null,
-  amenities: null,
+  selectedFiltersCount: 0,
+  filterParamNames: [],
+  categoryFilter: null,
+  amenitiesFilter: null,
+  brandFilter: null,
 };
 
 SearchFiltersMobileComponent.propTypes = {
@@ -271,8 +264,11 @@ SearchFiltersMobileComponent.propTypes = {
   onManageDisableScrolling: func.isRequired,
   onOpenModal: func.isRequired,
   onCloseModal: func.isRequired,
-  categories: array,
-  amenities: array,
+  selectedFiltersCount: number,
+  filterParamNames: array,
+  categoriesFilter: propTypes.filterConfig,
+  amenitiesFilter: propTypes.filterConfig,
+  brandFilter: propTypes.filterConfig,
 
   // from injectIntl
   intl: intlShape.isRequired,

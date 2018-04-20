@@ -2,7 +2,7 @@
  * Marketplace specific configuration.
  */
 
-export const amenities = null;
+export const amenities = [];
 
 export const categories = [
   { key: 'matkarattaat', label: 'Matkarattaat' },
