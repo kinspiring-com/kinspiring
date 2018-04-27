@@ -97,6 +97,17 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
     formAction: formAction.concat(['www.facebook.com', 'connect.facebook.net']),
   };
 
+  const hotjar = '*.hotjar.com';
+  const directive = name => customDirectives[name] || defaultDirectives[name] || [self];
+  const hotjarDirectives = {
+    imgSrc: directive('imgSrc').concat(hotjar),
+    scriptSrc: directive('scriptSrc').concat(hotjar),
+    connectSrc: directive('connectSrc').concat(hotjar),
+    frameSrc: directive('frameSrc').concat(hotjar),
+    childSrc: directive('childSrc').concat(hotjar),
+    fontSrc: directive('fontSrc').concat(hotjar),
+  };
+
   // ================ END CUSTOM CSP URLs ================ //
 
   const directives = Object.assign(
@@ -105,7 +116,8 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
       blockAllMixedContent: enforceSsl,
     },
     defaultDirectives,
-    customDirectives
+    customDirectives,
+    hotjarDirectives
   );
 
   // See: https://helmetjs.github.io/docs/csp/
