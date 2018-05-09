@@ -21,7 +21,7 @@ import css from './DateRangeInput.css';
 export const HORIZONTAL_ORIENTATION = 'horizontal';
 export const ANCHOR_LEFT = 'left';
 
-// Since redux-form tracks the onBlur event for marking the field as
+// Since final-form tracks the onBlur event for marking the field as
 // touched (which triggers possible error validation rendering), only
 // trigger the event asynchronously when no other input within this
 // component has received focus.
@@ -89,6 +89,8 @@ const defaultProps = {
   horizontalMargin: 0,
   withPortal: false,
   withFullScreenPortal: false,
+  appendToBody: false,
+  disableScroll: false,
   daySize: 38,
   isRTL: false,
   initialVisibleMonth: null,
@@ -203,12 +205,12 @@ class DateRangeInputComponent extends Component {
       onBlur,
       onChange,
       onFocus,
-      onDragStart,
-      onDrop,
       phrases,
       screenReaderInputMessage,
       useMobileMargins,
       value,
+      children,
+      render,
       ...datePickerProps
     } = this.props;
     /* eslint-enable no-unused-vars */
@@ -269,6 +271,8 @@ DateRangeInputComponent.defaultProps = {
 
 DateRangeInputComponent.propTypes = {
   className: string,
+  startDateId: string,
+  endDateId: string,
   unitType: propTypes.bookingUnitType.isRequired,
   focusedInput: oneOf([START_DATE, END_DATE]),
   initialDates: instanceOf(Date),
@@ -278,8 +282,6 @@ DateRangeInputComponent.propTypes = {
   onChange: func.isRequired,
   onBlur: func.isRequired,
   onFocus: func.isRequired,
-  onDragStart: func.isRequired,
-  onDrop: func.isRequired,
   phrases: shape({
     closeDatePicker: string,
     clearDate: string,

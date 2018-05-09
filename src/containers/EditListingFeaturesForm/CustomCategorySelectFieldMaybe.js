@@ -1,6 +1,6 @@
 import React from 'react';
 import { required } from '../../util/validators';
-import { SelectField } from '../../components';
+import { FieldSelect } from '../../components';
 
 const CustomCategorySelectFieldMaybe = props => {
   const { className, name, id, categories, intl } = props;
@@ -16,10 +16,10 @@ const CustomCategorySelectFieldMaybe = props => {
     })
   );
   return categories ? (
-    <SelectField
-      className={className}
-      name={name}
+    <FieldSelect
       id={id}
+      name={name}
+      className={className}
       label={categoryLabel}
       validate={categoryRequired}
     >
@@ -29,7 +29,7 @@ const CustomCategorySelectFieldMaybe = props => {
           {c.label}
         </option>
       ))}
-    </SelectField>
+    </FieldSelect>
   ) : null;
 };
 

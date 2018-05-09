@@ -1,72 +1,78 @@
 import React from 'react';
 import { bool, func, string, shape, arrayOf } from 'prop-types';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import classNames from 'classnames';
-import { reduxForm, propTypes as formPropTypes, formValueSelector } from 'redux-form';
+import { Form as FinalForm } from 'react-final-form';
+import arrayMutators from 'final-form-arrays';
 import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
+import classNames from 'classnames';
 
 import { propTypes } from '../../util/types';
 import { Button, Form } from '../../components';
+
 import CustomCategorySelectFieldMaybe from './CustomCategorySelectFieldMaybe';
 import KinspiringCategoryFieldsMaybe from './KinspiringCategoryFieldsMaybe';
 
 import css from './EditListingFeaturesForm.css';
 
-const EditListingFeaturesFormComponent = props => {
-  const {
-    form,
-    submitting,
-    disabled,
-    rootClassName,
-    className,
-    handleSubmit,
-    saveActionMsg,
-    updated,
-    updateError,
-    updateInProgress,
-    categories,
-    category,
-    intl,
-  } = props;
+const EditListingFeaturesFormComponent = props => (
+  <FinalForm
+    {...props}
+    mutators={{ ...arrayMutators }}
+    render={fieldRenderProps => {
+      const {
+        disabled,
+        rootClassName,
+        className,
+        handleSubmit,
+        pristine,
+        saveActionMsg,
+        updated,
+        updateError,
+        updateInProgress,
+        intl,
+        categories,
+        values,
+      } = fieldRenderProps;
 
-  const classes = classNames(rootClassName || css.root, className);
-  const submitReady = updated;
-  const submitInProgress = submitting || updateInProgress;
-  const submitDisabled = disabled || submitInProgress;
+      const { category } = values || {};
+      const classes = classNames(rootClassName || css.root, className);
+      const submitReady = updated && pristine;
+      const submitInProgress = updateInProgress;
+      const submitDisabled = disabled || submitInProgress;
 
-  const errorMessage = updateError ? (
-    <p className={css.error}>
-      <FormattedMessage id="EditListingFeaturesForm.updateFailed" />
-    </p>
-  ) : null;
+      const errorMessage = updateError ? (
+        <p className={css.error}>
+          <FormattedMessage id="EditListingFeaturesForm.updateFailed" />
+        </p>
+      ) : null;
 
-  return (
-    <Form className={classes} onSubmit={handleSubmit}>
-      {errorMessage}
+      return (
+        <Form className={classes} onSubmit={handleSubmit}>
+          {errorMessage}
 
-      <CustomCategorySelectFieldMaybe
-        className={css.category}
-        name="category"
-        id={`${form}.category`}
-        categories={categories}
-        intl={intl}
-      />
+          <CustomCategorySelectFieldMaybe
+            id="category"
+            name="category"
+            className={css.category}
+            categories={categories}
+            intl={intl}
+          />
 
-      <KinspiringCategoryFieldsMaybe form={form} category={category} intl={intl} />
+          <KinspiringCategoryFieldsMaybe category={category} intl={intl} />
 
-      <Button
-        className={css.submitButton}
-        type="submit"
-        inProgress={submitInProgress}
-        disabled={submitDisabled}
-        ready={submitReady}
-      >
-        {saveActionMsg}
-      </Button>
-    </Form>
-  );
-};
+          <Button
+            className={css.submitButton}
+            type="submit"
+            inProgress={submitInProgress}
+            disabled={submitDisabled}
+            ready={submitReady}
+          >
+            {saveActionMsg}
+          </Button>
+        </Form>
+      );
+    }}
+  />
+);
 
 EditListingFeaturesFormComponent.defaultProps = {
   rootClassName: null,
@@ -75,11 +81,10 @@ EditListingFeaturesFormComponent.defaultProps = {
 };
 
 EditListingFeaturesFormComponent.propTypes = {
-  ...formPropTypes,
   rootClassName: string,
   className: string,
   name: string.isRequired,
-  handleSubmit: func.isRequired,
+  onSubmit: func.isRequired,
   saveActionMsg: string.isRequired,
   updated: bool.isRequired,
   updateError: propTypes.error,
@@ -92,18 +97,9 @@ EditListingFeaturesFormComponent.propTypes = {
     })
   ),
 
-  // from mapStateToProps
-  category: string,
-
   intl: intlShape.isRequired,
 };
 
-const formName = 'EditListingFeaturesForm';
-const selector = formValueSelector(formName);
-const mapStateToProps = state => ({
-  category: selector(state, 'category'),
-});
+const EditListingFeaturesForm = injectIntl(EditListingFeaturesFormComponent);
 
-export default compose(connect(mapStateToProps), reduxForm({ form: formName }), injectIntl)(
-  EditListingFeaturesFormComponent
-);
+export default EditListingFeaturesForm;

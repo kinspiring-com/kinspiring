@@ -1,7 +1,7 @@
 import React from 'react';
 import { intlShape } from 'react-intl';
 import { string, shape, bool, oneOf, arrayOf } from 'prop-types';
-import { TextInputField, SelectField, FieldBoolean } from '../../components';
+import { FieldTextInput, FieldSelect, FieldBoolean } from '../../components';
 import * as validators from '../../util/validators';
 import config from '../../config';
 
@@ -15,7 +15,7 @@ const {
 } = config.custom;
 
 const CategoryFieldMaybe = props => {
-  const { className, form, field, intl } = props;
+  const { className, field, intl } = props;
   const { name, type, required, options = [] } = field;
 
   const label = intl.formatMessage({
@@ -29,11 +29,11 @@ const CategoryFieldMaybe = props => {
 
   if (type === FIELD_TYPE_TEXT) {
     return (
-      <TextInputField
+      <FieldTextInput
+        id={name}
+        name={name}
         className={className}
         type="text"
-        name={name}
-        id={`${form}.${name}`}
         label={label}
         placeholder={intl.formatMessage({
           id: `KinspiringCategoryFieldsMaybe.${name}.placeholder`,
@@ -43,11 +43,11 @@ const CategoryFieldMaybe = props => {
     );
   } else if (type === FIELD_TYPE_TEXTAREA) {
     return (
-      <TextInputField
+      <FieldTextInput
+        id={name}
+        name={name}
         className={className}
         type="textarea"
-        name={name}
-        id={`${form}.${name}`}
         label={label}
         placeholder={intl.formatMessage({
           id: `KinspiringCategoryFieldsMaybe.${name}.placeholder`,
@@ -58,9 +58,9 @@ const CategoryFieldMaybe = props => {
   } else if (type === FIELD_TYPE_BOOLEAN) {
     return (
       <FieldBoolean
-        className={className}
+        id={name}
         name={name}
-        id={`${form}.${name}`}
+        className={className}
         label={label}
         placeholder={intl.formatMessage({
           id: `KinspiringCategoryFieldsMaybe.${name}.placeholder`,
@@ -70,10 +70,10 @@ const CategoryFieldMaybe = props => {
     );
   } else if (type === FIELD_TYPE_SELECT_SINGLE) {
     return (
-      <SelectField
-        className={className}
+      <FieldSelect
+        id={name}
         name={name}
-        id={`${form}.${name}`}
+        className={className}
         label={label}
         validate={validate}
       >
@@ -85,7 +85,7 @@ const CategoryFieldMaybe = props => {
             {option.label}
           </option>
         ))}
-      </SelectField>
+      </FieldSelect>
     );
   } else {
     throw new Error(`Unknown field type: ${type}`);
@@ -94,7 +94,6 @@ const CategoryFieldMaybe = props => {
 
 CategoryFieldMaybe.propTypes = {
   className: string.isRequired,
-  form: string.isRequired,
   field: shape({
     name: string.isRequired,
     type: oneOf([
@@ -115,7 +114,7 @@ CategoryFieldMaybe.propTypes = {
 };
 
 const KinspiringCategoryFieldsMaybe = props => {
-  const { form, category, intl } = props;
+  const { category, intl } = props;
   if (!category) {
     return null;
   }
@@ -130,7 +129,6 @@ const KinspiringCategoryFieldsMaybe = props => {
         <CategoryFieldMaybe
           key={fieldName}
           className={css.field}
-          form={form}
           field={fieldInfo(fieldName)}
           intl={intl}
         />
@@ -144,7 +142,6 @@ KinspiringCategoryFieldsMaybe.defaultProps = {
 };
 
 KinspiringCategoryFieldsMaybe.propTypes = {
-  form: string.isRequired,
   category: string,
   intl: intlShape.isRequired,
 };
