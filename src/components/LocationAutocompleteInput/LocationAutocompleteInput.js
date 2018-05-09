@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
+import { Field } from 'react-final-form';
 import { debounce } from 'lodash';
 import classNames from 'classnames';
 import { propTypes } from '../../util/types';
@@ -400,8 +400,8 @@ class LocationAutocompleteInput extends Component {
     };
 
     const rootClass = classNames(rootClassName || css.root, className);
-    const iconClass = classNames(css.icon, iconClassName);
-    const inputClass = classNames(css.input, inputClassName, { [validClassName]: isValid });
+    const iconClass = classNames(iconClassName || css.icon);
+    const inputClass = classNames(inputClassName || css.input, { [validClassName]: isValid });
     const predictionsClass = classNames(predictionsClassName);
 
     // Only render predictions when the input has focus. For
@@ -436,7 +436,7 @@ class LocationAutocompleteInput extends Component {
         />
         {renderPredictions ? (
           <LocationPredictionsList
-            className={predictionsClass}
+            rootClassName={predictionsClass}
             predictions={predictions}
             highlightedIndex={this.state.highlightedIndex}
             onSelectStart={this.handlePredictionsSelectStart}
@@ -494,18 +494,14 @@ LocationAutocompleteInput.propTypes = {
 export default LocationAutocompleteInput;
 
 class LocationAutocompleteInputFieldComponent extends Component {
-  componentWillUnmount() {
-    if (this.props.clearOnUnmount) {
-      this.props.input.onChange('');
-    }
-  }
-
   render() {
     /* eslint-disable no-unused-vars */
-    const { rootClassName, labelClassName, clearOnUnmount, ...restProps } = this.props;
-    const { input, label, meta, ...otherProps } = restProps;
+    const { rootClassName, labelClassName, ...restProps } = this.props;
+    const { input, label, meta, valueFromForm, ...otherProps } = restProps;
     /* eslint-enable no-unused-vars */
 
+    const value = typeof valueFromForm !== 'undefined' ? valueFromForm : input.value;
+    const locationAutocompleteProps = { label, meta, ...otherProps, input: { ...input, value } };
     const labelInfo = label ? (
       <label className={labelClassName} htmlFor={input.name}>
         {label}
@@ -515,7 +511,7 @@ class LocationAutocompleteInputFieldComponent extends Component {
     return (
       <div className={rootClassName}>
         {labelInfo}
-        <LocationAutocompleteInput {...restProps} />
+        <LocationAutocompleteInput {...locationAutocompleteProps} />
         <ValidationError fieldMeta={meta} />
       </div>
     );
@@ -527,7 +523,6 @@ LocationAutocompleteInputFieldComponent.defaultProps = {
   labelClassName: null,
   type: null,
   label: null,
-  clearOnUnmount: false,
 };
 
 LocationAutocompleteInputFieldComponent.propTypes = {
@@ -539,7 +534,6 @@ LocationAutocompleteInputFieldComponent.propTypes = {
   }).isRequired,
   label: string,
   meta: object.isRequired,
-  clearOnUnmount: bool,
 };
 
 export const LocationAutocompleteInputField = props => {

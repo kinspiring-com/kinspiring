@@ -8,12 +8,15 @@ import * as ExpandingTextarea from './components/ExpandingTextarea/ExpandingText
 import * as FieldBirthdayInput from './components/FieldBirthdayInput/FieldBirthdayInput.example';
 import * as FieldBoolean from './components/FieldBoolean/FieldBoolean.example';
 import * as FieldCheckbox from './components/FieldCheckbox/FieldCheckbox.example';
+import * as FieldCheckboxGroup from './components/FieldCheckboxGroup/FieldCheckboxGroup.example';
 import * as FieldCurrencyInput from './components/FieldCurrencyInput/FieldCurrencyInput.example';
 import * as FieldDateInput from './components/FieldDateInput/FieldDateInput.example';
 import * as FieldDateRangeInput from './components/FieldDateRangeInput/FieldDateRangeInput.example';
 import * as FieldGroupCheckbox from './components/FieldGroupCheckbox/FieldGroupCheckbox.example';
 import * as FieldPhoneNumberInput from './components/FieldPhoneNumberInput/FieldPhoneNumberInput.example';
 import * as FieldReviewRating from './components/FieldReviewRating/FieldReviewRating.example';
+import * as FieldSelect from './components/FieldSelect/FieldSelect.example';
+import * as FieldTextInput from './components/FieldTextInput/FieldTextInput.example';
 import * as Footer from './components/Footer/Footer.example';
 import * as IconBannedUser from './components/IconBannedUser/IconBannedUser.example';
 import * as IconCheckmark from './components/IconCheckmark/IconCheckmark.example';
@@ -57,25 +60,27 @@ import * as TextInputField from './components/TextInputField/TextInputField.exam
 import * as TopbarDesktop from './components/TopbarDesktop/TopbarDesktop.example';
 import * as UserCard from './components/UserCard/UserCard.example';
 
+// forms
+import * as BookingDatesForm from './forms/BookingDatesForm/BookingDatesForm.example';
+import * as EditListingDescriptionForm from './forms/EditListingDescriptionForm/EditListingDescriptionForm.example';
+import * as EditListingFeaturesForm from './forms/EditListingFeaturesForm/EditListingFeaturesForm.example';
+import * as EditListingLocationForm from './forms/EditListingLocationForm/EditListingLocationForm.example';
+import * as EditListingPhotosForm from './forms/EditListingPhotosForm/EditListingPhotosForm.example';
+import * as EditListingPoliciesForm from './forms/EditListingPoliciesForm/EditListingPoliciesForm.example';
+import * as EditListingPricingForm from './forms/EditListingPricingForm/EditListingPricingForm.example';
+import * as EmailVerificationForm from './forms/EmailVerificationForm/EmailVerificationForm.example';
+import * as EnquiryForm from './forms/EnquiryForm/EnquiryForm.example';
+import * as LoginForm from './forms/LoginForm/LoginForm.example';
+import * as PasswordRecoveryForm from './forms/PasswordRecoveryForm/PasswordRecoveryForm.example';
+import * as PasswordResetForm from './forms/PasswordResetForm/PasswordResetForm.example';
+import * as PayoutDetailsForm from './forms/PayoutDetailsForm/PayoutDetailsForm.example';
+import * as ReviewForm from './forms/ReviewForm/ReviewForm.example';
+import * as SendMessageForm from './forms/SendMessageForm/SendMessageForm.example';
+import * as SignupForm from './forms/SignupForm/SignupForm.example';
+import * as StripePaymentForm from './forms/StripePaymentForm/StripePaymentForm.example';
+
 // containers
-import * as BookingDatesForm from './containers/BookingDatesForm/BookingDatesForm.example';
 import * as Colors from './containers/StyleguidePage/Colors.example';
-import * as EditListingDescriptionForm from './containers/EditListingDescriptionForm/EditListingDescriptionForm.example';
-import * as EditListingFeaturesForm from './containers/EditListingFeaturesForm/EditListingFeaturesForm.example';
-import * as EditListingLocationForm from './containers/EditListingLocationForm/EditListingLocationForm.example';
-import * as EditListingPhotosForm from './containers/EditListingPhotosForm/EditListingPhotosForm.example';
-import * as EditListingPoliciesForm from './containers/EditListingPoliciesForm/EditListingPoliciesForm.example';
-import * as EditListingPricingForm from './containers/EditListingPricingForm/EditListingPricingForm.example';
-import * as EmailVerificationForm from './containers/EmailVerificationForm/EmailVerificationForm.example';
-import * as EnquiryForm from './containers/EnquiryForm/EnquiryForm.example';
-import * as LoginForm from './containers/LoginForm/LoginForm.example';
-import * as PasswordRecoveryForm from './containers/PasswordRecoveryForm/PasswordRecoveryForm.example';
-import * as PasswordResetForm from './containers/PasswordResetForm/PasswordResetForm.example';
-import * as PayoutDetailsForm from './containers/PayoutDetailsForm/PayoutDetailsForm.example';
-import * as ReviewForm from './containers/ReviewForm/ReviewForm.example';
-import * as SendMessageForm from './containers/SendMessageForm/SendMessageForm.example';
-import * as SignupForm from './containers/SignupForm/SignupForm.example';
-import * as StripePaymentForm from './containers/StripePaymentForm/StripePaymentForm.example';
 import * as Typography from './containers/StyleguidePage/Typography.example';
 
 export {
@@ -98,12 +103,15 @@ export {
   FieldBirthdayInput,
   FieldBoolean,
   FieldCheckbox,
+  FieldCheckboxGroup,
   FieldCurrencyInput,
   FieldDateInput,
   FieldDateRangeInput,
   FieldGroupCheckbox,
   FieldPhoneNumberInput,
   FieldReviewRating,
+  FieldSelect,
+  FieldTextInput,
   Footer,
   IconBannedUser,
   IconCheckmark,

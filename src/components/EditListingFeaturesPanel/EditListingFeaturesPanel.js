@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { pick } from 'lodash';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
+
 import { ensureListing } from '../../util/data';
-import { EditListingFeaturesForm } from '../../containers';
+import { EditListingFeaturesForm } from '../../forms';
 import { ListingLink } from '../../components';
 import config from '../../config';
 
