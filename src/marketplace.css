@@ -46,6 +46,9 @@
   --marketplaceColorLight: #8affee;
   --marketplaceColorDark: #319486;
 
+  /* Used with inline CSS SVGs */
+  --marketplaceColorEncoded: %2346d4c0;
+
   --successColor: #2ecc71;
   --successColorDark: #239954;
   --failColor: #ff0000;
@@ -59,9 +62,6 @@
   --matterColorLight: #ffffff;
 
   --matterColorLightTransparent: rgba(255, 255, 255, 0.65);
-
-  /* Used with inline CSS SVGs */
-  --marketplaceColorEncoded: %2346d4c0;
 
   /* ================ Spacing unites ================ */
 

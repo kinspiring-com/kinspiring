@@ -102,7 +102,7 @@ export class BookingDatesFormComponent extends Component {
 
           // This is the place to collect breakdown estimation data. See the
           // EstimatedBreakdownMaybe component to change the calculations
-          // for customised payment processes.
+          // for customized payment processes.
           const bookingData =
             startDate && endDate
               ? {
@@ -142,8 +142,7 @@ export class BookingDatesFormComponent extends Component {
           const endDatePlaceholderText =
             endDatePlaceholder || intl.formatDate(tomorrow, dateFormatOptions);
           const submitButtonClasses = classNames(
-            css.submitButtonWrapper,
-            submitButtonWrapperClassName
+            submitButtonWrapperClassName || css.submitButtonWrapper
           );
 
           return (
