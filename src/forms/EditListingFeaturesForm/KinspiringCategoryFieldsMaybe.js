@@ -70,13 +70,7 @@ const CategoryFieldMaybe = props => {
     );
   } else if (type === FIELD_TYPE_SELECT_SINGLE) {
     return (
-      <FieldSelect
-        id={name}
-        name={name}
-        className={className}
-        label={label}
-        validate={validate}
-      >
+      <FieldSelect id={name} name={name} className={className} label={label} validate={validate}>
         <option value="">
           {intl.formatMessage({ id: `KinspiringCategoryFieldsMaybe.${name}.placeholder` })}
         </option>
