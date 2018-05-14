@@ -109,7 +109,6 @@
 .desktopSearchForm {
   display: none;
   background-color: var(--matterColorLight);
-  border-bottom: 4px solid var(--marketplaceColor);
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
 

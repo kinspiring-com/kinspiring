@@ -32,7 +32,7 @@
   padding: 11px 0 17px 0;
 
   /* Borders */
-  border-bottom-width: var(--borderRadiusMobileSearch);
+  border-bottom: var(--borderRadiusMobileSearch) solid var(--marketplaceColor);
 
   display: flex;
   width: 24px;
