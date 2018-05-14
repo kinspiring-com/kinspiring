@@ -2,16 +2,47 @@
 
 .root {
   border-radius: 2px;
+  position: relative;
+  display: flex;
 }
 
 .searchInputIcon {
+  /* Overwrite rules from LocationAutocompleteInput.icon */
+  display: flex;
+  width: 24px;
+  align-self: stretch;
+  background-color: var(--matterColorLight);
+
+  /* Customizations */
   box-sizing: content-box;
   padding-left: 24px;
   margin-top: 2px;
+  border-bottom: 6px solid var(--marketplaceColor);
+  border-bottom-left-radius: 2px;
 }
 
 .searchInput {
+  /* Overwrite rules from LocationAutocompleteInput.input */
+  flex-grow: 1;
+  padding-left: 10px;
+  margin: 0;
+  line-height: unset;
+
+  /* Safari bugfix: without this Safari will print placeholder to a wrong place */
+  &::-webkit-input-placeholder {
+    line-height: normal;
+  }
+
+  &:hover,
+  &:focus {
+    border-bottom-color: var(--marketplaceColor);
+    outline: none;
+  }
+
+  /* Customizations */
   height: 69px;
+  border-bottom: 6px solid var(--marketplaceColor);
+  border-bottom-right-radius: 2px;
 
   &:hover::placeholder,
   &:focus::placeholder {
@@ -27,6 +58,19 @@
 }
 
 .searchPredictions {
+  /* Overwrite rules from LocationAutocompleteInput.predictionsRoot */
+  position: absolute;
+  width: 100%;
+  padding-bottom: 72px;
+  top: 50px;
+  left: 0;
+  background-color: var(--marketplaceColor);
+  border-bottom-left-radius: var(--borderRadius);
+  border-bottom-right-radius: var(--borderRadius);
+  box-shadow: var(--boxShadowPopup);
+  z-index: var(--zIndexPopup + 1);
+
+  /* Customizations */
   margin-top: 16px;
   margin-bottom: 102px;
 
