@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { pick } from 'lodash';
+import pick from 'lodash/pick';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 

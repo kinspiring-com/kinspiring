@@ -3,11 +3,11 @@ import { array, bool, func, object, shape, string } from 'prop-types';
 import { compose } from 'redux';
 import { Form as FinalForm, Field } from 'react-final-form';
 import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 import classNames from 'classnames';
 import { propTypes } from '../../util/types';
 import { nonEmptyArray, composeValidators } from '../../util/validators';
-import { isUploadListingImageOverLimitError } from '../../util/errors';
+import { isUploadImageOverLimitError } from '../../util/errors';
 import { AddImages, Button, Form, ValidationError } from '../../components';
 
 import css from './EditListingPhotosForm.css';
@@ -79,7 +79,7 @@ export class EditListingPhotosFormComponent extends Component {
           });
 
           const { createListingsError, showListingsError, uploadImageError } = errors;
-          const uploadOverLimit = isUploadListingImageOverLimitError(uploadImageError);
+          const uploadOverLimit = isUploadImageOverLimitError(uploadImageError);
 
           let uploadImageFailed = null;
 

@@ -66,18 +66,10 @@ export const isTooManyEmailVerificationRequestsError = error =>
 
 /**
  * Check if the given API error (from
- * `sdk.images.uploadListingImage()`) is due to the image being over
+ * `sdk.images.upload()`) is due to the image being over
  * the size limit.
  */
-export const isUploadListingImageOverLimitError = error =>
-  hasErrorWithCode(error, ERROR_CODE_UPLOAD_OVER_LIMIT);
-
-/**
- * Check if the given API error (from
- * `sdk.images.uploadProfileImage()`) is due to the image being over
- * the size limit.
- */
-export const isUploadProfileImageOverLimitError = error =>
+export const isUploadImageOverLimitError = error =>
   hasErrorWithCode(error, ERROR_CODE_UPLOAD_OVER_LIMIT);
 
 /**
@@ -123,7 +115,7 @@ export const isTransactionInitiateAmountTooLowError = error => {
     try {
       // TODO: This is a temporary solution until a proper error code
       // for this specific error is received in the response.
-      const msg = apiError.meta.stripe_message;
+      const msg = apiError.meta.stripeMessage;
       isAmountTooLow =
         msg.startsWith('Amount must be at least') ||
         msg.startsWith('Amount must convert to at least');
@@ -176,7 +168,7 @@ export const isStripeInvalidPostalCode = error => {
   return errorAPIErrors(error).some(apiError => {
     // Stripe doesn't seem to give an error code for this specific
     // case, so we have to recognize it from the message.
-    const msg = apiError.meta && apiError.meta.stripe_message ? apiError.meta.stripe_message : '';
+    const msg = apiError.meta && apiError.meta.stripeMessage ? apiError.meta.stripeMessage : '';
     return msgRe.test(msg);
   });
 };
