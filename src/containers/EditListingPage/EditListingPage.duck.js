@@ -1,4 +1,7 @@
-import { omit, omitBy, isUndefined, mergeWith } from 'lodash';
+import omit from 'lodash/omit';
+import omitBy from 'lodash/omitBy';
+import isUndefined from 'lodash/isUndefined';
+import mergeWith from 'lodash/mergeWith';
 import { types as sdkTypes } from '../../util/sdkLoader';
 import { storableError } from '../../util/errors';
 import { addMarketplaceEntities } from '../../ducks/marketplaceData.duck';
@@ -241,7 +244,7 @@ export const showListings = requestAction(SHOW_LISTINGS_REQUEST);
 export const showListingsSuccess = successAction(SHOW_LISTINGS_SUCCESS);
 export const showListingsError = errorAction(SHOW_LISTINGS_ERROR);
 
-// SDK method: images.uploadListingImage
+// SDK method: images.upload
 export const uploadImage = requestAction(UPLOAD_IMAGE_REQUEST);
 export const uploadImageSuccess = successAction(UPLOAD_IMAGE_SUCCESS);
 export const uploadImageError = errorAction(UPLOAD_IMAGE_ERROR);
@@ -304,7 +307,7 @@ export function requestImageUpload(actionPayload) {
     const id = actionPayload.id;
     dispatch(uploadImage(actionPayload));
     return sdk.images
-      .uploadListingImage({ image: actionPayload.file })
+      .upload({ image: actionPayload.file })
       .then(resp => dispatch(uploadImageSuccess({ data: { id, imageId: resp.data.data.id } })))
       .catch(e => dispatch(uploadImageError({ id, error: storableError(e) })));
   };
