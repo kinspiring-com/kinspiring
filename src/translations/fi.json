@@ -504,6 +504,8 @@
   "PayoutDetailsForm.streetAddressLabel": "Katuosoite",
   "PayoutDetailsForm.streetAddressPlaceholder": "Kirjoita katuosoitteesi…",
   "PayoutDetailsForm.streetAddressRequired": "Tämä kenttä on pakollinen",
+  "PayoutDetailsForm.stripeConnectedAccountTermsLink": "Stripe Connected Account -sopimuksen",
+  "PayoutDetailsForm.stripeToSText": "Tallentamalla tiedot hyväksyt {stripeConnectedAccountTermsLink} ehdot.",
   "PayoutDetailsForm.submitButtonText": "Tallenna tiedot & julkaise ilmoitus",
   "PayoutDetailsForm.title": "Vielä yksi juttu: maksuasetukset",
   "PayoutPreferencesPage.contactDetailsTabTitle": "Sähköposti",
