@@ -12,9 +12,22 @@ way to update this template, but currently, we follow a pattern:
 
 ---
 
+## v1.0.0
+
+* [change] Migrate remaining Redux Forms to Final Form. Also now all the form components can be
+  found in the src/forms folder. Remove redux-form from the dependencies.
+  [#845](https://github.com/sharetribe/flex-template-web/pull/845)
+* [fix] Extract and fix missing information reminder modal from Topbar
+  [#846](https://github.com/sharetribe/flex-template-web/pull/846)
+* [fix] Add missing styles for ModalMissingInformation from Topbar
+  [#847](https://github.com/sharetribe/flex-template-web/pull/847)
+* [fix] API does not return all image variants anymore, this adds correct variants to update
+  contact details call.
+  [#848](https://github.com/sharetribe/flex-template-web/pull/848)
+
 ## v0.3.1
 
-* Change lodash import syntax to reduce bundle size (-15.14 KB)
+* [change] Change lodash import syntax to reduce bundle size (-15.14 KB)
   [#839](https://github.com/sharetribe/flex-template-web/pull/839)
 * [fix] Use https instead of git to access SDK repo for Heroku build (now that the repo is public).
   TODO: create SDK releases instead of using direct refs to single commit.
