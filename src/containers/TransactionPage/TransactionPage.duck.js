@@ -1,4 +1,6 @@
 import pick from 'lodash/pick';
+import pickBy from 'lodash/pickBy';
+import isEmpty from 'lodash/isEmpty';
 import { types as sdkTypes } from '../../util/sdkLoader';
 import { isTransactionsTransitionInvalidTransition, storableError } from '../../util/errors';
 import {
@@ -133,7 +135,12 @@ export default function checkoutPageReducer(state = initialState, action = {}) {
       return { ...state, fetchMessagesInProgress: false, fetchMessagesError: payload };
 
     case SEND_MESSAGE_REQUEST:
-      return { ...state, sendMessageInProgress: true, sendMessageError: null };
+      return {
+        ...state,
+        sendMessageInProgress: true,
+        sendMessageError: null,
+        initialMessageFailedToTransaction: null,
+      };
     case SEND_MESSAGE_SUCCESS:
       return { ...state, sendMessageInProgress: false };
     case SEND_MESSAGE_ERROR:
@@ -464,13 +471,22 @@ export const sendReview = (role, tx, reviewRating, reviewContent) => (dispatch, 
     : sendReviewAsFirst(tx.id, params, role, dispatch, sdk);
 };
 
+const isNonEmpty = value => {
+  return typeof value === 'object' || Array.isArray(value) ? !isEmpty(value) : !!value;
+};
+
 // loadData is a collection of async calls that need to be made
 // before page has all the info it needs to render itself
-export const loadData = params => dispatch => {
+export const loadData = params => (dispatch, getState) => {
   const txId = new UUID(params.id);
+  const state = getState().TransactionPage;
+  const txRef = state.transactionRef;
 
-  // Clear the send error since the message form is emptied as well.
-  dispatch(setInitialValues({ sendMessageError: null, sendReviewError: null }));
+  // In case a transaction reference is found from a previous
+  // data load -> clear the state. Otherwise keep the non-null
+  // and non-empty values which may have been set from a previous page.
+  const initialValues = txRef ? {} : pickBy(state, isNonEmpty);
+  dispatch(setInitialValues(initialValues));
 
   // Sale / order (i.e. transaction entity in API)
   return Promise.all([dispatch(fetchTransaction(txId)), dispatch(fetchMessages(txId, 1))]);

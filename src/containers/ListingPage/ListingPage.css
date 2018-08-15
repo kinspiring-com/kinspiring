@@ -526,29 +526,18 @@
   }
 }
 
-.editProfileLink {
-  @apply --marketplaceH4FontStyles;
-  position: absolute;
-  margin: 0;
-
-  /* Align to same baseline as the "Your host" heading */
-  top: 2px;
-  right: 24px;
-
-  @media (--viewportMedium) {
-    margin: 0;
-
-    /* Align to same baseline as the "Hello, ..." heading */
-    top: 74px;
-    right: 0;
-  }
-}
-
 .map {
   /* Dimensions: Map takes all available space from viewport (excludes action button and section title) */
   height: calc(100vh - 193px);
   width: 100%;
+
+  /* Static map: dimensions are 640px */
+  max-width: 640px;
+  max-height: 640px;
   background-color: #eee;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
 
   @media (--viewportMedium) {
     height: 75vh;

@@ -196,7 +196,6 @@ exports[`ListingPage matches snapshot 1`] = `
                 }
               }
               isEnquiryModalOpen={false}
-              isOwnListing={false}
               listing={
                 Object {
                   "attributes": Object {
@@ -306,6 +305,7 @@ exports[`ListingPage matches snapshot 1`] = `
                 
               </span>
             }
+            timeSlots={null}
             unitType="line-item/night"
           />
         </div>

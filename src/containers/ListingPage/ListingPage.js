@@ -198,6 +198,7 @@ export class ListingPageComponent extends Component {
       fetchReviewsError,
       sendEnquiryInProgress,
       sendEnquiryError,
+      timeSlots,
       categoriesConfig,
       // amenitiesConfig,
     } = this.props;
@@ -448,7 +449,6 @@ export class ListingPageComponent extends Component {
                   <SectionHost
                     title={title}
                     listing={currentListing}
-                    isOwnListing={isOwnListing}
                     authorDisplayName={authorDisplayName}
                     onContactUser={this.onContactUser}
                     isEnquiryModalOpen={isAuthenticated && this.state.enquiryModalOpen}
@@ -475,6 +475,7 @@ export class ListingPageComponent extends Component {
                   handleBookButtonClick={handleBookButtonClick}
                   handleMobileBookModalClose={handleMobileBookModalClose}
                   onManageDisableScrolling={onManageDisableScrolling}
+                  timeSlots={timeSlots}
                 />
               </div>
             </div>
@@ -495,6 +496,8 @@ ListingPageComponent.defaultProps = {
   showListingError: null,
   reviews: [],
   fetchReviewsError: null,
+  timeSlots: null,
+  fetchTimeSlotsError: null,
   sendEnquiryError: null,
   categoriesConfig: config.custom.categories,
   amenitiesConfig: config.custom.amenities,
@@ -530,6 +533,8 @@ ListingPageComponent.propTypes = {
   useInitialValues: func.isRequired,
   reviews: arrayOf(propTypes.review),
   fetchReviewsError: propTypes.error,
+  timeSlots: arrayOf(propTypes.timeSlot),
+  fetchTimeSlotsError: propTypes.error,
   sendEnquiryInProgress: bool.isRequired,
   sendEnquiryError: propTypes.error,
   onSendEnquiry: func.isRequired,
@@ -544,6 +549,8 @@ const mapStateToProps = state => {
     showListingError,
     reviews,
     fetchReviewsError,
+    timeSlots,
+    fetchTimeSlotsError,
     sendEnquiryInProgress,
     sendEnquiryError,
     enquiryModalOpenForListingId,
@@ -572,6 +579,8 @@ const mapStateToProps = state => {
     showListingError,
     reviews,
     fetchReviewsError,
+    timeSlots,
+    fetchTimeSlotsError,
     sendEnquiryInProgress,
     sendEnquiryError,
   };

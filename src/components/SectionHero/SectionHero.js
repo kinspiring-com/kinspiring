@@ -7,6 +7,7 @@ import { createResourceLocatorString } from '../../util/routes';
 import routeConfiguration from '../../routeConfiguration';
 import { IconSearch, Button } from '../../components';
 import { LocationSearchForm } from '../../forms';
+import config from '../../config';
 
 import css from './SectionHero.css';
 
@@ -21,8 +22,9 @@ const SectionHero = props => {
 
   const handleSearchSubmit = values => {
     const { search, selectedPlace } = values.location;
-    const { origin, bounds, country } = selectedPlace;
-    const searchParams = { address: search, origin, bounds, country };
+    const { origin, bounds } = selectedPlace;
+    const originMaybe = config.sortSearchByDistance ? { origin } : {};
+    const searchParams = { ...originMaybe, address: search, bounds };
     history.push(createResourceLocatorString('SearchPage', routeConfiguration(), {}, searchParams));
   };
 

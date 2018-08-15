@@ -70,9 +70,8 @@ propTypes.route = shape({
 // Place object from LocationAutocompleteInput
 propTypes.place = shape({
   address: string.isRequired,
-  origin: propTypes.latlng.isRequired,
+  origin: propTypes.latlng,
   bounds: propTypes.latlngBounds, // optional viewport bounds
-  country: string, // country code, e.g. FI, US
 });
 
 // Denormalised image object
@@ -182,6 +181,20 @@ propTypes.booking = shape({
   id: propTypes.uuid.isRequired,
   type: propTypes.value('booking').isRequired,
   attributes: shape({
+    end: instanceOf(Date).isRequired,
+    start: instanceOf(Date).isRequired,
+  }),
+});
+
+// A time slot that covers one day, having a start and end date.
+export const TIME_SLOT_DAY = 'time-slot/day';
+
+// Denormalised time slot object
+propTypes.timeSlot = shape({
+  id: propTypes.uuid.isRequired,
+  type: propTypes.value('timeSlot').isRequired,
+  attributes: shape({
+    type: oneOf([TIME_SLOT_DAY]).isRequired,
     end: instanceOf(Date).isRequired,
     start: instanceOf(Date).isRequired,
   }),
@@ -418,6 +431,8 @@ export const ERROR_CODE_TRANSACTION_ALREADY_REVIEWED_BY_CUSTOMER =
   'transaction-already-reviewed-by-customer';
 export const ERROR_CODE_TRANSACTION_ALREADY_REVIEWED_BY_PROVIDER =
   'transaction-already-reviewed-by-provider';
+export const ERROR_CODE_TRANSACTION_BOOKING_TIME_NOT_AVAILABLE =
+  'transaction-booking-time-not-available';
 export const ERROR_CODE_PAYMENT_FAILED = 'transaction-payment-failed';
 export const ERROR_CODE_EMAIL_TAKEN = 'email-taken';
 export const ERROR_CODE_EMAIL_NOT_FOUND = 'email-not-found';
@@ -425,6 +440,7 @@ export const ERROR_CODE_EMAIL_NOT_VERIFIED = 'email-unverified';
 export const ERROR_CODE_TOO_MANY_VERIFICATION_REQUESTS = 'email-too-many-verification-requests';
 export const ERROR_CODE_UPLOAD_OVER_LIMIT = 'request-upload-over-limit';
 export const ERROR_CODE_VALIDATION_INVALID_PARAMS = 'validation-invalid-params';
+export const ERROR_CODE_VALIDATION_INVALID_VALUE = 'validation-invalid-value';
 export const ERROR_CODE_NOT_FOUND = 'not-found';
 export const ERROR_CODE_FORBIDDEN = 'forbidden';
 export const ERROR_CODE_MISSING_STRIPE_ACCOUNT = 'transaction-missing-stripe-account';
@@ -441,6 +457,7 @@ const ERROR_CODES = [
   ERROR_CODE_TOO_MANY_VERIFICATION_REQUESTS,
   ERROR_CODE_UPLOAD_OVER_LIMIT,
   ERROR_CODE_VALIDATION_INVALID_PARAMS,
+  ERROR_CODE_VALIDATION_INVALID_VALUE,
   ERROR_CODE_NOT_FOUND,
   ERROR_CODE_FORBIDDEN,
   ERROR_CODE_MISSING_STRIPE_ACCOUNT,
