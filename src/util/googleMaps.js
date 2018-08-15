@@ -21,32 +21,26 @@ const placeBounds = place => {
   return null;
 };
 
-const placeCountry = place => {
-  if (place && place.address_components) {
-    const country = place.address_components.find(component => {
-      return component.types.includes('country');
-    });
-    return country ? country.short_name : null;
-  }
-  return null;
-};
-
 /**
  * Get a detailed place object
  *
  * @param {String} placeId - ID for a place received from the
  * autocomplete service
+ * @param {String} sessionToken - token to tie different autocomplete character searches together
+ * with getPlaceDetails call
  *
  * @return {Promise<util.propTypes.place>} Promise that
  * resolves to the detailed place, rejects if the request failed
  */
-export const getPlaceDetails = placeId =>
+export const getPlaceDetails = (placeId, sessionToken) =>
   new Promise((resolve, reject) => {
     const serviceStatus = window.google.maps.places.PlacesServiceStatus;
     const el = document.createElement('div');
     const service = new window.google.maps.places.PlacesService(el);
+    const fields = ['address_component', 'formatted_address', 'geometry', 'place_id'];
+    const sessionTokenMaybe = sessionToken ? { sessionToken } : {};
 
-    service.getDetails({ placeId }, (place, status) => {
+    service.getDetails({ placeId, fields, ...sessionTokenMaybe }, (place, status) => {
       if (status !== serviceStatus.OK) {
         reject(
           new Error(`Could not get details for place id "${placeId}", error status was "${status}"`)
@@ -56,7 +50,6 @@ export const getPlaceDetails = placeId =>
           address: place.formatted_address,
           origin: placeOrigin(place),
           bounds: placeBounds(place),
-          country: placeCountry(place),
         });
       }
     });
@@ -71,16 +64,19 @@ const predictionSuccessful = status => {
  * Get place predictions for the given search
  *
  * @param {String} search - place name or address to search
+ * @param {String} sessionToken - token to tie different autocomplete character searches together
+ * with getPlaceDetails call
  *
  * @return {Promise<{ search, predictions[] }>} - Promise of an object
  * with the original search query and an array of
  * `google.maps.places.AutocompletePrediction` objects
  */
-export const getPlacePredictions = search =>
+export const getPlacePredictions = (search, sessionToken) =>
   new Promise((resolve, reject) => {
     const service = new window.google.maps.places.AutocompleteService();
+    const sessionTokenMaybe = sessionToken ? { sessionToken } : {};
 
-    service.getPlacePredictions({ input: search }, (predictions, status) => {
+    service.getPlacePredictions({ input: search, ...sessionTokenMaybe }, (predictions, status) => {
       if (!predictionSuccessful(status)) {
         reject(new Error(`Prediction service status not OK: ${status}`));
       } else {
@@ -155,4 +151,26 @@ export const hasSameSDKBounds = (sdkBounds1, sdkBounds2) => {
     sdkBounds1.sw.lat === sdkBounds2.sw.lat &&
     sdkBounds1.sw.lng === sdkBounds2.sw.lng
   );
+};
+
+/**
+ * Calculate a bounding box in the given location
+ *
+ * @param {latlng} center - center of the bounding box
+ * @param {distance} distance - distance in meters from the center to
+ * the sides of the bounding box
+ *
+ * @return {LatLngBounds} bounding box around the given location
+ *
+ */
+export const locationBounds = (latlng, distance) => {
+  const bounds = new window.google.maps.Circle({
+    center: new window.google.maps.LatLng(latlng.lat, latlng.lng),
+    radius: distance,
+  }).getBounds();
+
+  const ne = bounds.getNorthEast();
+  const sw = bounds.getSouthWest();
+
+  return new SDKLatLngBounds(new SDKLatLng(ne.lat(), ne.lng()), new SDKLatLng(sw.lat(), sw.lng()));
 };

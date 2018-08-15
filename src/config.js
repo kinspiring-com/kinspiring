@@ -36,6 +36,15 @@ const bookingProcessAlias = 'daily-with-commission-from-both/release-1';
 // translations when the unit is changed.
 const bookingUnitType = 'line-item/day';
 
+// Should the application fetch available time slots (currently defined as
+// start and end dates) to be shown on listing page.
+const fetchAvailableTimeSlots = true;
+
+// A maximum number of days forwards during which a booking can be made.
+// This is limited due to Stripe holding funds up to 90 days from the
+// moment they are charged.
+const dayCountAvailableForBooking = 174; // ~(6 months - 1 week)
+
 // To pass environment variables to the client app in the build
 // script, react-scripts (and the sharetribe-scripts fork of
 // react-scripts) require using the REACT_APP_ prefix to avoid
@@ -250,6 +259,9 @@ const siteFacebookPage = 'https://www.facebook.com/kinspiringcom/';
 // You should create one to track social sharing in Facebook
 const facebookAppId = null;
 
+// Google Maps API key is needed for static map images.
+const googleMapsAPIKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+
 const coordinates = {
   // If true, obfuscate the coordinates of the listings that are shown
   // on a map.
@@ -278,9 +290,26 @@ const coordinates = {
     fillColor: '#c0392b',
     fillOpacity: 0.2,
     strokeColor: '#c0392b',
-    strokeWeight: 0.5,
+    strokeOpacity: 0.5,
+    strokeWeight: 1,
     clickable: false,
   },
+
+  // An option to use custom marker on static maps. Uncomment to enable it.
+  // https://developers.google.com/maps/documentation/maps-static/dev-guide#Markers
+  //
+  // Note 1: fuzzy coordinate circle overwrites these custom marker settings)
+  // Note 2: markerURI needs to be a public URI accessible by Google Maps API servers.
+  // The easiest place is /public/static/icons/ folder, but then the marker image is not available
+  // while developing through localhost.
+
+  // customMarker: {
+  //   markerURI: encodeURI(`${canonicalRootURL}/static/icons/map-marker-32x32.png`),
+  //   anchorX: 16,
+  //   anchorY: 32,
+  //   width: 32,
+  //   height: 32,
+  // },
 };
 
 // NOTE: only expose configuration that should be visible in the
@@ -291,6 +320,8 @@ const config = {
   locale,
   bookingProcessAlias,
   bookingUnitType,
+  fetchAvailableTimeSlots,
+  dayCountAvailableForBooking,
   i18n,
   sdk: {
     clientId: sdkClientId,
@@ -314,6 +345,7 @@ const config = {
   facebookAppId,
   sentryDsn,
   usingSSL,
+  googleMapsAPIKey,
   coordinates,
   custom,
 };

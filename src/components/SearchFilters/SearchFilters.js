@@ -55,9 +55,13 @@ const SearchFiltersComponent = props => {
     id: 'SearchFilters.amenitiesLabel',
   });
 
-  const initialAmenities = initialValues(urlQueryParams, amenitiesFilter.paramName);
+  const initialAmenities = amenitiesFilter
+    ? initialValues(urlQueryParams, amenitiesFilter.paramName)
+    : null;
 
-  const initialCategory = initialValue(urlQueryParams, categoryFilter.paramName);
+  const initialCategory = categoryFilter
+    ? initialValue(urlQueryParams, categoryFilter.paramName)
+    : null;
 
   const handleSelectOptions = (urlParam, options) => {
     const queryParams =
@@ -91,6 +95,7 @@ const SearchFiltersComponent = props => {
 
   const amenitiesFilterElement = amenitiesFilter ? (
     <SelectMultipleFilter
+      id={'SearchFilters.amenitiesFilter'}
       name="amenities"
       urlParam={amenitiesFilter.paramName}
       label={amenitiesLabel}
