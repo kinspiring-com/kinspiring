@@ -1,9 +1,7 @@
 ;; Preauth with daily booking transaction process
 ;;
 
-{:params {:param/provider-commission 0.10M
-          :param/customer-commission 0.02M}
- :states {:state/initial {}
+{:states {:state/initial {}
           :state/enquiry {}
           :state/preauthorized
           {:triggers [{:name :tegel.trigger/delayed
@@ -40,18 +38,18 @@
                :transition/request
                {:name :transition/request
                 :actor #{:actor.role/customer}
-                :actions [:tegel.action/create-booking
+                :actions [[:tegel.action/create-booking {:prevent-overlapping? true}]
                           :tegel.action/calculate-tx-daily-total-price
-                          :tegel.action/calculate-tx-customer-commission
-                          :tegel.action/calculate-tx-provider-commission
+                          [:tegel.action/calculate-tx-customer-commission {:commission 0.02M}]
+                          [:tegel.action/calculate-tx-provider-commission {:commission 0.10M}]
                           :tegel.action/stripe-create-charge]}
                :transition/request-after-enquiry
                {:name :transition/request-after-enquiry
                 :actor #{:actor.role/customer}
-                :actions [:tegel.action/create-booking
+                :actions [[:tegel.action/create-booking {:prevent-overlapping? true}]
                           :tegel.action/calculate-tx-daily-total-price
-                          :tegel.action/calculate-tx-customer-commission
-                          :tegel.action/calculate-tx-provider-commission
+                          [:tegel.action/calculate-tx-customer-commission {:commission 0.02M}]
+                          [:tegel.action/calculate-tx-provider-commission {:commission 0.10M}]
                           :tegel.action/stripe-create-charge]}
                :transition/accept
                {:name :transition/accept
