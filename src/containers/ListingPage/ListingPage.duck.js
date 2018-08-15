@@ -185,13 +185,55 @@ export const fetchReviews = listingId => (dispatch, getState, sdk) => {
     });
 };
 
-export const fetchTimeSlots = params => (dispatch, getState, sdk) => {
+export const fetchTimeSlots = listingId => (dispatch, getState, sdk) => {
+  // max range for a time slots query is 90 days / request
+  const maxQueryRange = 90;
+
+  const twoRequests = config.dayCountAvailableForBooking > maxQueryRange;
+
+  const rangeSize = Math.min(maxQueryRange, config.dayCountAvailableForBooking);
+
+  const start = moment().toDate();
+  const end = moment()
+    .add(rangeSize, 'days')
+    .toDate();
+  const params = { listingId, start, end };
+
   dispatch(fetchTimeSlotsRequest);
   return sdk.timeslots
     .query(params)
     .then(response => {
       const timeSlots = denormalisedResponseEntities(response);
-      dispatch(fetchTimeSlotsSuccess(timeSlots));
+
+      if (twoRequests) {
+        // run a second query if the amount of bookable days
+        // exceeds the max size of time slots response
+
+        const secondQueryRange = Math.min(
+          maxQueryRange,
+          config.dayCountAvailableForBooking - maxQueryRange
+        );
+        const secondRequestParams = {
+          listingId,
+          start: end,
+          end: moment(end)
+            .add(secondQueryRange, 'days')
+            .toDate(),
+        };
+
+        sdk.timeslots
+          .query(secondRequestParams)
+          .then(secondResponse => {
+            const secondBatch = denormalisedResponseEntities(secondResponse);
+            const combined = timeSlots.concat(secondBatch);
+            dispatch(fetchTimeSlotsSuccess(combined));
+          })
+          .catch(e => {
+            dispatch(fetchTimeSlotsError(storableError(e)));
+          });
+      } else {
+        dispatch(fetchTimeSlotsSuccess(timeSlots));
+      }
     })
     .catch(e => {
       dispatch(fetchTimeSlotsError(storableError(e)));
@@ -231,18 +273,9 @@ export const loadData = (params, search) => dispatch => {
   }
 
   if (config.fetchAvailableTimeSlots) {
-    // fetch time slots for 90 days starting today
-    // as the booking can only be done for 90 days
-    // in the future due to Stripe limitations
-    const start = moment().toDate();
-    const end = moment()
-      .add(config.dayCountAvailableForBooking, 'days')
-      .toDate();
-    const timeSlotsParams = { listingId, start, end };
-
     return Promise.all([
       dispatch(showListing(listingId)),
-      dispatch(fetchTimeSlots(timeSlotsParams)),
+      dispatch(fetchTimeSlots(listingId)),
       dispatch(fetchReviews(listingId)),
     ]);
   } else {
