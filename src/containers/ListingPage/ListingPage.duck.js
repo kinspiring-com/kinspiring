@@ -38,7 +38,7 @@ const initialState = {
   reviews: [],
   fetchReviewsError: null,
   timeSlots: null,
-  fetchTimesLotsError: null,
+  fetchTimeSlotsError: null,
   sendEnquiryInProgress: false,
   sendEnquiryError: null,
   enquiryModalOpenForListingId: null,
@@ -185,52 +185,53 @@ export const fetchReviews = listingId => (dispatch, getState, sdk) => {
     });
 };
 
+const timeSlotsRequest = params => (dispatch, getState, sdk) => {
+  return sdk.timeslots.query(params).then(response => {
+    return denormalisedResponseEntities(response);
+  });
+};
+
 export const fetchTimeSlots = listingId => (dispatch, getState, sdk) => {
-  // max range for a time slots query is 90 days / request
-  const maxQueryRange = 90;
+  dispatch(fetchTimeSlotsRequest);
 
-  const twoRequests = config.dayCountAvailableForBooking > maxQueryRange;
+  // Time slots can be fetched for 90 days at a time,
+  // for at most 180 days from now. If max number of bookable
+  // day exceeds 90, a second request is made.
 
-  const rangeSize = Math.min(maxQueryRange, config.dayCountAvailableForBooking);
+  const maxTimeSlots = 90;
+  // booking range: today + bookable days -1
+  const bookingRange = config.dayCountAvailableForBooking - 1;
+  const timeSlotsRange = Math.min(bookingRange, maxTimeSlots);
 
-  const start = moment().toDate();
+  const start = moment
+    .utc()
+    .startOf('day')
+    .toDate();
   const end = moment()
-    .add(rangeSize, 'days')
+    .utc()
+    .startOf('day')
+    .add(timeSlotsRange, 'days')
     .toDate();
   const params = { listingId, start, end };
 
-  dispatch(fetchTimeSlotsRequest);
-  return sdk.timeslots
-    .query(params)
-    .then(response => {
-      const timeSlots = denormalisedResponseEntities(response);
+  return dispatch(timeSlotsRequest(params))
+    .then(timeSlots => {
+      const secondRequest = bookingRange > maxTimeSlots;
 
-      if (twoRequests) {
-        // run a second query if the amount of bookable days
-        // exceeds the max size of time slots response
-
-        const secondQueryRange = Math.min(
-          maxQueryRange,
-          config.dayCountAvailableForBooking - maxQueryRange
-        );
-        const secondRequestParams = {
+      if (secondRequest) {
+        const secondRange = Math.min(maxTimeSlots, bookingRange - maxTimeSlots);
+        const secondParams = {
           listingId,
           start: end,
           end: moment(end)
-            .add(secondQueryRange, 'days')
+            .add(secondRange, 'days')
             .toDate(),
         };
 
-        sdk.timeslots
-          .query(secondRequestParams)
-          .then(secondResponse => {
-            const secondBatch = denormalisedResponseEntities(secondResponse);
-            const combined = timeSlots.concat(secondBatch);
-            dispatch(fetchTimeSlotsSuccess(combined));
-          })
-          .catch(e => {
-            dispatch(fetchTimeSlotsError(storableError(e)));
-          });
+        return dispatch(timeSlotsRequest(secondParams)).then(secondBatch => {
+          const combined = timeSlots.concat(secondBatch);
+          dispatch(fetchTimeSlotsSuccess(combined));
+        });
       } else {
         dispatch(fetchTimeSlotsSuccess(timeSlots));
       }

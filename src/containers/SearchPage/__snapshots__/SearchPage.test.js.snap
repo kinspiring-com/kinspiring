@@ -101,7 +101,6 @@ exports[`SearchPageComponent matches snapshot 1`] = `
       <div>
         <withRouter(SearchMapComponent)
           activeListingId={null}
-          isOpenOnModal={false}
           listings={Array []}
           onCloseAsModal={[Function]}
           onIdle={[Function]}

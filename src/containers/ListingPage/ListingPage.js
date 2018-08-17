@@ -199,6 +199,7 @@ export class ListingPageComponent extends Component {
       sendEnquiryInProgress,
       sendEnquiryError,
       timeSlots,
+      fetchTimeSlotsError,
       categoriesConfig,
       // amenitiesConfig,
     } = this.props;
@@ -476,6 +477,7 @@ export class ListingPageComponent extends Component {
                   handleMobileBookModalClose={handleMobileBookModalClose}
                   onManageDisableScrolling={onManageDisableScrolling}
                   timeSlots={timeSlots}
+                  fetchTimeSlotsError={fetchTimeSlotsError}
                 />
               </div>
             </div>
