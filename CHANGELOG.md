@@ -11,7 +11,37 @@ way to update this template, but currently, we follow a pattern:
 * Patch (v0.0.**X**): Bug fixes and small changes to components.
 
 ---
-## Upcoming version 2018-08-XX
+## v1.4.2 2018-09-06
+* [add] Reduce character queries on LocationAutocompleteInput to reduce geocoding costs.
+  [#883](https://github.com/sharetribe/flex-template-web/pull/883)
+* [change] Update git links and improve documentation
+  [#911](https://github.com/sharetribe/flex-template-web/pull/911)
+* [change] improve env-template to better defaults.
+  [#912](https://github.com/sharetribe/flex-template-web/pull/912)
+* [fix] Touch event from location autocomplete prediction list ended up causing clicks.
+  [#917](https://github.com/sharetribe/flex-template-web/pull/917)
+* [change] Disable default predictions in listing wizard
+  [#906](https://github.com/sharetribe/flex-template-web/pull/906)
+
+## v1.4.1 2018-08-21
+* [fix] Fix window resize redirecting to search page with reusable map component
+  [#905](https://github.com/sharetribe/flex-template-web/pull/905)
+
+* [change] Maps configuration has been restructured. The new
+  configuration is agnostic of the maps provider in use and works with
+  both Google Maps as well as Mapbox.
+
+  The fuzzy location circle has less configuration, but otherwise all
+  the previous settings can be set also in the new configuration. See
+  `config.js` for details.
+
+  The default location searches are now enabled in the
+  `.env-template`. For old installations, the
+  `REACT_APP_DEFAULT_SEARCHES_ENABLED` env var should be set to
+  `true`. The default searches can then be configured in
+  `src/default-location-searches.js`.
+
+  [#900](https://github.com/sharetribe/flex-template-web/pull/900)
 
 ## v1.4.0 2018-08-17
 * [change] Put availability calendar behind a feature flag
