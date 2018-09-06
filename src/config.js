@@ -26,7 +26,7 @@ const sortSearchByDistance = false;
 //
 // In a way, 'processAlias' defines which transaction process (or processes)
 // this particular web application is able to handle.
-const bookingProcessAlias = 'daily-with-commission-from-both/release-1';
+const bookingProcessAlias = 'daily-with-commission-from-both/release-2';
 
 // The transaction line item code for the main unit type in bookings.
 //
