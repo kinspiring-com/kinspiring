@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import { Form as FinalForm } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
-import classNames from 'classnames';
 
 import { propTypes } from '../../util/types';
 import { Button, Form } from '../../components';

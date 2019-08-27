@@ -121,8 +121,8 @@ const estimatedTransaction = (unitType, bookingStart, bookingEnd, unitPrice, qua
       createdAt: now,
       lastTransitionedAt: now,
       lastTransition: TRANSITION_REQUEST_PAYMENT,
-      payinTotal: totalPrice,
-      payoutTotal: totalPrice,
+      payinTotal: payInTotal,
+      payoutTotal: payInTotal,
       lineItems: [
         {
           code: unitType,

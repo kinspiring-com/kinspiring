@@ -34,7 +34,7 @@ import defaultMessages from './translations/fi.json';
 
 // Step 2:
 // Import locale rules for React Intl library
-import localeData from 'react-intl/locale-data/en';
+import 'react-intl/locale-data/en';
 import localeData from 'react-intl/locale-data/fi';
 
 // Step 3:
