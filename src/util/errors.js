@@ -15,9 +15,9 @@ import {
   ERROR_CODE_TRANSACTION_ALREADY_REVIEWED_BY_CUSTOMER,
   ERROR_CODE_TRANSACTION_ALREADY_REVIEWED_BY_PROVIDER,
   ERROR_CODE_PAYMENT_FAILED,
+  ERROR_CODE_CHARGE_ZERO_PAYIN,
   ERROR_CODE_EMAIL_TAKEN,
   ERROR_CODE_EMAIL_NOT_FOUND,
-  ERROR_CODE_EMAIL_NOT_VERIFIED,
   ERROR_CODE_TOO_MANY_VERIFICATION_REQUESTS,
   ERROR_CODE_UPLOAD_OVER_LIMIT,
   ERROR_CODE_MISSING_STRIPE_ACCOUNT,
@@ -81,13 +81,6 @@ export const isPasswordRecoveryEmailNotFoundError = error =>
   hasErrorWithCode(error, ERROR_CODE_EMAIL_NOT_FOUND);
 
 /**
- * Check if the given API error (from `sdk.passwordReset.request()`)
- * is due to the email not being verified, preventing the reset.
- */
-export const isPasswordRecoveryEmailNotVerifiedError = error =>
-  hasErrorWithCode(error, ERROR_CODE_EMAIL_NOT_VERIFIED);
-
-/**
  * Check if the given API error (from `sdk.transaction.initiate()` or
  * `sdk.transaction.initiateSpeculative()`) is due to the listing
  * being closed or deleted.
@@ -112,11 +105,20 @@ export const isTransactionInitiateBookingTimeNotAvailableError = error =>
   hasErrorWithCode(error, ERROR_CODE_TRANSACTION_BOOKING_TIME_NOT_AVAILABLE);
 
 /**
+ * Check if the given API error (from `sdk.transaction.initiate()` or
+ * `sdk.transaction.initiateSpeculative()`) is due to payment being zero.
+ */
+export const isTransactionZeroPaymentError = error =>
+  hasErrorWithCode(error, ERROR_CODE_CHARGE_ZERO_PAYIN);
+
+/**
  * Check if the given API error (from `sdk.transaction.initiate()`) is
  * due to the transaction total amount being too low for Stripe.
  */
 export const isTransactionInitiateAmountTooLowError = error => {
-  return responseAPIErrors(error).some(apiError => {
+  const isZeroPayment = isTransactionZeroPaymentError(error);
+
+  const tooLowAmount = errorAPIErrors(error).some(apiError => {
     const isPaymentFailedError =
       apiError.status === 402 && apiError.code === ERROR_CODE_PAYMENT_FAILED;
     let isAmountTooLow = false;
@@ -134,6 +136,51 @@ export const isTransactionInitiateAmountTooLowError = error => {
 
     return isPaymentFailedError && isAmountTooLow;
   });
+
+  return isZeroPayment || tooLowAmount;
+};
+
+/**
+ * Check if the given API error (from `sdk.transaction.initiate()`) is
+ * due to the transaction charge creation disabled by Stripe.
+ */
+export const isTransactionChargeDisabledError = error => {
+  const chargeCreationDisabled = errorAPIErrors(error).some(apiError => {
+    const isPaymentFailedError =
+      apiError.status === 402 && apiError.code === ERROR_CODE_PAYMENT_FAILED;
+
+    let isChargeCreationDisabled = false;
+    try {
+      const msg = apiError.meta.stripeMessage;
+      isChargeCreationDisabled =
+        msg.startsWith('Your account cannot currently make charges.') ||
+        msg.match(/verification.disabled_reason/);
+    } catch (e) {
+      // Ignore
+    }
+
+    return isPaymentFailedError && isChargeCreationDisabled;
+  });
+
+  return chargeCreationDisabled;
+};
+
+/**
+ * Check if the given API error (from `sdk.transaction.initiate()`) is
+ * due to other error in Stripe.
+ */
+export const transactionInitiateOrderStripeErrors = error => {
+  if (error) {
+    return errorAPIErrors(error).reduce((messages, apiError) => {
+      const isPaymentFailedError =
+        apiError.status === 402 && apiError.code === ERROR_CODE_PAYMENT_FAILED;
+      const hasStripeError = apiError && apiError.meta && apiError.meta.stripeMessage;
+      const stripeMessageMaybe =
+        isPaymentFailedError && hasStripeError ? [apiError.meta.stripeMessage] : [];
+      return [...messages, ...stripeMessageMaybe];
+    }, []);
+  }
+  return null;
 };
 
 /**
@@ -169,7 +216,7 @@ export const isChangePasswordWrongPassword = error => error && error.status === 
 
 /**
  * Check if the given API error (from
- * 'sdk.currentUser.createStripeAccount(payoutDetails)') is due to
+ * 'sdk.stripeAccount.create(payoutDetails)') is due to
  * invalid postal code in the given country.
  */
 export const isStripeInvalidPostalCode = error => {
@@ -179,6 +226,14 @@ export const isStripeInvalidPostalCode = error => {
     // case, so we have to recognize it from the message.
     const msg = apiError.meta && apiError.meta.stripeMessage ? apiError.meta.stripeMessage : '';
     return msgRe.test(msg);
+  });
+};
+
+export const isStripeError = error => {
+  return errorAPIErrors(error).some(apiError => {
+    // Stripe doesn't seem to give an error code for this specific
+    // case, so we have to recognize it from the message.
+    return !!(apiError.meta && apiError.meta.stripeMessage);
   });
 };
 

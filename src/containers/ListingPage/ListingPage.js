@@ -9,13 +9,25 @@ import config from '../../config';
 import routeConfiguration from '../../routeConfiguration';
 import { LISTING_STATE_PENDING_APPROVAL, LISTING_STATE_CLOSED, propTypes } from '../../util/types';
 import { types as sdkTypes } from '../../util/sdkLoader';
-import { LISTING_PAGE_PENDING_APPROVAL_VARIANT, createSlug, parse } from '../../util/urlHelpers';
+import {
+  LISTING_PAGE_DRAFT_VARIANT,
+  LISTING_PAGE_PENDING_APPROVAL_VARIANT,
+  LISTING_PAGE_PARAM_TYPE_DRAFT,
+  LISTING_PAGE_PARAM_TYPE_EDIT,
+  createSlug,
+} from '../../util/urlHelpers';
 import { formatMoney } from '../../util/currency';
 import { createResourceLocatorString, findRouteByRouteName } from '../../util/routes';
-import { ensureListing, ensureOwnListing, ensureUser, userDisplayName } from '../../util/data';
+import {
+  ensureListing,
+  ensureOwnListing,
+  ensureUser,
+  userDisplayNameAsString,
+} from '../../util/data';
 import { richText } from '../../util/richText';
 import { getMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { manageDisableScrolling, isScrollingDisabled } from '../../ducks/UI.duck';
+import { initializeCardPaymentData } from '../../ducks/stripe.duck.js';
 import {
   Page,
   NamedLink,
@@ -25,6 +37,7 @@ import {
   LayoutWrapperMain,
   LayoutWrapperFooter,
   Footer,
+  BookingPanel,
 } from '../../components';
 import { TopbarContainer, NotFoundPage } from '../../containers';
 
@@ -32,14 +45,13 @@ import { sendEnquiry, loadData, setInitialValues } from './ListingPage.duck';
 import SectionImages from './SectionImages';
 import SectionAvatar from './SectionAvatar';
 import SectionHeading from './SectionHeading';
-import SectionDescription from './SectionDescription';
-// import SectionFeatures from './SectionFeatures';
-import SectionReviews from './SectionReviews';
-import SectionHost from './SectionHost';
-// import SectionRulesMaybe from './SectionRulesMaybe';
-import SectionMapMaybe from './SectionMapMaybe';
-import SectionBooking from './SectionBooking';
 import KinspiringPublicData from './KinspiringPublicData';
+import SectionDescriptionMaybe from './SectionDescriptionMaybe';
+import SectionFeaturesMaybe from './SectionFeaturesMaybe';
+import SectionReviews from './SectionReviews';
+import SectionHostMaybe from './SectionHostMaybe';
+import SectionRulesMaybe from './SectionRulesMaybe';
+import SectionMapMaybe from './SectionMapMaybe';
 import css from './ListingPage.css';
 
 const MIN_LENGTH_FOR_LONG_WORDS_IN_TITLE = 16;
@@ -57,38 +69,6 @@ const priceData = (price, intl) => {
     };
   }
   return {};
-};
-
-const openBookModal = (history, listing) => {
-  if (!listing.id) {
-    // Listing not fully loaded yet
-    return;
-  }
-  const routes = routeConfiguration();
-  history.push(
-    createResourceLocatorString(
-      'ListingPage',
-      routes,
-      { id: listing.id.uuid, slug: createSlug(listing.attributes.title) },
-      { book: true }
-    )
-  );
-};
-
-const closeBookModal = (history, listing) => {
-  if (!listing.id) {
-    // Listing not fully loaded yet
-    return;
-  }
-  const routes = routeConfiguration();
-  history.push(
-    createResourceLocatorString(
-      'ListingPage',
-      routes,
-      { id: listing.id.uuid, slug: createSlug(listing.attributes.title) },
-      {}
-    )
-  );
 };
 
 const categoryLabel = (categories, key) => {
@@ -112,7 +92,13 @@ export class ListingPageComponent extends Component {
   }
 
   handleSubmit(values) {
-    const { history, getListing, params, useInitialValues } = this.props;
+    const {
+      history,
+      getListing,
+      params,
+      callSetInitialValues,
+      onInitializeCardPaymentData,
+    } = this.props;
     const listingId = new UUID(params.id);
     const listing = getListing(listingId);
 
@@ -125,12 +111,16 @@ export class ListingPageComponent extends Component {
         bookingStart: bookingDates.startDate,
         bookingEnd: bookingDates.endDate,
       },
+      confirmPaymentError: null,
     };
 
     const routes = routeConfiguration();
     // Customize checkout page state with current listing and selected bookingDates
     const { setInitialValues } = findRouteByRouteName('CheckoutPage', routes);
-    useInitialValues(setInitialValues, initialValues);
+    callSetInitialValues(setInitialValues, initialValues);
+
+    // Clear previous Stripe errors from store if there is any
+    onInitializeCardPaymentData();
 
     // Redirect to CheckoutPage
     history.push(
@@ -144,14 +134,14 @@ export class ListingPageComponent extends Component {
   }
 
   onContactUser() {
-    const { currentUser, history, useInitialValues, params, location } = this.props;
+    const { currentUser, history, callSetInitialValues, params, location } = this.props;
 
     if (!currentUser) {
       const state = { from: `${location.pathname}${location.search}${location.hash}` };
 
       // We need to log in before showing the modal, but first we need to ensure
       // that modal does open when user is redirected back to this listingpage
-      useInitialValues(setInitialValues, { enquiryModalOpenForListingId: params.id });
+      callSetInitialValues(setInitialValues, { enquiryModalOpenForListingId: params.id });
 
       // signup and return back to listingPage.
       history.push(createResourceLocatorString('SignupPage', routeConfiguration(), {}, {}), state);
@@ -193,7 +183,6 @@ export class ListingPageComponent extends Component {
       location,
       scrollingDisabled,
       showListingError,
-      history,
       reviews,
       fetchReviewsError,
       sendEnquiryInProgress,
@@ -204,15 +193,21 @@ export class ListingPageComponent extends Component {
       // amenitiesConfig,
     } = this.props;
 
-    const isBook = !!parse(location.search).book;
     const listingId = new UUID(rawParams.id);
     const isPendingApprovalVariant = rawParams.variant === LISTING_PAGE_PENDING_APPROVAL_VARIANT;
-    const currentListing = isPendingApprovalVariant
-      ? ensureOwnListing(getOwnListing(listingId))
-      : ensureListing(getListing(listingId));
+    const isDraftVariant = rawParams.variant === LISTING_PAGE_DRAFT_VARIANT;
+    const currentListing =
+      isPendingApprovalVariant || isDraftVariant
+        ? ensureOwnListing(getOwnListing(listingId))
+        : ensureListing(getListing(listingId));
 
     const listingSlug = rawParams.slug || createSlug(currentListing.attributes.title || '');
     const params = { slug: listingSlug, ...rawParams };
+
+    const listingType = isDraftVariant
+      ? LISTING_PAGE_PARAM_TYPE_DRAFT
+      : LISTING_PAGE_PARAM_TYPE_EDIT;
+    const listingTab = isDraftVariant ? 'photos' : 'description';
 
     const isApproved =
       currentListing.id && currentListing.attributes.state !== LISTING_STATE_PENDING_APPROVAL;
@@ -225,7 +220,9 @@ export class ListingPageComponent extends Component {
     // another user. We use this information to try to fetch the
     // public listing.
     const pendingOtherUsersListing =
-      isPendingApprovalVariant && showListingError && showListingError.status === 403;
+      (isPendingApprovalVariant || isDraftVariant) &&
+      showListingError &&
+      showListingError.status === 403;
     const shouldShowPublicListingPage = pendingIsApproved || pendingOtherUsersListing;
 
     if (shouldShowPublicListingPage) {
@@ -248,6 +245,11 @@ export class ListingPageComponent extends Component {
         })}
       </span>
     );
+
+    const bookingTitle = (
+      <FormattedMessage id="ListingPage.bookingTitle" values={{ title: richTitle }} />
+    );
+    const bookingSubTitle = intl.formatMessage({ id: 'ListingPage.bookingSubTitle' });
 
     const topbar = <TopbarContainer />;
 
@@ -313,22 +315,17 @@ export class ListingPageComponent extends Component {
     const userAndListingAuthorAvailable = !!(currentUser && authorAvailable);
     const isOwnListing =
       userAndListingAuthorAvailable && currentListing.author.id.uuid === currentUser.id.uuid;
-    const isClosed = currentListing.attributes.state === LISTING_STATE_CLOSED;
-    const showContactUser = !currentUser || (currentUser && !isOwnListing);
+    const showContactUser = authorAvailable && (!currentUser || (currentUser && !isOwnListing));
 
     const currentAuthor = authorAvailable ? currentListing.author : null;
     const ensuredAuthor = ensureUser(currentAuthor);
 
-    const bannedUserDisplayName = intl.formatMessage({
-      id: 'ListingPage.bannedUserDisplayName',
-    });
-    const authorDisplayName = userDisplayName(ensuredAuthor, bannedUserDisplayName);
+    // When user is banned or deleted the listing is also deleted.
+    // Because listing can be never showed with banned or deleted user we don't have to provide
+    // banned or deleted display names for the function
+    const authorDisplayName = userDisplayNameAsString(ensuredAuthor, '');
 
     const { formattedPrice, priceTitle } = priceData(price, intl);
-
-    const handleMobileBookModalClose = () => {
-      closeBookModal(history, currentListing);
-    };
 
     const handleBookingSubmit = values => {
       const isCurrentlyClosed = currentListing.attributes.state === LISTING_STATE_CLOSED;
@@ -336,15 +333,6 @@ export class ListingPageComponent extends Component {
         window.scrollTo(0, 0);
       } else {
         this.handleSubmit(values);
-      }
-    };
-
-    const handleBookButtonClick = () => {
-      const isCurrentlyClosed = currentListing.attributes.state === LISTING_STATE_CLOSED;
-      if (isOwnListing || isCurrentlyClosed) {
-        window.scrollTo(0, 0);
-      } else {
-        openBookModal(history, currentListing);
       }
     };
 
@@ -419,8 +407,8 @@ export class ListingPageComponent extends Component {
                 editParams={{
                   id: listingId.uuid,
                   slug: listingSlug,
-                  type: 'edit',
-                  tab: 'description',
+                  type: listingType,
+                  tab: listingTab,
                 }}
                 imageCarouselOpen={this.state.imageCarouselOpen}
                 onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
@@ -439,15 +427,17 @@ export class ListingPageComponent extends Component {
                     showContactUser={showContactUser}
                     onContactUser={this.onContactUser}
                   />
-                  <SectionDescription description={description} />
+                  <SectionDescriptionMaybe description={description} />
                   <KinspiringPublicData publicData={publicData} />
+                  {/* <SectionFeaturesMaybe options={amenitiesConfig} publicData={publicData} />
+                  <SectionRulesMaybe publicData={publicData} /> */}
                   <SectionMapMaybe
                     geolocation={geolocation}
                     publicData={publicData}
                     listingId={currentListing.id}
                   />
                   <SectionReviews reviews={reviews} fetchReviewsError={fetchReviewsError} />
-                  <SectionHost
+                  <SectionHostMaybe
                     title={title}
                     listing={currentListing}
                     authorDisplayName={authorDisplayName}
@@ -461,20 +451,15 @@ export class ListingPageComponent extends Component {
                     onManageDisableScrolling={onManageDisableScrolling}
                   />
                 </div>
-                <SectionBooking
+                <BookingPanel
+                  className={css.bookingPanel}
                   listing={currentListing}
                   isOwnListing={isOwnListing}
-                  isClosed={isClosed}
-                  isBook={isBook}
                   unitType={unitType}
-                  price={price}
-                  formattedPrice={formattedPrice}
-                  priceTitle={priceTitle}
-                  handleBookingSubmit={handleBookingSubmit}
-                  richTitle={richTitle}
+                  onSubmit={handleBookingSubmit}
+                  title={bookingTitle}
+                  subTitle={bookingSubTitle}
                   authorDisplayName={authorDisplayName}
-                  handleBookButtonClick={handleBookButtonClick}
-                  handleMobileBookModalClose={handleMobileBookModalClose}
                   onManageDisableScrolling={onManageDisableScrolling}
                   timeSlots={timeSlots}
                   fetchTimeSlotsError={fetchTimeSlotsError}
@@ -521,7 +506,7 @@ ListingPageComponent.propTypes = {
   params: shape({
     id: string.isRequired,
     slug: string,
-    variant: oneOf([LISTING_PAGE_PENDING_APPROVAL_VARIANT]),
+    variant: oneOf([LISTING_PAGE_DRAFT_VARIANT, LISTING_PAGE_PENDING_APPROVAL_VARIANT]),
   }).isRequired,
 
   isAuthenticated: bool.isRequired,
@@ -532,7 +517,7 @@ ListingPageComponent.propTypes = {
   scrollingDisabled: bool.isRequired,
   enquiryModalOpenForListingId: string,
   showListingError: propTypes.error,
-  useInitialValues: func.isRequired,
+  callSetInitialValues: func.isRequired,
   reviews: arrayOf(propTypes.review),
   fetchReviewsError: propTypes.error,
   timeSlots: arrayOf(propTypes.timeSlot),
@@ -540,6 +525,7 @@ ListingPageComponent.propTypes = {
   sendEnquiryInProgress: bool.isRequired,
   sendEnquiryError: propTypes.error,
   onSendEnquiry: func.isRequired,
+  onInitializeCardPaymentData: func.isRequired,
 
   categoriesConfig: array,
   amenitiesConfig: array,
@@ -591,8 +577,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   onManageDisableScrolling: (componentId, disableScrolling) =>
     dispatch(manageDisableScrolling(componentId, disableScrolling)),
-  useInitialValues: (setInitialValues, values) => dispatch(setInitialValues(values)),
+  callSetInitialValues: (setInitialValues, values) => dispatch(setInitialValues(values)),
   onSendEnquiry: (listingId, message) => dispatch(sendEnquiry(listingId, message)),
+  onInitializeCardPaymentData: () => dispatch(initializeCardPaymentData()),
 });
 
 // Note: it is important that the withRouter HOC is **outside** the
@@ -601,9 +588,14 @@ const mapDispatchToProps = dispatch => ({
 // lifecycle hook.
 //
 // See: https://github.com/ReactTraining/react-router/issues/4671
-const ListingPage = compose(withRouter, connect(mapStateToProps, mapDispatchToProps), injectIntl)(
-  ListingPageComponent
-);
+const ListingPage = compose(
+  withRouter,
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
+  injectIntl
+)(ListingPageComponent);
 
 ListingPage.setInitialValues = initialValues => setInitialValues(initialValues);
 ListingPage.loadData = loadData;

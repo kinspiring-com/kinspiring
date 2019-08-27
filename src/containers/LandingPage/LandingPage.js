@@ -64,7 +64,7 @@ export const LandingPageComponent = props => {
           </div>
           <ul className={css.sections}>
             <li className={css.section}>
-              <div className={css.sectionContent}>
+              <div className={css.sectionContentFirstChild}>
                 <KinspiringSectionLinks />
               </div>
             </li>
@@ -113,6 +113,10 @@ const mapStateToProps = state => {
 // lifecycle hook.
 //
 // See: https://github.com/ReactTraining/react-router/issues/4671
-const LandingPage = compose(withRouter, connect(mapStateToProps), injectIntl)(LandingPageComponent);
+const LandingPage = compose(
+  withRouter,
+  connect(mapStateToProps),
+  injectIntl
+)(LandingPageComponent);
 
 export default LandingPage;

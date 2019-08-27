@@ -1,5 +1,6 @@
 import React from 'react';
 import { bool, func, string, shape, arrayOf } from 'prop-types';
+import classNames from 'classnames';
 import { Form as FinalForm } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
@@ -26,11 +27,11 @@ const EditListingFeaturesFormComponent = props => (
         pristine,
         saveActionMsg,
         updated,
-        updateError,
         updateInProgress,
         intl,
         categories,
         values,
+        fetchErrors,
       } = fieldRenderProps;
 
       const { category } = values || {};
@@ -39,15 +40,23 @@ const EditListingFeaturesFormComponent = props => (
       const submitInProgress = updateInProgress;
       const submitDisabled = disabled || submitInProgress;
 
-      const errorMessage = updateError ? (
+      const { updateListingError, showListingsError } = fetchErrors || {};
+      const errorMessage = updateListingError ? (
         <p className={css.error}>
           <FormattedMessage id="EditListingFeaturesForm.updateFailed" />
+        </p>
+      ) : null;
+
+      const errorMessageShowListing = showListingsError ? (
+        <p className={css.error}>
+          <FormattedMessage id="EditListingFeaturesForm.showListingFailed" />
         </p>
       ) : null;
 
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           {errorMessage}
+          {errorMessageShowListing}
 
           <CustomCategorySelectFieldMaybe
             id="category"
@@ -77,7 +86,7 @@ const EditListingFeaturesFormComponent = props => (
 EditListingFeaturesFormComponent.defaultProps = {
   rootClassName: null,
   className: null,
-  updateError: null,
+  fetchErrors: null,
 };
 
 EditListingFeaturesFormComponent.propTypes = {
@@ -87,7 +96,6 @@ EditListingFeaturesFormComponent.propTypes = {
   onSubmit: func.isRequired,
   saveActionMsg: string.isRequired,
   updated: bool.isRequired,
-  updateError: propTypes.error,
   updateInProgress: bool.isRequired,
 
   categories: arrayOf(
@@ -98,6 +106,10 @@ EditListingFeaturesFormComponent.propTypes = {
   ),
 
   intl: intlShape.isRequired,
+  fetchErrors: shape({
+    showListingsError: propTypes.error,
+    updateListingError: propTypes.error,
+  }),
 };
 
 const EditListingFeaturesForm = injectIntl(EditListingFeaturesFormComponent);

@@ -14,10 +14,6 @@
   --CheckoutPage_logoHeightDesktop: 27px;
 }
 
-.loading {
-  margin: 24px;
-}
-
 /* Dummy Topbar */
 
 .topbar {
@@ -202,7 +198,7 @@
 
 .priceBreakdownContainer {
   padding: 0 24px;
-  margin-bottom: 40px;
+  margin-bottom: 37px;
 
   @media (--viewportMedium) {
     margin-bottom: 38px;
@@ -237,7 +233,12 @@
   padding: 0 24px;
   margin-bottom: 35px;
 
+  @media (--viewportMedium) {
+    margin-top: 2px;
+  }
+
   @media (--viewportLarge) {
+    margin-top: 4px;
     padding: 0;
   }
 }
@@ -311,13 +312,12 @@
 
   @media (--viewportLarge) {
     margin-top: 17px;
-    margin-bottom: 0;
+    margin-bottom: 9px;
   }
 }
 
 .detailsSubtitle {
   @apply --marketplaceH5FontStyles;
-  color: var(--matterColorAnti);
 
   /* Reset margins from font styles */
   margin-top: 0;
@@ -337,7 +337,7 @@
   margin: 5px 24px 25px 24px;
 
   @media (--viewportLarge) {
-    margin: 38px 48px 26px 48px;
+    margin: 37px 48px 26px 48px;
   }
 }
 

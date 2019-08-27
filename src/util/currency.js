@@ -2,7 +2,7 @@ import has from 'lodash/has';
 import trimEnd from 'lodash/trimEnd';
 import Decimal from 'decimal.js';
 import { types as sdkTypes } from './sdkLoader';
-import { subUnitDivisors } from './currencyConfig';
+import { subUnitDivisors } from '../currency-config';
 
 const { Money } = sdkTypes;
 
@@ -254,6 +254,33 @@ export const formatMoney = (intl, value) => {
     useGrouping: true,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
+  };
+
+  return intl.formatNumber(valueAsNumber, numberFormatOptions);
+};
+
+/**
+ * Format the given major-unit string value as currency. E.g. "10" -> "$10".
+ *
+ * NOTE: This function should not be used with listing prices or other Money type.
+ * This can be used with price filters and other components that doesn't send Money types to API.
+ *
+ * @param {Object} intl
+ * @param {String} value
+ *
+ * @return {String} formatted money value
+ */
+export const formatCurrencyMajorUnit = (intl, currency, valueWithoutSubunits) => {
+  const valueAsNumber = new Decimal(valueWithoutSubunits).toNumber();
+
+  // See: https://github.com/yahoo/react-intl/wiki/API#formatnumber
+  const numberFormatOptions = {
+    style: 'currency',
+    currency,
+    currencyDisplay: 'symbol',
+    useGrouping: true,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   };
 
   return intl.formatNumber(valueAsNumber, numberFormatOptions);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, intlShape } from 'react-intl';
 import classNames from 'classnames';
@@ -32,6 +32,14 @@ const TopbarDesktop = props => {
     onSearchSubmit,
     initialSearchFormValues,
   } = props;
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const authenticatedOnClientSide = mounted && isAuthenticated;
+  const isAuthenticatedOrJustHydrated = isAuthenticated || !mounted;
 
   const classes = classNames(rootClassName || css.root, className);
 
@@ -47,7 +55,7 @@ const TopbarDesktop = props => {
 
   const notificationDot = notificationCount > 0 ? <div className={css.notificationDot} /> : null;
 
-  const inboxLink = isAuthenticated ? (
+  const inboxLink = authenticatedOnClientSide ? (
     <NamedLink
       className={css.inboxLink}
       name="InboxPage"
@@ -66,7 +74,7 @@ const TopbarDesktop = props => {
     return currentPage === page || isAccountSettingsPage ? css.currentPage : null;
   };
 
-  const profileMenu = isAuthenticated ? (
+  const profileMenu = authenticatedOnClientSide ? (
     <Menu>
       <MenuLabel className={css.profileMenuLabel} isOpenClassName={css.profileMenuIsOpen}>
         <Avatar className={css.avatar} user={currentUser} disableProfileLink />
@@ -100,7 +108,7 @@ const TopbarDesktop = props => {
           </NamedLink>
         </MenuItem>
         <MenuItem key="logout">
-          <InlineTextButton className={css.logoutButton} onClick={onLogout}>
+          <InlineTextButton rootClassName={css.logoutButton} onClick={onLogout}>
             <span className={css.menuItemBorder} />
             <FormattedMessage id="TopbarDesktop.logout" />
           </InlineTextButton>
@@ -109,7 +117,7 @@ const TopbarDesktop = props => {
     </Menu>
   ) : null;
 
-  const signupLink = isAuthenticated ? null : (
+  const signupLink = isAuthenticatedOrJustHydrated ? null : (
     <NamedLink name="SignupPage" className={css.signupLink}>
       <span className={css.signup}>
         <FormattedMessage id="TopbarDesktop.signup" />
@@ -117,7 +125,7 @@ const TopbarDesktop = props => {
     </NamedLink>
   );
 
-  const loginLink = isAuthenticated ? null : (
+  const loginLink = isAuthenticatedOrJustHydrated ? null : (
     <NamedLink name="LoginPage" className={css.loginLink}>
       <span className={css.login}>
         <FormattedMessage id="TopbarDesktop.login" />

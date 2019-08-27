@@ -66,57 +66,36 @@ const predictionSuccessful = status => {
  * @param {String} search - place name or address to search
  * @param {String} sessionToken - token to tie different autocomplete character searches together
  * with getPlaceDetails call
+ * @param {Object} searchConfigurations - defines the search configurations that can be used with
+ * the autocomplete service. Used to restrict search to specific country (or countries).
  *
  * @return {Promise<{ search, predictions[] }>} - Promise of an object
  * with the original search query and an array of
  * `google.maps.places.AutocompletePrediction` objects
  */
-export const getPlacePredictions = (search, sessionToken) =>
+export const getPlacePredictions = (search, sessionToken, searchConfigurations) =>
   new Promise((resolve, reject) => {
     const service = new window.google.maps.places.AutocompleteService();
     const sessionTokenMaybe = sessionToken ? { sessionToken } : {};
 
-    service.getPlacePredictions({ input: search, ...sessionTokenMaybe }, (predictions, status) => {
-      if (!predictionSuccessful(status)) {
-        reject(new Error(`Prediction service status not OK: ${status}`));
-      } else {
-        const results = {
-          search,
-          predictions: predictions || [],
-        };
-        resolve(results);
+    service.getPlacePredictions(
+      { input: search, ...sessionTokenMaybe, ...searchConfigurations },
+      (predictions, status) => {
+        if (!predictionSuccessful(status)) {
+          reject(new Error(`Prediction service status not OK: ${status}`));
+        } else {
+          const results = {
+            search,
+            predictions: predictions || [],
+          };
+          resolve(results);
+        }
       }
-    });
+    );
   });
 
 /**
- * Convert Google formatted LatLng object to Sharetribe SDK's LatLng coordinate format
- *
- * @param {LatLng} googleLatLng - Google Maps LatLng
- *
- * @return {SDKLatLng} - Converted latLng coordinate
- */
-export const googleLatLngToSDKLatLng = googleLatLng => {
-  return new SDKLatLng(googleLatLng.lat(), googleLatLng.lng());
-};
-
-/**
- * Convert Google formatted bounds object to Sharetribe SDK's bounds format
- *
- * @param {LatLngBounds} googleBounds - Google Maps LatLngBounds
- *
- * @return {SDKLatLngBounds} - Converted bounds
- */
-export const googleBoundsToSDKBounds = googleBounds => {
-  if (!googleBounds) {
-    return null;
-  }
-  const ne = googleBounds.getNorthEast();
-  const sw = googleBounds.getSouthWest();
-  return new SDKLatLngBounds(new SDKLatLng(ne.lat(), ne.lng()), new SDKLatLng(sw.lat(), sw.lng()));
-};
-
-/**
+ * Deprecation: use function from src/util/maps.js
  * Cut some precision from bounds coordinates to tackle subtle map movements
  * when map is moved manually
  *
@@ -134,6 +113,7 @@ export const sdkBoundsToFixedCoordinates = (sdkBounds, fixedPrecision) => {
 };
 
 /**
+ * Deprecation: use function from src/util/maps.js
  * Check if given bounds object have the same coordinates
  *
  * @param {LatLngBounds} sdkBounds1 - bounds #1 to be compared

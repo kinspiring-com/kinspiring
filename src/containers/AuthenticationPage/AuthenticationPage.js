@@ -157,7 +157,7 @@ export class AuthenticationPageComponent extends Component {
     const email = <span className={css.email}>{user.attributes.email}</span>;
 
     const resendEmailLink = (
-      <InlineTextButton className={css.modalHelperLink} onClick={onResendVerificationEmail}>
+      <InlineTextButton rootClassName={css.modalHelperLink} onClick={onResendVerificationEmail}>
         <FormattedMessage id="AuthenticationPage.resendEmailLinkText" />
       </InlineTextButton>
     );
@@ -324,7 +324,10 @@ const mapDispatchToProps = dispatch => ({
 // See: https://github.com/ReactTraining/react-router/issues/4671
 const AuthenticationPage = compose(
   withRouter,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
   injectIntl
 )(AuthenticationPageComponent);
 

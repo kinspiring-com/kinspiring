@@ -17,6 +17,7 @@ const Example = props => {
     description,
     props: exampleProps,
     useDefaultWrapperStyles,
+    rawOnly,
   } = props;
 
   const exampleWrapperClassName = useDefaultWrapperStyles ? css.defaultWrapperStyles : '';
@@ -30,8 +31,8 @@ const Example = props => {
           className={css.link}
         >
           {componentName}
-        </NamedLink>
-        /
+        </NamedLink>{' '}
+        /{' '}
         <NamedLink
           name="StyleguideComponentExample"
           params={{ component: componentName, example: exampleName }}
@@ -51,7 +52,20 @@ const Example = props => {
       </span>
       {desc}
       <div className={exampleWrapperClassName}>
-        <ExampleComponent {...exampleProps} />
+        {rawOnly ? (
+          <p>
+            This component is available in{' '}
+            <NamedLink
+              name="StyleguideComponentExampleRaw"
+              params={{ component: componentName, example: exampleName }}
+            >
+              raw mode
+            </NamedLink>{' '}
+            only.
+          </p>
+        ) : (
+          <ExampleComponent {...exampleProps} />
+        )}
       </div>
     </li>
   );
@@ -196,7 +210,9 @@ const StyleguidePage = props => {
   const html =
     examples.length > 0 ? (
       <ul className={css.examplesList}>
-        {examples.map(ex => <Example key={`${ex.componentName}/${ex.exampleName}`} {...ex} />)}
+        {examples.map(ex => (
+          <Example key={`${ex.componentName}/${ex.exampleName}`} {...ex} />
+        ))}
       </ul>
     ) : (
       <p>

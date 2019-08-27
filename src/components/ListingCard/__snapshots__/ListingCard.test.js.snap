@@ -16,12 +16,9 @@ exports[`ListingCard matches snapshot 1`] = `
     onMouseLeave={[Function]}
   >
     <div>
-      <ResponsiveImage
+      <lazyLoadWithDimensions(ListingImage)
         alt="listing1 title"
-        className={null}
         image={null}
-        noImageMessage={null}
-        rootClassName={null}
         sizes={null}
         variants={
           Array [
@@ -41,7 +38,7 @@ exports[`ListingCard matches snapshot 1`] = `
       </div>
       <div>
         <FormattedMessage
-          id="ListingCard.perUnit"
+          id="ListingCard.perNight"
           values={Object {}}
         />
       </div>

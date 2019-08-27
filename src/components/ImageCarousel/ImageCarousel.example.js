@@ -109,8 +109,6 @@ const imageLandscape = {
 
 const ImageCarouselWrapper = props => {
   const wrapperStyles = {
-    width: '100%',
-    height: 400,
     backgroundColor: '#000',
   };
   return (
@@ -123,14 +121,17 @@ const ImageCarouselWrapper = props => {
 export const NoImages = {
   component: ImageCarouselWrapper,
   props: { images: [] },
+  rawOnly: true,
 };
 
 export const SingleImage = {
   component: ImageCarouselWrapper,
   props: { images: [imageSquare] },
+  rawOnly: true,
 };
 
 export const MultipleImages = {
   component: ImageCarouselWrapper,
   props: { images: [imageLandscape, imagePortrait, imageSquare] },
+  rawOnly: true,
 };

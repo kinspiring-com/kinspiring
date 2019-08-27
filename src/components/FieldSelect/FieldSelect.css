@@ -6,6 +6,14 @@
 .select {
   color: var(--matterColorAnti);
   border-bottom-color: var(--attentionColor);
+  padding-right: 20px;
+
+  & > option {
+    color: var(--matterColor);
+  }
+  & > option:disabled {
+    color: var(--matterColorAnti);
+  }
 }
 
 .selectSuccess {

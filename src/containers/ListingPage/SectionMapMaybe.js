@@ -22,11 +22,12 @@ class SectionMapMaybe extends Component {
       return null;
     }
 
-    const address = publicData.location ? publicData.location.address : '';
+    const address = publicData && publicData.location ? publicData.location.address : '';
     const classes = classNames(rootClassName || css.sectionMap, className);
+    const cacheKey = listingId ? `${listingId.uuid}_${geolocation.lat}_${geolocation.lng}` : null;
 
     const mapProps = config.maps.fuzzy.enabled
-      ? { obfuscatedCenter: obfuscatedCoordinates(geolocation, listingId ? listingId.uuid : null) }
+      ? { obfuscatedCenter: obfuscatedCoordinates(geolocation, cacheKey) }
       : { address, center: geolocation };
     const map = <Map {...mapProps} useStaticMap={this.state.isStatic} />;
 

@@ -1,21 +1,14 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import { array, bool, func, number, oneOf, object, shape, string } from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import debounce from 'lodash/debounce';
-import isEqual from 'lodash/isEqual';
 import unionWith from 'lodash/unionWith';
 import classNames from 'classnames';
 import config from '../../config';
 import routeConfiguration from '../../routeConfiguration';
-import {
-  googleLatLngToSDKLatLng,
-  googleBoundsToSDKBounds,
-  sdkBoundsToFixedCoordinates,
-  hasSameSDKBounds,
-} from '../../util/googleMaps';
 import { createResourceLocatorString, pathByRouteName } from '../../util/routes';
 import { parse, stringify } from '../../util/urlHelpers';
 import { propTypes } from '../../util/types';
@@ -40,7 +33,6 @@ import css from './SearchPage.css';
 const RESULT_PAGE_SIZE = 24;
 const MODAL_BREAKPOINT = 768; // Search is in modal on mobile layout
 const SEARCH_WITH_MAP_DEBOUNCE = 300; // Little bit of debounce before search is initiated.
-const BOUNDS_FIXED_PRECISION = 8;
 
 export class SearchPageComponent extends Component {
   constructor(props) {
@@ -51,23 +43,28 @@ export class SearchPageComponent extends Component {
       isMobileModalOpen: false,
     };
 
-    // Initiating map creates 'bounds_changes' event
-    // we listen to that event to make new searches
-    // So, if the search comes from location search input (this.viewportBounds == null),
-    // we need to by pass extra searches created by Google Map's 'indle' event.
-    // This is done by keeping track of map's viewport bounds (which differ from location bounds)
-    this.viewportBounds = null;
-    this.modalOpenedBoundsChange = false;
     this.searchMapListingsInProgress = false;
 
     this.filters = this.filters.bind(this);
-    this.onIdle = debounce(this.onIdle.bind(this), SEARCH_WITH_MAP_DEBOUNCE);
+    this.onMapMoveEnd = debounce(this.onMapMoveEnd.bind(this), SEARCH_WITH_MAP_DEBOUNCE);
     this.onOpenMobileModal = this.onOpenMobileModal.bind(this);
     this.onCloseMobileModal = this.onCloseMobileModal.bind(this);
   }
 
   filters() {
-    const { categories, amenities, brands } = this.props;
+    const {
+      categories,
+      amenities,
+      priceFilterConfig,
+      dateRangeFilterConfig,
+      keywordFilterConfig,
+      brands
+    } = this.props;
+
+    // Note: "category" and "amenities" filters are not actually filtering anything by default.
+    // Currently, if you want to use them, we need to manually configure them to be available
+    // for search queries. Read more from extended data document:
+    // https://www.sharetribe.com/docs/references/extended-data/#data-schema
 
     return {
       categoryFilter: {
@@ -82,59 +79,50 @@ export class SearchPageComponent extends Component {
         paramName: 'pub_brand',
         options: brands,
       },
+      priceFilter: {
+        paramName: 'price',
+        config: priceFilterConfig,
+      },
+      dateRangeFilter: {
+        paramName: 'dates',
+        config: dateRangeFilterConfig,
+      },
+      keywordFilter: {
+        paramName: 'keywords',
+        config: keywordFilterConfig,
+      },
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!isEqual(this.props.location, nextProps.location)) {
-      // If no mapSearch url parameter is given, this is original location search
-      const { mapSearch } = parse(nextProps.location.search, {
-        latlng: ['origin'],
-        latlngBounds: ['bounds'],
-      });
-      if (!mapSearch) {
-        this.viewportBounds = null;
-      }
-    }
-  }
-
-  // We are using Google Maps idle event instead of bounds_changed, since it will not be fired
-  // too often (in the middle of map's pan or zoom activity)
-  onIdle(googleMap) {
-    const { history, location } = this.props;
-
-    // parse query parameters, including a custom attribute named category
-    const { address, bounds, mapSearch, ...rest } = parse(location.search, {
-      latlng: ['origin'],
-      latlngBounds: ['bounds'],
-    });
-
-    const viewportGMapBounds = googleMap.getBounds();
-    const viewportBounds = sdkBoundsToFixedCoordinates(
-      googleBoundsToSDKBounds(viewportGMapBounds),
-      BOUNDS_FIXED_PRECISION
-    );
-
-    // ViewportBounds from (previous) rendering differ from viewportBounds currently set to map
-    // I.e. user has changed the map somehow: moved, panned, zoomed, resized
-    const viewportBoundsChanged =
-      this.viewportBounds && !hasSameSDKBounds(this.viewportBounds, viewportBounds);
+  // Callback to determine if new search is needed
+  // when map is moved by user or viewport has changed
+  onMapMoveEnd(viewportBoundsChanged, data) {
+    const { viewportBounds, viewportCenter } = data;
 
     const routes = routeConfiguration();
     const searchPagePath = pathByRouteName('SearchPage', routes);
     const currentPath =
       typeof window !== 'undefined' && window.location && window.location.pathname;
 
-    // When using the ReusableMapContainer onIdle can fire from other pages than SearchPage too
+    // When using the ReusableMapContainer onMapMoveEnd can fire from other pages than SearchPage too
     const isSearchPage = currentPath === searchPagePath;
 
-    // If mapSearch url param is given (and we have not just opened mobile map modal)
+    // If mapSearch url param is given
     // or original location search is rendered once,
-    // we start to react to 'bounds_changed' event by generating new searches
-    if (viewportBoundsChanged && !this.modalOpenedBoundsChange && isSearchPage) {
-      const originMaybe = config.sortSearchByDistance
-        ? { origin: googleLatLngToSDKLatLng(viewportGMapBounds.getCenter()) }
-        : {};
+    // we start to react to "mapmoveend" events by generating new searches
+    // (i.e. 'moveend' event in Mapbox and 'bounds_changed' in Google Maps)
+    if (viewportBoundsChanged && isSearchPage) {
+      const { history, location } = this.props;
+
+      // parse query parameters, including a custom attribute named category
+      const { address, bounds, mapSearch, ...rest } = parse(location.search, {
+        latlng: ['origin'],
+        latlngBounds: ['bounds'],
+      });
+
+      //const viewportMapCenter = SearchMap.getMapCenter(map);
+      const originMaybe = config.sortSearchByDistance ? { origin: viewportCenter } : {};
+
       const searchParams = {
         address,
         ...originMaybe,
@@ -143,11 +131,7 @@ export class SearchPageComponent extends Component {
         ...validFilterParams(rest, this.filters()),
       };
 
-      this.viewportBounds = viewportBounds;
       history.push(createResourceLocatorString('SearchPage', routes, {}, searchParams));
-    } else {
-      this.viewportBounds = viewportBounds;
-      this.modalOpenedBoundsChange = false;
     }
   }
 
@@ -204,7 +188,6 @@ export class SearchPageComponent extends Component {
 
     const onMapIconClick = () => {
       this.useLocationSearchBounds = true;
-      this.modalOpenedBoundsChange = true;
       this.setState({ isSearchMapOpenOnMobile: true });
     };
 
@@ -251,6 +234,9 @@ export class SearchPageComponent extends Component {
               categoryFilter: filters.categoryFilter,
               amenitiesFilter: filters.amenitiesFilter,
               brandFilter: filters.brandFilter,
+              priceFilter: filters.priceFilter,
+              dateRangeFilter: filters.dateRangeFilter,
+              keywordFilter: filters.keywordFilter,
             }}
           />
           <ModalInMobile
@@ -268,12 +254,14 @@ export class SearchPageComponent extends Component {
                   activeListingId={activeListingId}
                   bounds={bounds}
                   center={origin}
+                  isSearchMapOpenOnMobile={this.state.isSearchMapOpenOnMobile}
+                  location={location}
                   listings={mapListings || []}
-                  onIdle={this.onIdle}
+                  onMapMoveEnd={this.onMapMoveEnd}
                   onCloseAsModal={() => {
                     onManageDisableScrolling('SearchPage.map', false);
                   }}
-                  useLocationSearchBounds={!this.viewportBounds}
+                  messages={intl.messages}
                 />
               ) : null}
             </div>
@@ -295,10 +283,11 @@ SearchPageComponent.defaultProps = {
   categories: config.custom.categories,
   amenities: config.custom.amenities,
   brands: config.custom.brands,
+  priceFilterConfig: config.custom.priceFilterConfig,
+  dateRangeFilterConfig: config.custom.dateRangeFilterConfig,
+  keywordFilterConfig: config.custom.keywordFilterConfig,
   activeListingId: null,
 };
-
-const { array, bool, func, oneOf, object, shape, string } = PropTypes;
 
 SearchPageComponent.propTypes = {
   listings: array,
@@ -315,6 +304,12 @@ SearchPageComponent.propTypes = {
   categories: array,
   amenities: array,
   brands: array,
+  priceFilterConfig: shape({
+    min: number.isRequired,
+    max: number.isRequired,
+    step: number.isRequired,
+  }),
+  dateRangeFilterConfig: shape({ active: bool.isRequired }),
 
   // from withRouter
   history: shape({
@@ -369,9 +364,14 @@ const mapDispatchToProps = dispatch => ({
 // lifecycle hook.
 //
 // See: https://github.com/ReactTraining/react-router/issues/4671
-const SearchPage = compose(withRouter, connect(mapStateToProps, mapDispatchToProps), injectIntl)(
-  SearchPageComponent
-);
+const SearchPage = compose(
+  withRouter,
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
+  injectIntl
+)(SearchPageComponent);
 
 SearchPage.loadData = (params, search) => {
   const queryParams = parse(search, {
@@ -386,6 +386,8 @@ SearchPage.loadData = (params, search) => {
     page,
     perPage: RESULT_PAGE_SIZE,
     include: ['author', 'images'],
+    'fields.listing': ['title', 'geolocation', 'price'],
+    'fields.user': ['profile.displayName', 'profile.abbreviatedName'],
     'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
     'limit.images': 1,
   });

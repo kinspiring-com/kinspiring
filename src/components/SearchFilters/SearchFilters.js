@@ -7,14 +7,22 @@ import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
 import omit from 'lodash/omit';
 
-import { SelectSingleFilter, SelectMultipleFilter } from '../../components';
+import {
+  BookingDateRangeFilter,
+  SelectSingleFilter,
+  SelectMultipleFilter,
+  PriceFilter,
+  KeywordFilter,
+} from '../../components';
 import routeConfiguration from '../../routeConfiguration';
+import { parseDateFromISO8601, stringifyDateToISO8601 } from '../../util/dates';
 import { createResourceLocatorString } from '../../util/routes';
 import { propTypes } from '../../util/types';
 import css from './SearchFilters.css';
 
 // Dropdown container can have a positional offset (in pixels)
 const FILTER_DROPDOWN_OFFSET = -14;
+const RADIX = 10;
 
 // resolve initial value for a single value filter
 const initialValue = (queryParams, paramName) => {
@@ -24,6 +32,32 @@ const initialValue = (queryParams, paramName) => {
 // resolve initial values for a multi value filter
 const initialValues = (queryParams, paramName) => {
   return !!queryParams[paramName] ? queryParams[paramName].split(',') : [];
+};
+
+const initialPriceRangeValue = (queryParams, paramName) => {
+  const price = queryParams[paramName];
+  const valuesFromParams = !!price ? price.split(',').map(v => Number.parseInt(v, RADIX)) : [];
+
+  return !!price && valuesFromParams.length === 2
+    ? {
+        minPrice: valuesFromParams[0],
+        maxPrice: valuesFromParams[1],
+      }
+    : null;
+};
+
+const initialDateRangeValue = (queryParams, paramName) => {
+  const dates = queryParams[paramName];
+  const rawValuesFromParams = !!dates ? dates.split(',') : [];
+  const valuesFromParams = rawValuesFromParams.map(v => parseDateFromISO8601(v));
+  const initialValues =
+    !!dates && valuesFromParams.length === 2
+      ? {
+          dates: { startDate: valuesFromParams[0], endDate: valuesFromParams[1] },
+        }
+      : { dates: null };
+
+  return initialValues;
 };
 
 const SearchFiltersComponent = props => {
@@ -37,6 +71,9 @@ const SearchFiltersComponent = props => {
     categoryFilter,
     amenitiesFilter,
     brandFilter,
+    priceFilter,
+    dateRangeFilter,
+    keywordFilter,
     isSearchFiltersPanelOpen,
     toggleSearchFiltersPanel,
     searchFiltersPanelSelectedCount,
@@ -55,12 +92,32 @@ const SearchFiltersComponent = props => {
     id: 'SearchFilters.amenitiesLabel',
   });
 
+  const keywordLabel = intl.formatMessage({
+    id: 'SearchFilters.keywordLabel',
+  });
+
   const initialAmenities = amenitiesFilter
     ? initialValues(urlQueryParams, amenitiesFilter.paramName)
     : null;
 
   const initialCategory = categoryFilter
     ? initialValue(urlQueryParams, categoryFilter.paramName)
+    : null;
+
+  const initialPriceRange = priceFilter
+    ? initialPriceRangeValue(urlQueryParams, priceFilter.paramName)
+    : null;
+
+  const initialBrand = brandFilter 
+  ? initialValue(urlQueryParams, brandFilter.paramName)
+  : null;
+
+  const initialDateRange = dateRangeFilter
+    ? initialDateRangeValue(urlQueryParams, dateRangeFilter.paramName)
+    : null;
+
+  const initialKeyword = keywordFilter
+    ? initialValue(urlQueryParams, keywordFilter.paramName)
     : null;
 
   const handleSelectOptions = (urlParam, options) => {
@@ -82,11 +139,44 @@ const SearchFiltersComponent = props => {
     history.push(createResourceLocatorString('SearchPage', routeConfiguration(), {}, queryParams));
   };
 
+  const handlePrice = (urlParam, range) => {
+    const { minPrice, maxPrice } = range || {};
+    const queryParams =
+      minPrice != null && maxPrice != null
+        ? { ...urlQueryParams, [urlParam]: `${minPrice},${maxPrice}` }
+        : omit(urlQueryParams, urlParam);
+
+    history.push(createResourceLocatorString('SearchPage', routeConfiguration(), {}, queryParams));
+  };
+
+  const handleDateRange = (urlParam, dateRange) => {
+    const hasDates = dateRange && dateRange.dates;
+    const { startDate, endDate } = hasDates ? dateRange.dates : {};
+
+    const start = startDate ? stringifyDateToISO8601(startDate) : null;
+    const end = endDate ? stringifyDateToISO8601(endDate) : null;
+
+    const queryParams =
+      start != null && end != null
+        ? { ...urlQueryParams, [urlParam]: `${start},${end}` }
+        : omit(urlQueryParams, urlParam);
+    history.push(createResourceLocatorString('SearchPage', routeConfiguration(), {}, queryParams));
+  };
+
+  const handleKeyword = (urlParam, values) => {
+    const queryParams = values
+      ? { ...urlQueryParams, [urlParam]: values }
+      : omit(urlQueryParams, urlParam);
+
+    history.push(createResourceLocatorString('SearchPage', routeConfiguration(), {}, queryParams));
+  };
+
   const categoryFilterElement = categoryFilter ? (
     <SelectSingleFilter
       urlParam={categoryFilter.paramName}
       label={categoryLabel}
       onSelect={handleSelectOption}
+      showAsPopup
       options={categoryFilter.options}
       initialValue={initialCategory}
       contentPlacementOffset={FILTER_DROPDOWN_OFFSET}
@@ -99,7 +189,8 @@ const SearchFiltersComponent = props => {
       name="amenities"
       urlParam={amenitiesFilter.paramName}
       label={amenitiesLabel}
-      onSelect={handleSelectOptions}
+      onSubmit={handleSelectOptions}
+      showAsPopup
       options={amenitiesFilter.options}
       initialValues={initialAmenities}
       contentPlacementOffset={FILTER_DROPDOWN_OFFSET}
@@ -114,10 +205,46 @@ const SearchFiltersComponent = props => {
       })}
       onSelect={handleSelectOption}
       options={brandFilter.options}
-      initialValue={initialValue(urlQueryParams, brandFilter.paramName)}
+      initialValue={initialBrand}
+      />
+  ) : null;
+  const priceFilterElement = priceFilter ? (
+    <PriceFilter
+      id="SearchFilters.priceFilter"
+      urlParam={priceFilter.paramName}
+      onSubmit={handlePrice}
+      showAsPopup
+      {...priceFilter.config}
+      initialValues={initialPriceRange}
       contentPlacementOffset={FILTER_DROPDOWN_OFFSET}
     />
   ) : null;
+
+  const dateRangeFilterElement =
+    dateRangeFilter && dateRangeFilter.config.active ? (
+      <BookingDateRangeFilter
+        id="SearchFilters.dateRangeFilter"
+        urlParam={dateRangeFilter.paramName}
+        onSubmit={handleDateRange}
+        showAsPopup
+        contentPlacementOffset={FILTER_DROPDOWN_OFFSET}
+        initialValues={initialDateRange}
+      />
+    ) : null;
+
+  const keywordFilterElement =
+    keywordFilter && keywordFilter.config.active ? (
+      <KeywordFilter
+        id={'SearchFilters.keywordFilter'}
+        name="keyword"
+        urlParam={keywordFilter.paramName}
+        label={keywordLabel}
+        onSubmit={handleKeyword}
+        showAsPopup
+        initialValues={initialKeyword}
+        contentPlacementOffset={FILTER_DROPDOWN_OFFSET}
+      />
+    ) : null;
 
   const toggleSearchFiltersPanelButtonClasses =
     isSearchFiltersPanelOpen || searchFiltersPanelSelectedCount > 0
@@ -142,6 +269,10 @@ const SearchFiltersComponent = props => {
         {categoryFilterElement}
         {/*amenitiesFilterElement*/}
         {kinspiringBrandFilterElement}
+        // {amenitiesFilterElement}
+        // {priceFilterElement}
+        // {dateRangeFilterElement}
+        // {keywordFilterElement}
         {toggleSearchFiltersPanelButton}
       </div>
 
@@ -176,6 +307,8 @@ SearchFiltersComponent.defaultProps = {
   categoryFilter: null,
   amenitiesFilter: null,
   brandFilter: null,
+  priceFilter: null,
+  dateRangeFilter: null,
   isSearchFiltersPanelOpen: false,
   toggleSearchFiltersPanel: null,
   searchFiltersPanelSelectedCount: 0,
@@ -192,6 +325,8 @@ SearchFiltersComponent.propTypes = {
   categoriesFilter: propTypes.filterConfig,
   amenitiesFilter: propTypes.filterConfig,
   brandFilter: propTypes.filterConfig,
+  priceFilter: propTypes.filterConfig,
+  dateRangeFilter: propTypes.filterConfig,
   isSearchFiltersPanelOpen: bool,
   toggleSearchFiltersPanel: func,
   searchFiltersPanelSelectedCount: number,
@@ -205,6 +340,9 @@ SearchFiltersComponent.propTypes = {
   intl: intlShape.isRequired,
 };
 
-const SearchFilters = compose(withRouter, injectIntl)(SearchFiltersComponent);
+const SearchFilters = compose(
+  withRouter,
+  injectIntl
+)(SearchFiltersComponent);
 
 export default SearchFilters;
