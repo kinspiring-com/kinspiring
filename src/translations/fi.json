@@ -840,5 +840,15 @@
   "StripePaymentForm.missingStripeKey": "Stripe-julkaisuavainta ei ole määritetty tälle markkinoille. Valitettavasti listan varaaminen ei ole mahdollista.",
   "StripePaymentForm.submitConfirmPaymentInfo": "Vahvista pyyntö",
   "CheckoutPage.perDay": "päivässä",
-  "CheckoutPage.perNight": "per yö"
+  "CheckoutPage.perNight": "per yö",
+  "SavedCardDetails.cancel": "Peruuta",
+  "SavedCardDetails.deletePaymentMethod": "Poista maksukortti",
+  "SavedCardDetails.expiredCardText": "Tämä maksukortti on vanhentunut",
+  "SavedCardDetails.removeCard": "Poista kortti",
+  "SavedCardDetails.removeCardModalContent": "Maksukortti •••• •••• ••••• {last4Digits} poistetaan tililtäsi.",
+  "SavedCardDetails.removeCardModalTitle": "Haluatko varmasti poistaa tämän maksukortin?",
+  "SavedCardDetails.replaceCardText": "Luotto- tai maksukortti",
+  "SavedCardDetails.replaceCardTitle": "Käytä toista maksutapaa",
+  "SavedCardDetails.savedPaymentMethodPlaceholderDesktop": "•••• •••• •••• {last4Digits}",
+  "SavedCardDetails.savedPaymentMethodPlaceholderMobile": "… {last4Digits}"
 }
