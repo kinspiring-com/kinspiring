@@ -203,6 +203,7 @@ const SearchFiltersComponent = props => {
       label={intl.formatMessage({
         id: 'SearchFilters.kinspiring.brandFilterLabel',
       })}
+      showAsPopup
       onSelect={handleSelectOption}
       options={brandFilter.options}
       initialValue={initialBrand}
@@ -269,11 +270,11 @@ const SearchFiltersComponent = props => {
         {categoryFilterElement}
         {/*amenitiesFilterElement*/}
         {kinspiringBrandFilterElement}
-        // {amenitiesFilterElement}
-        // {priceFilterElement}
-        // {dateRangeFilterElement}
-        // {keywordFilterElement}
-        {toggleSearchFiltersPanelButton}
+        {/*{amenitiesFilterElement}*/}
+        {/*{priceFilterElement}*/}
+        {/*{dateRangeFilterElement}*/}
+        {/*{keywordFilterElement}*/}
+        {/*{toggleSearchFiltersPanelButton}*/}
       </div>
 
       {listingsAreLoaded && resultsCount > 0 ? (
