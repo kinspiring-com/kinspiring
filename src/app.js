@@ -13,7 +13,7 @@ import difference from 'lodash/difference';
 import mapValues from 'lodash/mapValues';
 import moment from 'moment';
 import 'moment/locale/fi';
-import { IntlProvider, addLocaleData } from 'react-intl';
+import { IntlProvider } from 'react-intl';
 import configureStore from './store';
 import routeConfiguration from './routeConfiguration';
 import Routes from './Routes';
@@ -34,8 +34,6 @@ import defaultMessages from './translations/fi.json';
 
 // Step 2:
 // Import locale rules for React Intl library
-import 'react-intl/locale-data/en';
-import localeData from 'react-intl/locale-data/fi';
 
 // Step 3:
 // If you are using a non-english locale with moment library,
@@ -79,7 +77,7 @@ const setupLocale = () => {
   if (isTestEnv) {
     // Use english as a default locale in tests
     // This affects app.test.js and app.node.test.js tests
-    config.locale = 'en';
+    config.locale = 'fi';
     return;
   }
 

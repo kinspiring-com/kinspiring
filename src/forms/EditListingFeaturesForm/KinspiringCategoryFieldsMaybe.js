@@ -1,11 +1,11 @@
 import React from 'react';
-import { intlShape } from 'react-intl';
 import { string, shape, bool, oneOf, arrayOf } from 'prop-types';
 import { FieldTextInput, FieldSelect, FieldBoolean } from '../../components';
 import * as validators from '../../util/validators';
 import config from '../../config';
 
 import css from './KinspiringCategoryFieldsMaybe.css';
+import { intlShape } from '../../util/reactIntl';
 
 const {
   FIELD_TYPE_TEXT,

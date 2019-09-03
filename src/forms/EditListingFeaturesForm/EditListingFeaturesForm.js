@@ -3,7 +3,7 @@ import { bool, func, string, shape, arrayOf } from 'prop-types';
 import classNames from 'classnames';
 import { Form as FinalForm } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
-import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { propTypes } from '../../util/types';
 import { Button, Form } from '../../components';
@@ -12,6 +12,7 @@ import CustomCategorySelectFieldMaybe from './CustomCategorySelectFieldMaybe';
 import KinspiringCategoryFieldsMaybe from './KinspiringCategoryFieldsMaybe';
 
 import css from './EditListingFeaturesForm.css';
+import { intlShape } from '../../util/reactIntl';
 
 const EditListingFeaturesFormComponent = props => (
   <FinalForm
