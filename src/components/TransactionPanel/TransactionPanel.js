@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { array, arrayOf, bool, func, number, string } from 'prop-types';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
 import classNames from 'classnames';
 import {
   TRANSITION_REQUEST_PAYMENT_AFTER_ENQUIRY,
@@ -99,7 +99,7 @@ export class TransactionPanelComponent extends Component {
     this.scrollToMessage = this.scrollToMessage.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.isMobSaf = isMobileSafari();
   }
 
@@ -395,7 +395,7 @@ export class TransactionPanelComponent extends Component {
             />
             {showSendMessageForm ? (
               <SendMessageForm
-                form={this.sendMessageFormName}
+                formId={this.sendMessageFormName}
                 rootClassName={css.sendMessageForm}
                 messagePlaceholder={sendMessagePlaceholder}
                 inProgress={sendMessageInProgress}

@@ -103,7 +103,7 @@ exports[`InboxPage matches snapshot 1`] = `
                 "formatMessage": [Function],
                 "formatNumber": [Function],
                 "formatPlural": [Function],
-                "formatRelative": [Function],
+                "formatRelativeTime": [Function],
                 "formatTime": [Function],
                 "now": [Function],
               }
@@ -256,7 +256,7 @@ exports[`InboxPage matches snapshot 1`] = `
                 "formatMessage": [Function],
                 "formatNumber": [Function],
                 "formatPlural": [Function],
-                "formatRelative": [Function],
+                "formatRelativeTime": [Function],
                 "formatTime": [Function],
                 "now": [Function],
               }
@@ -404,7 +404,7 @@ exports[`InboxPage matches snapshot 1`] = `
       className={null}
       rootClassName={null}
     >
-      <InjectIntl(Footer) />
+      <injectIntl(Footer) />
     </LayoutWrapperFooter>
   </LayoutSideNavigation>
 </Page>
@@ -572,7 +572,7 @@ exports[`InboxPage matches snapshot 3`] = `
                 "formatMessage": [Function],
                 "formatNumber": [Function],
                 "formatPlural": [Function],
-                "formatRelative": [Function],
+                "formatRelativeTime": [Function],
                 "formatTime": [Function],
                 "now": [Function],
               }
@@ -725,7 +725,7 @@ exports[`InboxPage matches snapshot 3`] = `
                 "formatMessage": [Function],
                 "formatNumber": [Function],
                 "formatPlural": [Function],
-                "formatRelative": [Function],
+                "formatRelativeTime": [Function],
                 "formatTime": [Function],
                 "now": [Function],
               }
@@ -873,7 +873,7 @@ exports[`InboxPage matches snapshot 3`] = `
       className={null}
       rootClassName={null}
     >
-      <InjectIntl(Footer) />
+      <injectIntl(Footer) />
     </LayoutWrapperFooter>
   </LayoutSideNavigation>
 </Page>
