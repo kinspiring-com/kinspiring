@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
 import { propTypes } from '../../util/types';
 import { verify } from '../../ducks/EmailVerification.duck';
 import { isScrollingDisabled } from '../../ducks/UI.duck';
 import { parse } from '../../util/urlHelpers';
+import { ensureCurrentUser } from '../../util/data';
 import {
   Page,
   LayoutSingleColumn,
@@ -15,6 +16,7 @@ import {
   LayoutWrapperMain,
   LayoutWrapperFooter,
   Footer,
+  NamedRedirect,
 } from '../../components';
 import { EmailVerificationForm } from '../../forms';
 import { TopbarContainer } from '../../containers';
@@ -32,8 +34,8 @@ import css from './EmailVerificationPage.css';
   the unwanted result of the `parse` method is that it automatically
   parses the token to number.
 */
-const parseVerificationToken = location => {
-  const urlParams = parse(location.search);
+const parseVerificationToken = search => {
+  const urlParams = parse(search);
   const verificationToken = urlParams.t;
 
   if (verificationToken) {
@@ -57,10 +59,17 @@ export const EmailVerificationPageComponent = props => {
     id: 'EmailVerificationPage.title',
   });
 
-  const initialValues = { verificationToken: parseVerificationToken(location) };
+  const initialValues = {
+    verificationToken: parseVerificationToken(location ? location.search : null),
+  };
+
+  const user = ensureCurrentUser(currentUser);
+  if (user && user.attributes.emailVerified) {
+    return <NamedRedirect name="LandingPage" />;
+  }
 
   return (
-    <Page title={title} scrollingDisabled={scrollingDisabled}>
+    <Page title={title} scrollingDisabled={scrollingDisabled} referrer="origin">
       <LayoutSingleColumn>
         <LayoutWrapperTopbar>
           <TopbarContainer />
@@ -68,11 +77,11 @@ export const EmailVerificationPageComponent = props => {
         <LayoutWrapperMain className={css.layoutWrapperMain}>
           <div className={css.root}>
             <div className={css.content}>
-              {currentUser ? (
+              {user.id ? (
                 <EmailVerificationForm
                   initialValues={initialValues}
                   onSubmit={submitVerification}
-                  currentUser={currentUser}
+                  currentUser={user}
                   inProgress={emailVerificationInProgress}
                   verificationError={verificationError}
                 />
@@ -138,8 +147,16 @@ const mapDispatchToProps = dispatch => ({
 // See: https://github.com/ReactTraining/react-router/issues/4671
 const EmailVerificationPage = compose(
   withRouter,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
   injectIntl
 )(EmailVerificationPageComponent);
+
+EmailVerificationPage.loadData = (params, search) => {
+  const token = parseVerificationToken(search);
+  return verify(token);
+};
 
 export default EmailVerificationPage;

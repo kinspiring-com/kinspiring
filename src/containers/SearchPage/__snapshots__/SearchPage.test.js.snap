@@ -79,6 +79,26 @@ exports[`SearchPageComponent matches snapshot 1`] = `
             ],
             "paramName": "pub_category",
           },
+          "dateRangeFilter": Object {
+            "config": Object {
+              "active": true,
+            },
+            "paramName": "dates",
+          },
+          "keywordFilter": Object {
+            "config": Object {
+              "active": true,
+            },
+            "paramName": "keywords",
+          },
+          "priceFilter": Object {
+            "config": Object {
+              "max": 1000,
+              "min": 0,
+              "step": 5,
+            },
+            "paramName": "price",
+          },
         }
       }
       resultsCount={0}
@@ -101,10 +121,15 @@ exports[`SearchPageComponent matches snapshot 1`] = `
       <div>
         <withRouter(SearchMapComponent)
           activeListingId={null}
+          isSearchMapOpenOnMobile={false}
           listings={Array []}
+          location={
+            Object {
+              "search": "",
+            }
+          }
           onCloseAsModal={[Function]}
-          onIdle={[Function]}
-          useLocationSearchBounds={true}
+          onMapMoveEnd={[Function]}
         />
       </div>
     </withViewport(ModalInMobileComponent)>

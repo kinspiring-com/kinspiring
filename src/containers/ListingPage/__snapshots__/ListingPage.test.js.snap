@@ -52,10 +52,12 @@ exports[`ListingPage matches snapshot 1`] = `
                 "deleted": false,
                 "description": "listing1 description",
                 "geolocation": LatLng {
+                  "_sdkType": "LatLng",
                   "lat": 40,
                   "lng": 60,
                 },
                 "price": Money {
+                  "_sdkType": "Money",
                   "amount": 5500,
                   "currency": "USD",
                 },
@@ -66,17 +68,20 @@ exports[`ListingPage matches snapshot 1`] = `
               "author": Object {
                 "attributes": Object {
                   "banned": false,
+                  "deleted": false,
                   "profile": Object {
                     "abbreviatedName": "TT",
                     "displayName": "user-1 display name",
                   },
                 },
                 "id": UUID {
+                  "_sdkType": "UUID",
                   "uuid": "user-1",
                 },
                 "type": "user",
               },
               "id": UUID {
+                "_sdkType": "UUID",
                 "uuid": "listing1",
               },
               "images": Array [],
@@ -99,12 +104,14 @@ exports[`ListingPage matches snapshot 1`] = `
               Object {
                 "attributes": Object {
                   "banned": false,
+                  "deleted": false,
                   "profile": Object {
                     "abbreviatedName": "TT",
                     "displayName": "user-1 display name",
                   },
                 },
                 "id": UUID {
+                  "_sdkType": "UUID",
                   "uuid": "user-1",
                 },
                 "type": "user",
@@ -117,7 +124,6 @@ exports[`ListingPage matches snapshot 1`] = `
               formattedPrice={55}
               hostLink={
                 <NamedLink
-                  className={undefined}
                   name="ListingPage"
                   params={
                     Object {
@@ -147,7 +153,7 @@ exports[`ListingPage matches snapshot 1`] = `
               }
               showContactUser={true}
             />
-            <SectionDescription
+            <SectionDescriptionMaybe
               description="listing1 description"
             />
             <KinspiringPublicData
@@ -157,12 +163,14 @@ exports[`ListingPage matches snapshot 1`] = `
               className={null}
               geolocation={
                 LatLng {
+                  "_sdkType": "LatLng",
                   "lat": 40,
                   "lng": 60,
                 }
               }
               listingId={
                 UUID {
+                  "_sdkType": "UUID",
                   "uuid": "listing1",
                 }
               }
@@ -173,12 +181,13 @@ exports[`ListingPage matches snapshot 1`] = `
               fetchReviewsError={null}
               reviews={Array []}
             />
-            <SectionHost
+            <SectionHostMaybe
               authorDisplayName="user-1 display name"
               currentUser={
                 Object {
                   "attributes": Object {
                     "banned": false,
+                    "deleted": false,
                     "email": "user-2@example.com",
                     "emailVerified": true,
                     "profile": Object {
@@ -187,9 +196,9 @@ exports[`ListingPage matches snapshot 1`] = `
                       "firstName": "user-2 first name",
                       "lastName": "user-2 last name",
                     },
-                    "stripeConnected": true,
                   },
                   "id": UUID {
+                    "_sdkType": "UUID",
                     "uuid": "user-2",
                   },
                   "type": "currentUser",
@@ -202,10 +211,12 @@ exports[`ListingPage matches snapshot 1`] = `
                     "deleted": false,
                     "description": "listing1 description",
                     "geolocation": LatLng {
+                      "_sdkType": "LatLng",
                       "lat": 40,
                       "lng": 60,
                     },
                     "price": Money {
+                      "_sdkType": "Money",
                       "amount": 5500,
                       "currency": "USD",
                     },
@@ -216,17 +227,20 @@ exports[`ListingPage matches snapshot 1`] = `
                   "author": Object {
                     "attributes": Object {
                       "banned": false,
+                      "deleted": false,
                       "profile": Object {
                         "abbreviatedName": "TT",
                         "displayName": "user-1 display name",
                       },
                     },
                     "id": UUID {
+                      "_sdkType": "UUID",
                       "uuid": "user-1",
                     },
                     "type": "user",
                   },
                   "id": UUID {
+                    "_sdkType": "UUID",
                     "uuid": "listing1",
                   },
                   "images": Array [],
@@ -242,15 +256,9 @@ exports[`ListingPage matches snapshot 1`] = `
               title="listing1 title"
             />
           </div>
-          <SectionBooking
+          <withRouter(injectIntl(BookingPanel))
             authorDisplayName="user-1 display name"
             fetchTimeSlotsError={null}
-            formattedPrice={55}
-            handleBookButtonClick={[Function]}
-            handleBookingSubmit={[Function]}
-            handleMobileBookModalClose={[Function]}
-            isBook={false}
-            isClosed={false}
             isOwnListing={false}
             listing={
               Object {
@@ -258,10 +266,12 @@ exports[`ListingPage matches snapshot 1`] = `
                   "deleted": false,
                   "description": "listing1 description",
                   "geolocation": LatLng {
+                    "_sdkType": "LatLng",
                     "lat": 40,
                     "lng": 60,
                   },
                   "price": Money {
+                    "_sdkType": "Money",
                     "amount": 5500,
                     "currency": "USD",
                   },
@@ -272,17 +282,20 @@ exports[`ListingPage matches snapshot 1`] = `
                 "author": Object {
                   "attributes": Object {
                     "banned": false,
+                    "deleted": false,
                     "profile": Object {
                       "abbreviatedName": "TT",
                       "displayName": "user-1 display name",
                     },
                   },
                   "id": UUID {
+                    "_sdkType": "UUID",
                     "uuid": "user-1",
                   },
                   "type": "user",
                 },
                 "id": UUID {
+                  "_sdkType": "UUID",
                   "uuid": "listing1",
                 },
                 "images": Array [],
@@ -290,23 +303,25 @@ exports[`ListingPage matches snapshot 1`] = `
               }
             }
             onManageDisableScrolling={[Function]}
-            price={
-              Money {
-                "amount": 5500,
-                "currency": "USD",
-              }
-            }
-            priceTitle={55}
-            richTitle={
-              <span>
-                
-                listing1
-                 
-                title
-                
-              </span>
-            }
+            onSubmit={[Function]}
+            subTitle="ListingPage.bookingSubTitle"
             timeSlots={null}
+            title={
+              <FormattedMessage
+                id="ListingPage.bookingTitle"
+                values={
+                  Object {
+                    "title": <span>
+                      
+                      listing1
+                       
+                      title
+                      
+                    </span>,
+                  }
+                }
+              />
+            }
             unitType="line-item/night"
           />
         </div>
@@ -316,7 +331,7 @@ exports[`ListingPage matches snapshot 1`] = `
       className={null}
       rootClassName={null}
     >
-      <InjectIntl(Footer) />
+      <injectIntl(Footer) />
     </LayoutWrapperFooter>
   </LayoutSingleColumn>
 </Page>

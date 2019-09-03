@@ -1,6 +1,9 @@
 import unionWith from 'lodash/unionWith';
 import { storableError } from '../../util/errors';
 import { addMarketplaceEntities } from '../../ducks/marketplaceData.duck';
+import { convertUnitToSubUnit, unitDivisor } from '../../util/currency';
+import { formatDateStringToUTC, getExclusiveEndDate } from '../../util/dates';
+import config from '../../config';
 
 // ================ Action types ================ //
 
@@ -118,9 +121,43 @@ export const searchMapListingsError = e => ({
 export const searchListings = searchParams => (dispatch, getState, sdk) => {
   dispatch(searchListingsRequest(searchParams));
 
-  const { perPage, ...rest } = searchParams;
+  const priceSearchParams = priceParam => {
+    const inSubunits = value =>
+      convertUnitToSubUnit(value, unitDivisor(config.currencyConfig.currency));
+    const values = priceParam ? priceParam.split(',') : [];
+    return priceParam && values.length === 2
+      ? {
+          price: [inSubunits(values[0]), inSubunits(values[1]) + 1].join(','),
+        }
+      : {};
+  };
+
+  const datesSearchParams = datesParam => {
+    const values = datesParam ? datesParam.split(',') : [];
+    const hasValues = datesParam && values.length === 2;
+    const startDate = hasValues ? values[0] : null;
+    const isNightlyBooking = config.bookingUnitType === 'line-item/night';
+    const endDate =
+      hasValues && isNightlyBooking ? values[1] : hasValues ? getExclusiveEndDate(values[1]) : null;
+
+    return hasValues
+      ? {
+          start: formatDateStringToUTC(startDate),
+          end: formatDateStringToUTC(endDate),
+          // Availability can be full or partial. Default value is full.
+          availability: 'full',
+        }
+      : {};
+  };
+
+  const { perPage, price, dates, ...rest } = searchParams;
+  const priceMaybe = priceSearchParams(price);
+  const datesMaybe = datesSearchParams(dates);
+
   const params = {
     ...rest,
+    ...priceMaybe,
+    ...datesMaybe,
     per_page: perPage,
   };
 

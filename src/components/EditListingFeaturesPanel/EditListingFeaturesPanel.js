@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import pick from 'lodash/pick';
 import classNames from 'classnames';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage } from '../../util/reactIntl';
 
+import { LISTING_STATE_DRAFT } from '../../util/types';
 import { ensureListing } from '../../util/data';
 import { EditListingFeaturesForm } from '../../forms';
 import { ListingLink } from '../../components';
@@ -30,7 +31,8 @@ const EditListingFeaturesPanel = props => {
   const currentListing = ensureListing(listing);
   const { publicData } = currentListing.attributes;
 
-  const panelTitle = currentListing.id ? (
+  const isPublished = currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
+  const panelTitle = isPublished ? (
     <FormattedMessage
       id="EditListingFeaturesPanel.title"
       values={{ listingTitle: <ListingLink listing={listing} /> }}
@@ -70,9 +72,9 @@ const EditListingFeaturesPanel = props => {
         onChange={onChange}
         saveActionMsg={submitButtonText}
         updated={panelUpdated}
-        updateError={errors.updateListingError}
         updateInProgress={updateInProgress}
         categories={config.custom.categories}
+        fetchErrors={errors}
       />
     </div>
   );

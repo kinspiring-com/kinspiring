@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
@@ -313,9 +313,11 @@ const mapStateToProps = state => {
   };
 };
 
-const ProfilePage = compose(connect(mapStateToProps), withViewport, injectIntl)(
-  ProfilePageComponent
-);
+const ProfilePage = compose(
+  connect(mapStateToProps),
+  withViewport,
+  injectIntl
+)(ProfilePageComponent);
 
 ProfilePage.loadData = params => {
   const id = new UUID(params.id);

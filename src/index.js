@@ -13,8 +13,8 @@
 
 // React 16 depends on the collection types Map and Set, as well as requestAnimationFrame.
 // https://reactjs.org/docs/javascript-environment-requirements.html
-import 'core-js/es6/map';
-import 'core-js/es6/set';
+import 'core-js/features/map';
+import 'core-js/features/set';
 import 'raf/polyfill';
 
 import React from 'react';
@@ -77,13 +77,14 @@ if (typeof window !== 'undefined') {
   // set up logger with Sentry DSN client key and environment
   log.setup();
 
+  const baseUrl = config.sdk.baseUrl ? { baseUrl: config.sdk.baseUrl } : {};
+
   // eslint-disable-next-line no-underscore-dangle
   const preloadedState = window.__PRELOADED_STATE__ || '{}';
   const initialState = JSON.parse(preloadedState, sdkTypes.reviver);
   const sdk = createInstance({
     transitVerbose: config.sdk.transitVerbose,
     clientId: config.sdk.clientId,
-    baseUrl: config.sdk.baseUrl,
     secure: config.usingSSL,
     typeHandlers: [
       {
@@ -93,6 +94,7 @@ if (typeof window !== 'undefined') {
         reader: v => new Decimal(v.value),
       },
     ],
+    ...baseUrl,
   });
   const analyticsHandlers = setupAnalyticsHandlers();
   const store = configureStore(initialState, sdk, analyticsHandlers);

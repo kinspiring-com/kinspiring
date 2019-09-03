@@ -31,13 +31,14 @@
 
   @media (--viewportMedium) {
     min-height: 500px;
-    height: 80vh;
+    height: 70vh;
     max-height: none;
   }
 
   @media (--viewportLarge) {
+    max-height: 800px;
     min-height: 600px;
-    height: calc(100vh - var(--topbarHeightDesktop));
+    height: calc(70vh - var(--topbarHeightDesktop));
   }
 }
 
@@ -84,18 +85,29 @@
   margin: var(--LandingPage_sectionMarginTop) 24px 51px 24px;
 
   @media (--viewportMedium) {
-    margin: var(--LandingPage_sectionMarginTopMedium) 7.5vw 60px 7.5vw;
+    max-width: 100%;
+    margin: var(--LandingPage_sectionMarginTopMedium) 24px 60px 24px;
   }
 
   @media (--viewportLarge) {
-    max-width: calc(1052px + 36px + 36px);
-    margin: var(--LandingPage_sectionMarginTopLarge) auto 93px auto;
+    max-width: 1128px;
     padding: 0 36px 0 36px;
+    margin: var(--LandingPage_sectionMarginTopLarge) auto 93px auto;
+  }
+
+  @media (--viewportXLarge) {
+    max-width: 1056px;
+    padding: 0;
   }
 }
 
+.sectionContentFirstChild {
+  composes: sectionContent;
+  margin-top: 3vh;
+}
+
 /* A bar on top of light sections */
-.section:nth-of-type(2n) .sectionContent:before {
+.section:nth-of-type(2n) .sectionContent::before {
   background: var(--marketplaceColor);
   content: '';
   display: block;

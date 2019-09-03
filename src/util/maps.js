@@ -3,26 +3,43 @@ import seedrandom from 'seedrandom';
 import { types as sdkTypes } from './sdkLoader';
 import config from '../config';
 
-const { LatLng } = sdkTypes;
+const { LatLng, LatLngBounds } = sdkTypes;
+
+const EARTH_RADIUS = 6371000; /* meters  */
+const DEG_TO_RAD = Math.PI / 180.0;
+const THREE_PI = Math.PI * 3;
+const TWO_PI = Math.PI * 2;
+
+const degToRadians = latlng => {
+  const { lat, lng } = latlng;
+  const latR = lat * DEG_TO_RAD;
+  const lngR = lng * DEG_TO_RAD;
+  return { lat: latR, lng: lngR };
+};
+
+const radToDegrees = latlngInRadians => {
+  const { lat: latR, lng: lngR } = latlngInRadians;
+  const lat = latR / DEG_TO_RAD;
+  const lng = lngR / DEG_TO_RAD;
+  return { lat, lng };
+};
 
 /**
  * This obfuscatedCoordinatesImpl function is a temporary solution for the coordinate obfuscation.
  * In the future, improved version needs to have protectedData working and
  * available in accepted transaction.
+ *
+ * Based on:
+ * https://gis.stackexchange.com/questions/25877/generating-random-locations-nearby#answer-213898
  */
+
 const obfuscatedCoordinatesImpl = (latlng, cacheKey) => {
-  const { lat, lng } = latlng;
+  const { lat, lng } = degToRadians(latlng);
+  const sinLat = Math.sin(lat);
+  const cosLat = Math.cos(lat);
 
-  // https://gis.stackexchange.com/questions/25877/generating-random-locations-nearby
-  const r = config.maps.fuzzy.offset / 111300;
-  const y0 = lat;
-  const x0 = lng;
-
-  // Two seeded random numbers to be used to calculate new location
-  // We need seeded so that the static map URL doesn't change between requests
-  // (i.e. URL is cacheable)
-  const u = cacheKey ? seedrandom(cacheKey)() : Math.random();
-  const v = cacheKey
+  const randomizeBearing = cacheKey ? seedrandom(cacheKey)() : Math.random();
+  const randomizeDistance = cacheKey
     ? seedrandom(
         cacheKey
           .split('')
@@ -30,16 +47,25 @@ const obfuscatedCoordinatesImpl = (latlng, cacheKey) => {
           .join('')
       )()
     : Math.random();
-  const w = r * Math.sqrt(u);
-  const t = 2 * Math.PI * v;
-  const x = w * Math.cos(t);
-  const y1 = w * Math.sin(t);
-  const x1 = x / Math.cos(y0);
 
-  const newLat = y0 + y1;
-  const newLng = x0 + x1;
+  // Randomize distance and bearing
+  const distance = randomizeDistance * config.maps.fuzzy.offset;
+  const bearing = randomizeBearing * TWO_PI;
+  const theta = distance / EARTH_RADIUS;
+  const sinBearing = Math.sin(bearing);
+  const cosBearing = Math.cos(bearing);
+  const sinTheta = Math.sin(theta);
+  const cosTheta = Math.cos(theta);
 
-  return new LatLng(newLat, newLng);
+  const newLat = Math.asin(sinLat * cosTheta + cosLat * sinTheta * cosBearing);
+  const newLng =
+    lng + Math.atan2(sinBearing * sinTheta * cosLat, cosTheta - sinLat * Math.sin(newLat));
+
+  // Normalize -PI -> +PI radians
+  const newLngNormalized = ((newLng + THREE_PI) % TWO_PI) - Math.PI;
+
+  const result = radToDegrees({ lat: newLat, lng: newLngNormalized });
+  return new LatLng(result.lat, result.lng);
 };
 
 const obfuscationKeyGetter = (latlng, cacheKey) => cacheKey;
@@ -103,29 +129,66 @@ export const circlePolyline = (latlng, radius) => {
   const R = 6371;
   const pi = Math.PI;
 
-  const _lat = lat * pi / 180;
-  const _lng = lng * pi / 180;
+  const _lat = (lat * pi) / 180;
+  const _lng = (lng * pi) / 180;
   const d = radius / 1000 / R;
 
   let points = [];
   for (let i = 0; i <= 360; i += detail) {
-    const brng = i * pi / 180;
+    const brng = (i * pi) / 180;
 
     let pLat = Math.asin(
       Math.sin(_lat) * Math.cos(d) + Math.cos(_lat) * Math.sin(d) * Math.cos(brng)
     );
     const pLng =
-      (_lng +
+      ((_lng +
         Math.atan2(
           Math.sin(brng) * Math.sin(d) * Math.cos(_lat),
           Math.cos(d) - Math.sin(_lat) * Math.sin(pLat)
         )) *
-      180 /
+        180) /
       pi;
-    pLat = pLat * 180 / pi;
+    pLat = (pLat * 180) / pi;
 
     points.push([pLat, pLng]);
   }
 
   return points;
+};
+
+/**
+ * Cut some precision from bounds coordinates to tackle subtle map movements
+ * when map is moved manually
+ *
+ * @param {LatLngBounds} sdkBounds - bounds to be changed to fixed precision
+ * @param {Number} fixedPrecision - integer to be used on tofixed() change.
+ *
+ * @return {LatLngBounds} - bounds cut to given fixed precision
+ */
+export const sdkBoundsToFixedCoordinates = (sdkBounds, fixedPrecision) => {
+  const fixed = n => Number.parseFloat(n.toFixed(fixedPrecision));
+  const ne = new LatLng(fixed(sdkBounds.ne.lat), fixed(sdkBounds.ne.lng));
+  const sw = new LatLng(fixed(sdkBounds.sw.lat), fixed(sdkBounds.sw.lng));
+
+  return new LatLngBounds(ne, sw);
+};
+
+/**
+ * Check if given bounds object have the same coordinates
+ *
+ * @param {LatLngBounds} sdkBounds1 - bounds #1 to be compared
+ * @param {LatLngBounds} sdkBounds2 - bounds #2 to be compared
+ *
+ * @return {boolean} - true if bounds are the same
+ */
+export const hasSameSDKBounds = (sdkBounds1, sdkBounds2) => {
+  if (!(sdkBounds1 instanceof LatLngBounds) || !(sdkBounds2 instanceof LatLngBounds)) {
+    return false;
+  }
+  return (
+    sdkBounds1.ne.lat === sdkBounds2.ne.lat &&
+    sdkBounds1.ne.lng === sdkBounds2.ne.lng &&
+    sdkBounds1.sw.lat === sdkBounds2.sw.lat &&
+    sdkBounds1.sw.lng === sdkBounds2.sw.lng
+  );
 };

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
 import { propTypes } from '../../util/types';
 import { parse } from '../../util/urlHelpers';
 import { isScrollingDisabled } from '../../ducks/UI.duck';
@@ -231,9 +231,13 @@ const mapDispatchToProps = dispatch => ({
   onOpenListing: listingId => dispatch(openListing(listingId)),
 });
 
-const ManageListingsPage = compose(connect(mapStateToProps, mapDispatchToProps), injectIntl)(
-  ManageListingsPageComponent
-);
+const ManageListingsPage = compose(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
+  injectIntl
+)(ManageListingsPageComponent);
 
 ManageListingsPage.loadData = (params, search) => {
   const queryParams = parse(search);

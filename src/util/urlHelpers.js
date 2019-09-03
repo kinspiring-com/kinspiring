@@ -4,6 +4,16 @@ import { types as sdkTypes } from './sdkLoader';
 const { LatLng, LatLngBounds } = sdkTypes;
 
 export const LISTING_PAGE_PENDING_APPROVAL_VARIANT = 'pending-approval';
+export const LISTING_PAGE_DRAFT_VARIANT = 'draft';
+
+export const LISTING_PAGE_PARAM_TYPE_NEW = 'new';
+export const LISTING_PAGE_PARAM_TYPE_DRAFT = 'draft';
+export const LISTING_PAGE_PARAM_TYPE_EDIT = 'edit';
+export const LISTING_PAGE_PARAM_TYPES = [
+  LISTING_PAGE_PARAM_TYPE_NEW,
+  LISTING_PAGE_PARAM_TYPE_DRAFT,
+  LISTING_PAGE_PARAM_TYPE_EDIT,
+];
 
 // Create slug from random texts
 // From Gist thread: https://gist.github.com/mathewbyrne/1280286
@@ -45,7 +55,7 @@ export const createSlug = str => {
     text = text.replace(new RegExp(`[${set.from}]`, 'gi'), set.to);
   });
 
-  return encodeURIComponent(
+  const slug = encodeURIComponent(
     text
       .replace(/\s+/g, '-') // Replace spaces with -
       .replace(/[^\w-]+/g, '') // Remove all non-word chars
@@ -53,6 +63,8 @@ export const createSlug = str => {
       .replace(/^-+/, '') // Trim - from start of text
       .replace(/-+$/, '') // Trim - from end of text
   );
+
+  return slug.length > 0 ? slug : 'no-slug';
 };
 
 /**

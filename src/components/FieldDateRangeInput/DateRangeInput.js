@@ -7,7 +7,7 @@
 import React, { Component } from 'react';
 import { bool, func, instanceOf, oneOf, shape, string, arrayOf } from 'prop-types';
 import { DateRangePicker, isInclusivelyAfterDay, isInclusivelyBeforeDay } from 'react-dates';
-import { intlShape, injectIntl } from 'react-intl';
+import { intlShape, injectIntl } from '../../util/reactIntl';
 import classNames from 'classnames';
 import moment from 'moment';
 import { START_DATE, END_DATE } from '../../util/dates';
@@ -21,8 +21,7 @@ import {
   pickerEndDateToApiDate,
 } from './DateRangeInput.helpers';
 
-import NextMonthIcon from './NextMonthIcon';
-import PreviousMonthIcon from './PreviousMonthIcon';
+import { IconArrowHead } from '../../components';
 import css from './DateRangeInput.css';
 
 export const HORIZONTAL_ORIENTATION = 'horizontal';
@@ -36,6 +35,15 @@ export const ANCHOR_LEFT = 'left';
 // This prevents showing the validation error when the user selects a
 // value and moves on to another input within this component.
 const BLUR_TIMEOUT = 100;
+
+// IconArrowHead component might not be defined if exposed directly to the file.
+// This component is called before IconArrowHead component in components/index.js
+const PrevIcon = props => (
+  <IconArrowHead {...props} direction="left" rootClassName={css.arrowIcon} />
+);
+const NextIcon = props => (
+  <IconArrowHead {...props} direction="right" rootClassName={css.arrowIcon} />
+);
 
 // Possible configuration options of React-dates
 const defaultProps = {
@@ -60,7 +68,7 @@ const defaultProps = {
   block: false,
 
   // calendar presentation and interaction related props
-  renderMonth: null,
+  renderMonthText: null,
   orientation: HORIZONTAL_ORIENTATION,
   anchorDirection: ANCHOR_LEFT,
   horizontalMargin: 0,
@@ -79,8 +87,8 @@ const defaultProps = {
   hideKeyboardShortcutsPanel: true,
 
   // navigation related props
-  navPrev: <PreviousMonthIcon />,
-  navNext: <NextMonthIcon />,
+  navPrev: <PrevIcon />,
+  navNext: <NextIcon />,
   onPrevMonthClick() {},
   onNextMonthClick() {},
   transitionDuration: 200, // milliseconds between next month changes etc.
@@ -131,12 +139,12 @@ class DateRangeInputComponent extends Component {
     this.onFocusChange = this.onFocusChange.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     // Update focusedInput in case a new value for it is
     // passed in the props. This may occur if the focus
     // is manually set to the date picker.
-    if (nextProps.focusedInput && nextProps.focusedInput !== this.props.focusedInput) {
-      this.setState({ focusedInput: nextProps.focusedInput });
+    if (this.props.focusedInput && this.props.focusedInput !== prevProps.focusedInput) {
+      this.setState({ focusedInput: this.props.focusedInput });
     }
   }
 

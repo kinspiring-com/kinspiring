@@ -118,12 +118,13 @@
 
   /* ================ LocationAutocompleteInput bottom attribution padding ================ */
 
-  --locationAutocompleteBottomPadding: 72px;
+  /* Google Maps needs 72px bottom padding to accommodate logo, Mapbox doesn't have one */
+  --locationAutocompleteBottomPadding: 8px;
 
   /* ================ Clearfix solution ================ */
 
   --clearfix {
-    &:after {
+    &::after {
       content: '';
       display: table;
       clear: both;
@@ -176,7 +177,7 @@
     margin: 0;
 
     /* Padding is only for <a> elements where button styles are applied,
-   buttons elements should have zero padding */
+		buttons elements should have zero padding */
     padding: 20px 0 0 0;
 
     /* Borders */
@@ -568,6 +569,8 @@
 
 /* ================ Custom media queries ================ */
 
+@custom-media --viewportSmall (min-width: 550px);
 @custom-media --viewportMedium (min-width: 768px);
 @custom-media --viewportLarge (min-width: 1024px);
+@custom-media --viewportLargeWithPaddings (min-width: 1128px);
 @custom-media --viewportXLarge (min-width: 1921px);

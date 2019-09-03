@@ -20,8 +20,11 @@ const toPathByRouteName = (nameToFind, routes) => {
 /**
  * Shorthand for single path call. (```pathByRouteName('ListingPage', routes, { id: uuidX });```)
  */
-export const pathByRouteName = (nameToFind, routes, params = {}) =>
-  toPathByRouteName(nameToFind, routes)(params);
+export const pathByRouteName = (nameToFind, routes, params = {}) => {
+  const hasEmptySlug = params && params.hasOwnProperty('slug') && params.slug === '';
+  const pathParams = hasEmptySlug ? { ...params, slug: 'no-slug' } : params;
+  return toPathByRouteName(nameToFind, routes)(pathParams);
+};
 
 /**
  * Find the matching routes and their params for the given pathname
@@ -99,7 +102,7 @@ export const findRouteByRouteName = (nameToFind, routes) => {
  * @return {String} Canonical URL of the given location
  *
  */
-export const canonicalRoutePath = (routes, location) => {
+export const canonicalRoutePath = (routes, location, pathOnly = false) => {
   const { pathname, search, hash } = location;
 
   const matches = matchPathname(pathname, routes);
@@ -116,8 +119,8 @@ export const canonicalRoutePath = (routes, location) => {
       throw new Error('Expected ListingPage route to have 4 parts');
     }
     const canonicalListingPathname = `/${parts[1]}/${parts[3]}`;
-    return `${canonicalListingPathname}${search}${hash}`;
+    return pathOnly ? canonicalListingPathname : `${canonicalListingPathname}${search}${hash}`;
   }
 
-  return `${pathname}${search}${hash}`;
+  return pathOnly ? pathname : `${pathname}${search}${hash}`;
 };

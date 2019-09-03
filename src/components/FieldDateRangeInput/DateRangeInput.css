@@ -61,6 +61,33 @@
     background-color: var(--marketplaceColor);
     box-shadow: none;
   }
+
+  & :global(.DayPickerNavigation__horizontal) {
+    position: relative;
+    width: 100%;
+  }
+
+  & :global(.DayPickerNavigation_button__horizontal) {
+    padding: 6px 9px;
+    top: 19px;
+    position: absolute;
+    cursor: pointer;
+    display: inline;
+
+    &:first-of-type {
+      left: 24px;
+    }
+
+    &:last-of-type {
+      right: 24px;
+    }
+  }
+
+  & :global(.DayPickerNavigation_button) {
+    color: var(--matterColorLight);
+    border: 0;
+  }
+
   & :global(.CalendarMonth),
   & :global(.CalendarMonthGrid) {
     background-color: transparent;
@@ -83,6 +110,10 @@
     font-weight: 400;
   }
 
+  & :global(.DayPicker__withBorder) {
+    border-radius: 0;
+  }
+
   & :global(.CalendarMonth_caption) {
     color: var(--matterColorLight);
     @apply --marketplaceH2FontStyles;
@@ -94,10 +125,7 @@
       margin-bottom: 0;
     }
   }
-  & :global(.DayPickerNavigation_button) {
-    color: var(--matterColorLight);
-    border: 0;
-  }
+
   & :global(.CalendarDay__default) {
     background-color: var(--marketplaceColor);
     border: 0;
@@ -126,7 +154,7 @@
     width: 100%;
     height: var(--DateRangeInput_selectionHeight);
     background-image: url("data:image/svg+xml;utf8,<svg width='14' height='2' viewBox='0 0 14 2' xmlns='http://www.w3.org/2000/svg'><path d='M0 0h14v2H0z' fill='%23FFF' fill-rule='evenodd'/></svg>");
-    background-position: center 28px;
+    background-position: center 34px;
   }
 
   /* Remove default bg-color and use our extra span instead '.renderedDay' */
@@ -263,8 +291,7 @@
   }
 }
 
-.rootNextMonthIcon,
-.rootPreviousMonthIcon {
+.arrowIcon {
   stroke: var(--matterColorLight);
   fill: var(--matterColorLight);
 }

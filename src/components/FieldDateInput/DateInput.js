@@ -12,7 +12,7 @@ import {
   isInclusivelyBeforeDay,
   isSameDay,
 } from 'react-dates';
-import { intlShape, injectIntl } from 'react-intl';
+import { intlShape, injectIntl } from '../../util/reactIntl';
 import classNames from 'classnames';
 import moment from 'moment';
 import config from '../../config';
@@ -48,7 +48,7 @@ const defaultProps = {
   small: false,
 
   // calendar presentation and interaction related props
-  renderMonth: null,
+  renderMonthText: null,
   orientation: HORIZONTAL_ORIENTATION,
   anchorDirection: ANCHOR_LEFT,
   horizontalMargin: 0,

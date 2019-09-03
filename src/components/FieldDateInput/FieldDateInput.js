@@ -14,6 +14,8 @@ import { propTypes } from '../../util/types';
 import DateInput from './DateInput';
 import css from './FieldDateInput.css';
 
+const MAX_MOBILE_SCREEN_WIDTH = 768;
+
 class FieldDateInputComponent extends Component {
   render() {
     const {
@@ -45,12 +47,13 @@ class FieldDateInputComponent extends Component {
       [css.pickerError]: hasError,
     });
 
-    const { onBlur, onFocus, ...restOfInput } = input;
+    const { onBlur, onFocus, type, ...restOfInput } = input;
     const inputProps = {
       onBlur: input.onBlur,
       onFocus: input.onFocus,
       useMobileMargins,
       id,
+      readOnly: typeof window !== 'undefined' && window.innerWidth < MAX_MOBILE_SCREEN_WIDTH,
       ...restOfInput,
       ...rest,
     };

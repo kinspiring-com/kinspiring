@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { string, func } from 'prop-types';
-import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage, intlShape, injectIntl } from '../../util/reactIntl';
 import classNames from 'classnames';
-import { NamedLink, ResponsiveImage } from '../../components';
-import { propTypes } from '../../util/types';
+import { lazyLoadWithDimensions } from '../../util/contextHelpers';
+import { LINE_ITEM_DAY, LINE_ITEM_NIGHT, propTypes } from '../../util/types';
 import { formatMoney } from '../../util/currency';
 import { ensureListing, ensureUser } from '../../util/data';
 import { richText } from '../../util/richText';
 import { createSlug } from '../../util/urlHelpers';
 import config from '../../config';
+import { NamedLink, ResponsiveImage } from '../../components';
 
 import css from './ListingCard.css';
 
@@ -33,6 +34,13 @@ const priceData = (price, intl) => {
   return {};
 };
 
+class ListingImage extends Component {
+  render() {
+    return <ResponsiveImage {...this.props} />;
+  }
+}
+const LazyImage = lazyLoadWithDimensions(ListingImage, { loadAfterInitialRendering: 3000 });
+
 export const ListingCardComponent = props => {
   const { className, rootClassName, intl, listing, renderSizes, setActiveListing } = props;
   const classes = classNames(rootClassName || css.root, className);
@@ -47,6 +55,16 @@ export const ListingCardComponent = props => {
 
   const { formattedPrice, priceTitle } = priceData(price, intl);
 
+  const unitType = config.bookingUnitType;
+  const isNightly = unitType === LINE_ITEM_NIGHT;
+  const isDaily = unitType === LINE_ITEM_DAY;
+
+  const unitTranslationKey = isNightly
+    ? 'ListingCard.perNight'
+    : isDaily
+    ? 'ListingCard.perDay'
+    : 'ListingCard.perUnit';
+
   return (
     <NamedLink className={classes} name="ListingPage" params={{ id, slug }}>
       <div
@@ -55,7 +73,7 @@ export const ListingCardComponent = props => {
         onMouseLeave={() => setActiveListing(null)}
       >
         <div className={css.aspectWrapper}>
-          <ResponsiveImage
+          <LazyImage
             rootClassName={css.rootForImage}
             alt={title}
             image={firstImage}
@@ -70,7 +88,7 @@ export const ListingCardComponent = props => {
             {formattedPrice}
           </div>
           <div className={css.perUnit}>
-            <FormattedMessage id="ListingCard.perUnit" />
+            <FormattedMessage id={unitTranslationKey} />
           </div>
         </div>
         <div className={css.mainInfo}>
@@ -81,11 +99,7 @@ export const ListingCardComponent = props => {
             })}
           </div>
           <div className={css.authorInfo}>
-            <FormattedMessage
-              className={css.authorName}
-              id="ListingCard.hostedBy"
-              values={{ authorName }}
-            />
+            <FormattedMessage id="ListingCard.hostedBy" values={{ authorName }} />
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
 import { propTypes } from '../../util/types';
 import { parse } from '../../util/urlHelpers';
 import { isScrollingDisabled } from '../../ducks/UI.duck';
@@ -121,7 +121,7 @@ export class PasswordResetPageComponent extends Component {
     }
 
     return (
-      <Page title={title} scrollingDisabled={scrollingDisabled}>
+      <Page title={title} scrollingDisabled={scrollingDisabled} referrer="origin">
         <LayoutSingleColumn>
           <LayoutWrapperTopbar>
             <TopbarContainer />
@@ -180,7 +180,10 @@ const mapDispatchToProps = dispatch => ({
 // See: https://github.com/ReactTraining/react-router/issues/4671
 const PasswordResetPage = compose(
   withRouter,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
   injectIntl
 )(PasswordResetPageComponent);
 

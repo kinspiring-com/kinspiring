@@ -46,10 +46,10 @@ exports[`InboxPage matches snapshot 1`] = `
               "selected": true,
               "text": <span>
                 <FormattedMessage
-                      id="InboxPage.ordersTabTitle"
-                      values={Object {}}
+                  id="InboxPage.ordersTabTitle"
+                  values={Object {}}
                 />
-          </span>,
+              </span>,
             },
             Object {
               "linkProps": Object {
@@ -61,10 +61,10 @@ exports[`InboxPage matches snapshot 1`] = `
               "selected": false,
               "text": <span>
                 <FormattedMessage
-                      id="InboxPage.salesTabTitle"
-                      values={Object {}}
+                  id="InboxPage.salesTabTitle"
+                  values={Object {}}
                 />
-          </span>,
+              </span>,
             },
           ]
         }
@@ -95,7 +95,7 @@ exports[`InboxPage matches snapshot 1`] = `
         <li
           key="order-1"
         >
-          <Component
+          <InboxItem
             intl={
               Object {
                 "formatDate": [Function],
@@ -103,16 +103,25 @@ exports[`InboxPage matches snapshot 1`] = `
                 "formatMessage": [Function],
                 "formatNumber": [Function],
                 "formatPlural": [Function],
-                "formatRelative": [Function],
+                "formatRelativeTime": [Function],
                 "formatTime": [Function],
                 "now": [Function],
+              }
+            }
+            stateData={
+              Object {
+                "bookingClassName": undefined,
+                "lastTransitionedAtClassName": undefined,
+                "nameClassName": undefined,
+                "state": "InboxPage.stateRequested",
+                "stateClassName": undefined,
               }
             }
             tx={
               Object {
                 "attributes": Object {
                   "createdAt": 2017-05-01T00:00:00.000Z,
-                  "lastTransition": "transition/request",
+                  "lastTransition": "transition/confirm-payment",
                   "lastTransitionedAt": 2017-01-15T00:00:00.000Z,
                   "lineItems": Array [
                     Object {
@@ -122,12 +131,14 @@ exports[`InboxPage matches snapshot 1`] = `
                         "provider",
                       ],
                       "lineTotal": Money {
+                        "_sdkType": "Money",
                         "amount": 1000,
                         "currency": "USD",
                       },
                       "quantity": "1",
                       "reversal": false,
                       "unitPrice": Money {
+                        "_sdkType": "Money",
                         "amount": 1000,
                         "currency": "USD",
                       },
@@ -138,21 +149,25 @@ exports[`InboxPage matches snapshot 1`] = `
                         "provider",
                       ],
                       "lineTotal": Money {
+                        "_sdkType": "Money",
                         "amount": -100,
                         "currency": "USD",
                       },
                       "reversal": false,
                       "unitPrice": Money {
+                        "_sdkType": "Money",
                         "amount": -100,
                         "currency": "USD",
                       },
                     },
                   ],
                   "payinTotal": Money {
+                    "_sdkType": "Money",
                     "amount": 1000,
                     "currency": "USD",
                   },
                   "payoutTotal": Money {
+                    "_sdkType": "Money",
                     "amount": 900,
                     "currency": "USD",
                   },
@@ -160,7 +175,12 @@ exports[`InboxPage matches snapshot 1`] = `
                     Object {
                       "by": "customer",
                       "createdAt": 2017-05-01T00:00:00.000Z,
-                      "transition": "transition/request",
+                      "transition": "transition/request-payment",
+                    },
+                    Object {
+                      "by": "customer",
+                      "createdAt": 2017-05-01T00:00:01.000Z,
+                      "transition": "transition/confirm-payment",
                     },
                     Object {
                       "by": "provider",
@@ -171,10 +191,13 @@ exports[`InboxPage matches snapshot 1`] = `
                 },
                 "booking": Object {
                   "attributes": Object {
+                    "displayEnd": 2017-02-16T00:00:00.000Z,
+                    "displayStart": 2017-02-15T00:00:00.000Z,
                     "end": 2017-02-16T00:00:00.000Z,
                     "start": 2017-02-15T00:00:00.000Z,
                   },
                   "id": UUID {
+                    "_sdkType": "UUID",
                     "uuid": "booking1",
                   },
                   "type": "booking",
@@ -182,29 +205,34 @@ exports[`InboxPage matches snapshot 1`] = `
                 "customer": Object {
                   "attributes": Object {
                     "banned": false,
+                    "deleted": false,
                     "profile": Object {
                       "abbreviatedName": "TT",
                       "displayName": "customer-user-id display name",
                     },
                   },
                   "id": UUID {
+                    "_sdkType": "UUID",
                     "uuid": "customer-user-id",
                   },
                   "type": "user",
                 },
                 "id": UUID {
+                  "_sdkType": "UUID",
                   "uuid": "order-1",
                 },
                 "listing": null,
                 "provider": Object {
                   "attributes": Object {
                     "banned": false,
+                    "deleted": false,
                     "profile": Object {
                       "abbreviatedName": "TT",
                       "displayName": "provider-user-id display name",
                     },
                   },
                   "id": UUID {
+                    "_sdkType": "UUID",
                     "uuid": "provider-user-id",
                   },
                   "type": "user",
@@ -220,7 +248,7 @@ exports[`InboxPage matches snapshot 1`] = `
         <li
           key="order-2"
         >
-          <Component
+          <InboxItem
             intl={
               Object {
                 "formatDate": [Function],
@@ -228,16 +256,25 @@ exports[`InboxPage matches snapshot 1`] = `
                 "formatMessage": [Function],
                 "formatNumber": [Function],
                 "formatPlural": [Function],
-                "formatRelative": [Function],
+                "formatRelativeTime": [Function],
                 "formatTime": [Function],
                 "now": [Function],
+              }
+            }
+            stateData={
+              Object {
+                "bookingClassName": undefined,
+                "lastTransitionedAtClassName": undefined,
+                "nameClassName": undefined,
+                "state": "InboxPage.stateRequested",
+                "stateClassName": undefined,
               }
             }
             tx={
               Object {
                 "attributes": Object {
                   "createdAt": 2017-05-01T00:00:00.000Z,
-                  "lastTransition": "transition/request",
+                  "lastTransition": "transition/confirm-payment",
                   "lastTransitionedAt": 2016-01-15T00:00:00.000Z,
                   "lineItems": Array [
                     Object {
@@ -247,12 +284,14 @@ exports[`InboxPage matches snapshot 1`] = `
                         "provider",
                       ],
                       "lineTotal": Money {
+                        "_sdkType": "Money",
                         "amount": 1000,
                         "currency": "USD",
                       },
                       "quantity": "1",
                       "reversal": false,
                       "unitPrice": Money {
+                        "_sdkType": "Money",
                         "amount": 1000,
                         "currency": "USD",
                       },
@@ -263,21 +302,25 @@ exports[`InboxPage matches snapshot 1`] = `
                         "provider",
                       ],
                       "lineTotal": Money {
+                        "_sdkType": "Money",
                         "amount": -100,
                         "currency": "USD",
                       },
                       "reversal": false,
                       "unitPrice": Money {
+                        "_sdkType": "Money",
                         "amount": -100,
                         "currency": "USD",
                       },
                     },
                   ],
                   "payinTotal": Money {
+                    "_sdkType": "Money",
                     "amount": 1000,
                     "currency": "USD",
                   },
                   "payoutTotal": Money {
+                    "_sdkType": "Money",
                     "amount": 900,
                     "currency": "USD",
                   },
@@ -285,7 +328,12 @@ exports[`InboxPage matches snapshot 1`] = `
                     Object {
                       "by": "customer",
                       "createdAt": 2017-05-01T00:00:00.000Z,
-                      "transition": "transition/request",
+                      "transition": "transition/request-payment",
+                    },
+                    Object {
+                      "by": "customer",
+                      "createdAt": 2017-05-01T00:00:01.000Z,
+                      "transition": "transition/confirm-payment",
                     },
                     Object {
                       "by": "provider",
@@ -296,10 +344,13 @@ exports[`InboxPage matches snapshot 1`] = `
                 },
                 "booking": Object {
                   "attributes": Object {
+                    "displayEnd": 2017-03-16T00:00:00.000Z,
+                    "displayStart": 2017-03-15T00:00:00.000Z,
                     "end": 2017-03-16T00:00:00.000Z,
                     "start": 2017-03-15T00:00:00.000Z,
                   },
                   "id": UUID {
+                    "_sdkType": "UUID",
                     "uuid": "booking2",
                   },
                   "type": "booking",
@@ -307,29 +358,34 @@ exports[`InboxPage matches snapshot 1`] = `
                 "customer": Object {
                   "attributes": Object {
                     "banned": false,
+                    "deleted": false,
                     "profile": Object {
                       "abbreviatedName": "TT",
                       "displayName": "customer-user-id display name",
                     },
                   },
                   "id": UUID {
+                    "_sdkType": "UUID",
                     "uuid": "customer-user-id",
                   },
                   "type": "user",
                 },
                 "id": UUID {
+                  "_sdkType": "UUID",
                   "uuid": "order-2",
                 },
                 "listing": null,
                 "provider": Object {
                   "attributes": Object {
                     "banned": false,
+                    "deleted": false,
                     "profile": Object {
                       "abbreviatedName": "TT",
                       "displayName": "provider-user-id display name",
                     },
                   },
                   "id": UUID {
+                    "_sdkType": "UUID",
                     "uuid": "provider-user-id",
                   },
                   "type": "user",
@@ -348,7 +404,7 @@ exports[`InboxPage matches snapshot 1`] = `
       className={null}
       rootClassName={null}
     >
-      <InjectIntl(Footer) />
+      <injectIntl(Footer) />
     </LayoutWrapperFooter>
   </LayoutSideNavigation>
 </Page>
@@ -381,7 +437,11 @@ exports[`InboxPage matches snapshot 2`] = `
       <div
         className=""
       >
-        provider-user-id display name
+        <span
+          className=""
+        >
+          provider-user-id display name
+        </span>
       </div>
       <div
         className=""
@@ -455,10 +515,10 @@ exports[`InboxPage matches snapshot 3`] = `
               "selected": false,
               "text": <span>
                 <FormattedMessage
-                      id="InboxPage.ordersTabTitle"
-                      values={Object {}}
+                  id="InboxPage.ordersTabTitle"
+                  values={Object {}}
                 />
-          </span>,
+              </span>,
             },
             Object {
               "linkProps": Object {
@@ -470,10 +530,10 @@ exports[`InboxPage matches snapshot 3`] = `
               "selected": true,
               "text": <span>
                 <FormattedMessage
-                      id="InboxPage.salesTabTitle"
-                      values={Object {}}
+                  id="InboxPage.salesTabTitle"
+                  values={Object {}}
                 />
-          </span>,
+              </span>,
             },
           ]
         }
@@ -504,7 +564,7 @@ exports[`InboxPage matches snapshot 3`] = `
         <li
           key="sale-1"
         >
-          <Component
+          <InboxItem
             intl={
               Object {
                 "formatDate": [Function],
@@ -512,16 +572,25 @@ exports[`InboxPage matches snapshot 3`] = `
                 "formatMessage": [Function],
                 "formatNumber": [Function],
                 "formatPlural": [Function],
-                "formatRelative": [Function],
+                "formatRelativeTime": [Function],
                 "formatTime": [Function],
                 "now": [Function],
+              }
+            }
+            stateData={
+              Object {
+                "bookingClassName": undefined,
+                "lastTransitionedAtClassName": undefined,
+                "nameClassName": undefined,
+                "state": "InboxPage.statePending",
+                "stateClassName": undefined,
               }
             }
             tx={
               Object {
                 "attributes": Object {
                   "createdAt": 2017-05-01T00:00:00.000Z,
-                  "lastTransition": "transition/request",
+                  "lastTransition": "transition/confirm-payment",
                   "lastTransitionedAt": 2017-01-15T00:00:00.000Z,
                   "lineItems": Array [
                     Object {
@@ -531,12 +600,14 @@ exports[`InboxPage matches snapshot 3`] = `
                         "provider",
                       ],
                       "lineTotal": Money {
+                        "_sdkType": "Money",
                         "amount": 1000,
                         "currency": "USD",
                       },
                       "quantity": "1",
                       "reversal": false,
                       "unitPrice": Money {
+                        "_sdkType": "Money",
                         "amount": 1000,
                         "currency": "USD",
                       },
@@ -547,21 +618,25 @@ exports[`InboxPage matches snapshot 3`] = `
                         "provider",
                       ],
                       "lineTotal": Money {
+                        "_sdkType": "Money",
                         "amount": -100,
                         "currency": "USD",
                       },
                       "reversal": false,
                       "unitPrice": Money {
+                        "_sdkType": "Money",
                         "amount": -100,
                         "currency": "USD",
                       },
                     },
                   ],
                   "payinTotal": Money {
+                    "_sdkType": "Money",
                     "amount": 1000,
                     "currency": "USD",
                   },
                   "payoutTotal": Money {
+                    "_sdkType": "Money",
                     "amount": 900,
                     "currency": "USD",
                   },
@@ -569,7 +644,12 @@ exports[`InboxPage matches snapshot 3`] = `
                     Object {
                       "by": "customer",
                       "createdAt": 2017-05-01T00:00:00.000Z,
-                      "transition": "transition/request",
+                      "transition": "transition/request-payment",
+                    },
+                    Object {
+                      "by": "customer",
+                      "createdAt": 2017-05-01T00:00:01.000Z,
+                      "transition": "transition/confirm-payment",
                     },
                     Object {
                       "by": "provider",
@@ -580,10 +660,13 @@ exports[`InboxPage matches snapshot 3`] = `
                 },
                 "booking": Object {
                   "attributes": Object {
+                    "displayEnd": 2017-02-16T00:00:00.000Z,
+                    "displayStart": 2017-02-15T00:00:00.000Z,
                     "end": 2017-02-16T00:00:00.000Z,
                     "start": 2017-02-15T00:00:00.000Z,
                   },
                   "id": UUID {
+                    "_sdkType": "UUID",
                     "uuid": "booking1",
                   },
                   "type": "booking",
@@ -591,29 +674,34 @@ exports[`InboxPage matches snapshot 3`] = `
                 "customer": Object {
                   "attributes": Object {
                     "banned": false,
+                    "deleted": false,
                     "profile": Object {
                       "abbreviatedName": "TT",
                       "displayName": "customer-user-id display name",
                     },
                   },
                   "id": UUID {
+                    "_sdkType": "UUID",
                     "uuid": "customer-user-id",
                   },
                   "type": "user",
                 },
                 "id": UUID {
+                  "_sdkType": "UUID",
                   "uuid": "sale-1",
                 },
                 "listing": null,
                 "provider": Object {
                   "attributes": Object {
                     "banned": false,
+                    "deleted": false,
                     "profile": Object {
                       "abbreviatedName": "TT",
                       "displayName": "provider-user-id display name",
                     },
                   },
                   "id": UUID {
+                    "_sdkType": "UUID",
                     "uuid": "provider-user-id",
                   },
                   "type": "user",
@@ -629,7 +717,7 @@ exports[`InboxPage matches snapshot 3`] = `
         <li
           key="sale-2"
         >
-          <Component
+          <InboxItem
             intl={
               Object {
                 "formatDate": [Function],
@@ -637,16 +725,25 @@ exports[`InboxPage matches snapshot 3`] = `
                 "formatMessage": [Function],
                 "formatNumber": [Function],
                 "formatPlural": [Function],
-                "formatRelative": [Function],
+                "formatRelativeTime": [Function],
                 "formatTime": [Function],
                 "now": [Function],
+              }
+            }
+            stateData={
+              Object {
+                "bookingClassName": undefined,
+                "lastTransitionedAtClassName": undefined,
+                "nameClassName": undefined,
+                "state": "InboxPage.statePending",
+                "stateClassName": undefined,
               }
             }
             tx={
               Object {
                 "attributes": Object {
                   "createdAt": 2017-05-01T00:00:00.000Z,
-                  "lastTransition": "transition/request",
+                  "lastTransition": "transition/confirm-payment",
                   "lastTransitionedAt": 2016-01-15T00:00:00.000Z,
                   "lineItems": Array [
                     Object {
@@ -656,12 +753,14 @@ exports[`InboxPage matches snapshot 3`] = `
                         "provider",
                       ],
                       "lineTotal": Money {
+                        "_sdkType": "Money",
                         "amount": 1000,
                         "currency": "USD",
                       },
                       "quantity": "1",
                       "reversal": false,
                       "unitPrice": Money {
+                        "_sdkType": "Money",
                         "amount": 1000,
                         "currency": "USD",
                       },
@@ -672,21 +771,25 @@ exports[`InboxPage matches snapshot 3`] = `
                         "provider",
                       ],
                       "lineTotal": Money {
+                        "_sdkType": "Money",
                         "amount": -100,
                         "currency": "USD",
                       },
                       "reversal": false,
                       "unitPrice": Money {
+                        "_sdkType": "Money",
                         "amount": -100,
                         "currency": "USD",
                       },
                     },
                   ],
                   "payinTotal": Money {
+                    "_sdkType": "Money",
                     "amount": 1000,
                     "currency": "USD",
                   },
                   "payoutTotal": Money {
+                    "_sdkType": "Money",
                     "amount": 900,
                     "currency": "USD",
                   },
@@ -694,7 +797,12 @@ exports[`InboxPage matches snapshot 3`] = `
                     Object {
                       "by": "customer",
                       "createdAt": 2017-05-01T00:00:00.000Z,
-                      "transition": "transition/request",
+                      "transition": "transition/request-payment",
+                    },
+                    Object {
+                      "by": "customer",
+                      "createdAt": 2017-05-01T00:00:01.000Z,
+                      "transition": "transition/confirm-payment",
                     },
                     Object {
                       "by": "provider",
@@ -705,10 +813,13 @@ exports[`InboxPage matches snapshot 3`] = `
                 },
                 "booking": Object {
                   "attributes": Object {
+                    "displayEnd": 2017-03-16T00:00:00.000Z,
+                    "displayStart": 2017-03-15T00:00:00.000Z,
                     "end": 2017-03-16T00:00:00.000Z,
                     "start": 2017-03-15T00:00:00.000Z,
                   },
                   "id": UUID {
+                    "_sdkType": "UUID",
                     "uuid": "booking2",
                   },
                   "type": "booking",
@@ -716,29 +827,34 @@ exports[`InboxPage matches snapshot 3`] = `
                 "customer": Object {
                   "attributes": Object {
                     "banned": false,
+                    "deleted": false,
                     "profile": Object {
                       "abbreviatedName": "TT",
                       "displayName": "customer-user-id display name",
                     },
                   },
                   "id": UUID {
+                    "_sdkType": "UUID",
                     "uuid": "customer-user-id",
                   },
                   "type": "user",
                 },
                 "id": UUID {
+                  "_sdkType": "UUID",
                   "uuid": "sale-2",
                 },
                 "listing": null,
                 "provider": Object {
                   "attributes": Object {
                     "banned": false,
+                    "deleted": false,
                     "profile": Object {
                       "abbreviatedName": "TT",
                       "displayName": "provider-user-id display name",
                     },
                   },
                   "id": UUID {
+                    "_sdkType": "UUID",
                     "uuid": "provider-user-id",
                   },
                   "type": "user",
@@ -757,7 +873,7 @@ exports[`InboxPage matches snapshot 3`] = `
       className={null}
       rootClassName={null}
     >
-      <InjectIntl(Footer) />
+      <injectIntl(Footer) />
     </LayoutWrapperFooter>
   </LayoutSideNavigation>
 </Page>
@@ -792,7 +908,11 @@ exports[`InboxPage matches snapshot 4`] = `
       <div
         className=""
       >
-        customer-user-id display name
+        <span
+          className=""
+        >
+          customer-user-id display name
+        </span>
       </div>
       <div
         className=""

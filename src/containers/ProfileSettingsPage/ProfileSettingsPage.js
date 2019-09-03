@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
 import { propTypes } from '../../util/types';
 import { ensureCurrentUser } from '../../util/data';
 import { isScrollingDisabled } from '../../ducks/UI.duck';
@@ -177,8 +177,12 @@ const mapDispatchToProps = dispatch => ({
   onUpdateProfile: data => dispatch(updateProfile(data)),
 });
 
-const ProfileSettingsPage = compose(connect(mapStateToProps, mapDispatchToProps), injectIntl)(
-  ProfileSettingsPageComponent
-);
+const ProfileSettingsPage = compose(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
+  injectIntl
+)(ProfileSettingsPageComponent);
 
 export default ProfileSettingsPage;

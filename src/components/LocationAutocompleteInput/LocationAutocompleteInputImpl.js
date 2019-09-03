@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { any, arrayOf, bool, func, number, shape, string, oneOfType, object } from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
 import { IconSpinner } from '../../components';
 import { propTypes } from '../../util/types';
+import config from '../../config';
+
 import IconHourGlass from './IconHourGlass';
 import IconCurrentLocation from './IconCurrentLocation';
-import Geocoder, { GeocoderAttribution, CURRENT_LOCATION_ID } from './GeocoderGoogleMaps';
-// import Geocoder, { GeocoderAttribution, CURRENT_LOCATION_ID } from './GeocoderMapbox';
-import config from '../../config';
+import Geocoder, { GeocoderAttribution, CURRENT_LOCATION_ID } from './GeocoderMapbox';
+// import Geocoder, { GeocoderAttribution, CURRENT_LOCATION_ID } from './GeocoderGoogleMaps';
 
 import css from './LocationAutocompleteInput.css';
 
@@ -163,6 +164,7 @@ class LocationAutocompleteInputImpl extends Component {
       touchStartedFrom: null,
       highlightedIndex: -1, // -1 means no highlight
       fetchingPlaceDetails: false,
+      fetchingPredictions: false,
     };
 
     // Ref to the input element.
@@ -231,9 +233,11 @@ class LocationAutocompleteInputImpl extends Component {
         e.preventDefault();
         e.stopPropagation();
         this.selectItemIfNoneSelected();
+        this.input.blur();
       }
     } else if (e.keyCode === KEY_CODE_TAB) {
       this.selectItemIfNoneSelected();
+      this.input.blur();
     } else if (e.keyCode === KEY_CODE_ESC && this.input) {
       this.input.blur();
     }
@@ -335,6 +339,11 @@ class LocationAutocompleteInputImpl extends Component {
       });
   }
   selectItemIfNoneSelected() {
+    if (this.state.fetchingPredictions) {
+      // No need to select anything since prediction fetch is still going on
+      return;
+    }
+
     const { search, selectedPlace } = currentValue(this.props);
     const predictions = this.currentPredictions();
     if (!selectedPlace) {
@@ -342,19 +351,19 @@ class LocationAutocompleteInputImpl extends Component {
         const index = this.state.highlightedIndex !== -1 ? this.state.highlightedIndex : 0;
         this.selectPrediction(predictions[index]);
       } else {
-        this.predict(search).then(() => {
-          this.selectPrediction(predictions[0]);
-        });
+        this.predict(search);
       }
     }
   }
   predict(search) {
     const onChange = this.props.input.onChange;
+    this.setState({ fetchingPredictions: true });
 
     return this.getGeocoder()
       .getPlacePredictions(search)
       .then(results => {
         const { search: currentSearch } = currentValue(this.props);
+        this.setState({ fetchingPredictions: false });
 
         // If the earlier predictions arrive when the user has already
         // changed the search term, ignore and wait until the latest
@@ -373,6 +382,7 @@ class LocationAutocompleteInputImpl extends Component {
         }
       })
       .catch(e => {
+        this.setState({ fetchingPredictions: false });
         // eslint-disable-next-line no-console
         console.error(e);
         const value = currentValue(this.props);
