@@ -939,7 +939,7 @@
   "StripePaymentForm.paymentHeading": "Maksu",
   "StripePaymentForm.replaceAfterOnetimePayment": "Korvaa kortti… {last4Digits} uudella kortilla tulevia varauksia varten",
   "StripePaymentForm.saveAfterOnetimePayment": "Tallenna korttitiedot tulevia varauksia varten",
-  "StripePaymentForm.saveforLaterUseLegalInfo": "Annan Kinspiringille lähettää ohjeet kortilleni antaneelle finanssilaitokselle maksujen ottamiseksi korttitililtäni kanssani tehdyn sopimuksen ehtojen mukaisesti.",
+  "StripePaymentForm.saveforLaterUseLegalInfo": "Kun maksat varauksesi maksukortilla maksusta huolehtii yhteistyökumppanimme Stripe. Jos tallennat maksukortin tiedot seuraavaa kertaa varten, tallentaa Stripe ne turvalliseen maksujärjestelmäänsä. Kortin tiedot eivät tallennu Kinspiringin omaan järjestelmään.",
   "StripePaymentForm.stripe.api_connection_error": "Emme pystyneet yhdistämään: Stripe API.",
   "StripePaymentForm.stripe.api_error": "Virhe: Stripe API.",
   "StripePaymentForm.stripe.authentication_error": "Emme pystyneet todentamaan maksutietoja Stripessa.",
