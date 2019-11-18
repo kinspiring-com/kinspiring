@@ -134,17 +134,17 @@ const StripePaymentAddress = props => {
         />
       </div>
       <div className={css.formRow}>
-        <FieldTextInput
-          id={`${fieldId}.state`}
-          name="state"
-          disabled={disabled}
-          className={css.field}
-          type="text"
-          autoComplete="billing address-level1"
-          label={stateLabel}
-          placeholder={statePlaceholder}
-          onUnmount={() => form.change('state', undefined)}
-        />
+        {/*<FieldTextInput*/}
+        {/*  id={`${fieldId}.state`}*/}
+        {/*  name="state"*/}
+        {/*  disabled={disabled}*/}
+        {/*  className={css.field}*/}
+        {/*  type="text"*/}
+        {/*  autoComplete="billing address-level1"*/}
+        {/*  label={stateLabel}*/}
+        {/*  placeholder={statePlaceholder}*/}
+        {/*  onUnmount={() => form.change('state', undefined)}*/}
+        {/*/>*/}
 
         <FieldSelect
           id={`${fieldId}.country`}
