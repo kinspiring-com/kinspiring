@@ -905,7 +905,7 @@
   "StripeBankAccountTokenInputField.transitNumber.placeholder": "Kirjoita kuljetusnumero...",
   "StripeBankAccountTokenInputField.transitNumber.required": "Lähetysnumero vaaditaan",
   "StripeBankAccountTokenInputField.unsupportedCountry": "Palvelu ei hyväksy maata: {country}",
-  "StripePaymentAddress.addressLine1Label": "katuosoite",
+  "StripePaymentAddress.addressLine1Label": "Katuosoite",
   "StripePaymentAddress.addressLine1Placeholder": "123 Esimerkki",
   "StripePaymentAddress.addressLine1Required": "Katuosoite vaaditaan",
   "StripePaymentAddress.addressLine2Label": "Asunto {optionalText}",
